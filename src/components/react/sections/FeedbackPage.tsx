@@ -101,7 +101,7 @@ export default function FeedbackPage() {
                 className="mb-10 text-center max-w-2xl"
                 style={{ color: 'var(--color-body)' }}
             >
-                We value your experience at Samaguri Satra. Please fill out the form and rate your visit.
+                We value your experience at Assamese Manuscript Archive. Please fill out the form and rate your visit.
             </motion.p>
 
             <div className="flex flex-col md:flex-row gap-8 w-full max-w-6xl justify-center">
@@ -238,7 +238,7 @@ export default function FeedbackPage() {
                     <p className="mb-6" style={{ color: 'var(--color-body)' }}>
                         Get your certificate for the Audio Guided Course on{' '}
                         <span style={{ fontStyle: 'italic', color: 'var(--color-primary)' }}>
-                            History of Samaguri Satra Manuscript Paintings
+                            History of Assamese Manuscript Archive Manuscript Paintings
                         </span>
                     </p>
 
@@ -256,7 +256,7 @@ export default function FeedbackPage() {
                                 Certificate of Completion
                             </p>
                             <p className="text-sm mt-2" style={{ color: 'var(--color-muted)' }}>
-                                Samaguri Satra Heritage Course
+                                Assamese Manuscript Archive Heritage Course
                             </p>
                         </div>
                     </div>

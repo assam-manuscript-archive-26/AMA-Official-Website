@@ -45,7 +45,7 @@ export default function AdminShell({ currentPath }: AdminShellProps) {
     setActivePath(normalized);
     const segment = normalized.split('/').pop();
     const title = segment === 'admin' ? 'Dashboard' : (segment || 'Dashboard');
-    document.title = `${title.charAt(0).toUpperCase() + title.slice(1)} | Samaguri Satra Admin`;
+    document.title = `${title.charAt(0).toUpperCase() + title.slice(1)} | Assamese Manuscript Archive Admin`;
   }, [activePath]);
 
   useEffect(() => {

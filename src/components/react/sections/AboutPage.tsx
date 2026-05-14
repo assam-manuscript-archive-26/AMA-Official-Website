@@ -74,7 +74,7 @@ export default function AboutPage() {
                 </p>
                 <p className="flex items-start gap-3">
                   <Building2 size={20} className="mt-1 text-[var(--color-primary)] flex-shrink-0" />
-                  <span><strong className="text-[var(--color-text)]">Chamaguri Sattra (Samaguri Sattra), Majuli</strong> — Custodian of heritage traditions</span>
+                  <span><strong className="text-[var(--color-text)]">Assamese Manuscript Archive, Majuli</strong> — Custodian of heritage traditions</span>
                 </p>
               </div>
             </div>

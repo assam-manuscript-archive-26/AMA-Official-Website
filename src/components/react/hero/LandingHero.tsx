@@ -141,7 +141,7 @@ export default function LandingHero() {
 
           {/* Headline */}
           <h1 className="font-display text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight md:leading-[1.1] mb-8 text-center max-w-5xl" style={{ color: 'var(--hero-headline-color, white)', textShadow: '0 4px 20px rgba(0,0,0,0.4), 0 8px 40px rgba(0,0,0,0.2)' }}>
-            Discover the Heritage of Samaguri Satra
+            Discover the Heritage of Assamese Manuscript Archive
           </h1>
 
           {/* Search Bar - On top of video */}

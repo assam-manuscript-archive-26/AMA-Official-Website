@@ -29,7 +29,7 @@ export default function AdminSidebar({ currentPath = '/admin', onNavigate, isOpe
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('samaguri_theme') as ThemeMode | null;
+      const saved = localStorage.getItem('ama_theme') as ThemeMode | null;
       if (saved) setCurrentTheme(saved);
     }
   }, []);
@@ -46,7 +46,7 @@ export default function AdminSidebar({ currentPath = '/admin', onNavigate, isOpe
 
   const applyTheme = (mode: ThemeMode) => {
     setCurrentTheme(mode);
-    localStorage.setItem('samaguri_theme', mode);
+    localStorage.setItem('ama_theme', mode);
     const root = document.documentElement;
     if (mode === 'system') {
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -77,7 +77,7 @@ export default function AdminSidebar({ currentPath = '/admin', onNavigate, isOpe
           <div className="admin-sidebar-header">
             {isOpen && (
               <div className="admin-sidebar-brand">
-                <span className="admin-sidebar-title">Samaguri Satra</span>
+                <span className="admin-sidebar-title">Assamese Manuscript Archive</span>
                 <span className="admin-sidebar-subtitle">Admin Panel</span>
               </div>
             )}
@@ -123,7 +123,7 @@ export default function AdminSidebar({ currentPath = '/admin', onNavigate, isOpe
                 </div>
               )}
             </div>
-            {isOpen && <span className="admin-sidebar-footer-text">v1.0 — Samaguri Satra</span>}
+            {isOpen && <span className="admin-sidebar-footer-text">v1.0 — Assamese Manuscript Archive</span>}
           </div>
         </div>
       </div>

@@ -1,13 +1,22 @@
 {
   "$schema": "https://json.schemastore.org/wrangler",
-  "name": "samaguri-satra-website",
+  "name": "assamese-manuscript-archive",
   "main": "dist/_worker.js/index.js",
-  "compatibility_date": "2025-01-01",
+  "compatibility_date": "2025-05-14",
   "compatibility_flags": ["nodejs_compat"],
   "assets": {
-    "directory": "./dist"
+    "directory": "./dist",
+    "binding": "ASSETS"
+  },
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
   },
   "vars": {
-    "NODE_ENV": "production"
+    "NODE_ENV": "production",
+    "PUBLIC_DATABASE": "s5_intern_database",
+    "PUBLIC_BASE_URL": "https://v7.frontql.dev",
+    "PUBLIC_FILE_UPLOAD_URL": "https://uploads.backendservices.in/api",
+    "PUBLIC_IMAGE_URL": "https://uploads.backendservices.in/storage/"
   }
 }

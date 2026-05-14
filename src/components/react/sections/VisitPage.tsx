@@ -111,7 +111,7 @@ const VisitPage = () => {
                     className="text-4xl mb-4"
                     style={{ fontFamily: 'var(--font-display)', fontWeight: 500, color: 'var(--color-ink)' }}
                 >
-                    Visit Samaguri Satra
+                    Visit Assamese Manuscript Archive
                 </h2>
                 <p style={{ color: 'var(--color-body)', maxWidth: '600px', margin: '0 auto' }}>
                     Step into history and explore ancient manuscripts. Contact us for guided tours, research access, or any inquiries.
@@ -142,7 +142,7 @@ const VisitPage = () => {
                         Address
                     </h3>
                     <p className="text-sm" style={{ color: 'var(--color-body)' }}>
-                        Samaguri Satra, Majuli, Assam, India
+                        Assamese Manuscript Archive, Majuli, Assam, India
                     </p>
                 </button>
 
@@ -193,7 +193,7 @@ const VisitPage = () => {
                         Email
                     </h3>
                     <p className="text-sm" style={{ color: 'var(--color-body)' }}>
-                        contact@samaguri-satra.org
+                        assamesemanuscriptarchive@gmail.com
                     </p>
                 </button>
             </div>

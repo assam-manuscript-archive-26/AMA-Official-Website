@@ -37,8 +37,8 @@ const EventsCalendar: React.FC = () => {
             const url = window.location.href;
             if (navigator.share) {
                 await navigator.share({
-                    title: selectedEvent?.title || 'Samaguri Satra Event',
-                    text: selectedEvent?.description || 'Check out this event at Samaguri Satra',
+                    title: selectedEvent?.title || 'Assamese Manuscript Archive Event',
+                    text: selectedEvent?.description || 'Check out this event at Assamese Manuscript Archive',
                     url: url,
                 });
             } else {

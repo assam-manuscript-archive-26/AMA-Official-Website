@@ -77,7 +77,7 @@ export default function ProfessionalFooter() {
             <ul className="space-y-3">
               <li className="flex items-center justify-center gap-2 text-white text-sm">
                 <MapPin size={16} className="text-[#cc785c]" />
-                <span>Samaguri, Majuli, Assam, India</span>
+                <span>Assamese Manuscript Archive, Majuli, Assam, India</span>
               </li>
               <li>
                 <a
@@ -90,11 +90,11 @@ export default function ProfessionalFooter() {
               </li>
               <li>
                 <a
-                  href="mailto:info@samagurisatra.org"
+                  href="mailto:assamesemanuscriptarchive@gmail.com"
                   className="inline-flex items-center gap-2 text-white hover:text-[#cc785c] transition-colors text-sm"
                 >
                   <Mail size={16} className="text-[#cc785c]" />
-                  <span>info@samagurisatra.org</span>
+                  <span>assamesemanuscriptarchive@gmail.com</span>
                 </a>
               </li>
             </ul>
@@ -109,10 +109,10 @@ export default function ProfessionalFooter() {
             <div className="w-full h-32 bg-[#252320] rounded-lg flex items-center justify-center border border-[#1f1e1b]">
               <div className="text-center">
                 <MapPin size={24} className="mx-auto text-[#cc785c] mb-2" />
-                <p className="text-xs text-[#a09d96]">Samaguri Satra</p>
+                <p className="text-xs text-[#a09d96]">Assamese Manuscript Archive</p>
                 <p className="text-xs text-[#a09d96]">Majuli, Assam</p>
                 <a
-                  href="https://maps.google.com/?q=Samaguri+Majuli+Assam"
+                  href="https://maps.google.com/?q=Assamese Manuscript Archive+Majuli+Assam"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1 text-xs text-[#cc785c] hover:text-[#faf9f5] mt-2 transition-colors"

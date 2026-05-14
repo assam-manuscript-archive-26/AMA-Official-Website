@@ -21,7 +21,7 @@ export default function MajuliIntro() {
             </h2>
             <div className="space-y-4 text-[var(--color-text-secondary)] leading-relaxed">
               {/* <p>
-                Samaguri Satra is one of the oldest and most revered monastery of Majuli,world's smallest river island. It stands as a guardian of ancient manuscripts, traditional crafts, and spiritual wisdom.
+                Assamese Manuscript Archive is one of the oldest and most revered monastery of Majuli,world's smallest river island. It stands as a guardian of ancient manuscripts, traditional crafts, and spiritual wisdom.
               </p> */}
               <p>
                 The Assamese Manuscript Archive is a digital gateway to Assam’s ancient manuscript heritage, preserving sacred texts, devotional writings, and literary treasures from sattras and monastic centers across the state.
@@ -67,7 +67,7 @@ export default function MajuliIntro() {
                   <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-[#faf9f5]/20 flex items-center justify-center backdrop-blur-sm">
                     <span className="text-[#faf9f5] font-display text-4xl">স</span>
                   </div>
-                  {/* <p className="text-[#faf9f5]/80 text-sm font-body">Samaguri Satra</p> */}
+                  {/* <p className="text-[#faf9f5]/80 text-sm font-body">Assamese Manuscript Archive</p> */}
                 </div>
               </div>
             </div>

@@ -1,7 +1,7 @@
 import Api from '../apis/Api';
 
-const SESSION_KEY = 'samaguri_admin_session';
-const USER_KEY = 'samaguri_admin_user';
+const SESSION_KEY = 'ama_admin_session';
+const USER_KEY = 'ama_admin_user';
 
 function getCurrentDateTime() {
   const now = new Date();

@@ -1,11 +1,13 @@
 {
-  "name": "samaguri-satra-website",
+  "name": "assamese-manuscript-archive",
   "type": "module",
   "version": "1.0.0",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "preview:worker": "wrangler dev",
+    "deploy": "astro build && node -e \"import('fs').then(fs => fs.copyFileSync('.assetsignore', 'dist/.assetsignore'))\" && wrangler deploy",
     "astro": "astro",
     "server": "bun src/backend/apis/server.js"
   },
@@ -38,6 +40,7 @@
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@types/react-webcam": "^3.0.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "wrangler": "^4.91.0"
   }
 }

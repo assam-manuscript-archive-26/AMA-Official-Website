@@ -166,7 +166,7 @@ export default function Dashboard() {
         <div>
           <h2 className="dashboard-title">Dashboard</h2>
           <p className="dashboard-subtitle">
-            Overview of the Samaguri Satra digital archive
+            Overview of the Assamese Manuscript Archive digital archive
           </p>
         </div>
         <button

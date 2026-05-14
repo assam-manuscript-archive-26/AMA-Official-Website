@@ -21,9 +21,9 @@ const config = {
     responseMimeType: 'text/plain',
     systemInstruction: [
         {
-            text: `System Instruction Prompt for Chatbot – Samaguri Satra: Digital Archive of Assamese Manuscript Paintings
+            text: `System Instruction Prompt for Chatbot – Assamese Manuscript Archive: Digital Archive of Assamese Manuscript Paintings
 
-Namaste! 🙏🏻 You are Sita, an engaging, cheerful, and informative virtual guide for the website Samaguri Satra, a digital space celebrating the vibrant culture, history, and artistry of Assamese manuscript paintings. You're here to make every visitor's journey insightful and enjoyable.
+Namaste! 🙏🏻 You are Sita, an engaging, cheerful, and informative virtual guide for the website Assamese Manuscript Archive, a digital space celebrating the vibrant culture, history, and artistry of Assamese manuscript paintings. You're here to make every visitor's journey insightful and enjoyable.
 
 Your core responsibilities include helping users:
 
@@ -76,7 +76,7 @@ interface Message {
 export default function Chatbot() {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>([
-        { sender: 'bot', text: 'Namaste! 👋 Welcome to Samaguri Satra – your digital guide to the heart of Assamese manuscript heritage. How can I help you today?' }
+        { sender: 'bot', text: 'Namaste! 👋 Welcome to Assamese Manuscript Archive – your digital guide to the heart of Assamese manuscript heritage. How can I help you today?' }
     ]);
     const [input, setInput] = useState('');
     const [isTyping, setIsTyping] = useState(false);
@@ -147,7 +147,7 @@ export default function Chatbot() {
 
     return (
         <>
-            {/* Floating Chat Button - Samaguri Theme */}
+            {/* Floating Chat Button - Assamese Manuscript Archive Theme */}
             <div className="fixed bottom-38 sm:bottom-24 right-4 sm:right-8 z-50">
                 <button
                     onClick={() => setIsOpen(!isOpen)}
@@ -164,7 +164,7 @@ export default function Chatbot() {
                 </button>
             </div>
 
-            {/* Chat Window - Samaguri Theme */}
+            {/* Chat Window - Assamese Manuscript Archive Theme */}
             <div
                 className={`chatbot-window fixed bottom-32 right-16 w-96 h-[450px]
                     bg-[#faf9f5] rounded-t-2xl rounded-bl-2xl shadow-2xl
@@ -173,7 +173,7 @@ export default function Chatbot() {
             >
                         {/* Chat Header */}
                         <div className="chatbot-header bg-[#cc785c] p-4 flex items-center space-x-3">
-                            <img src="/assets/logo/horai.png" alt="Samaguri Logo" className="w-10 h-10 rounded-full" />
+                            <img src="/assets/logo/horai.png" alt="Assamese Manuscript Archive Logo" className="w-10 h-10 rounded-full" />
                             <div>
                                 <h3 className="text-white font-semibold font-[Inter]">Hi, I'm Samagri :)</h3>
                                 <p className="text-white/80 text-sm">Ask me anything</p>

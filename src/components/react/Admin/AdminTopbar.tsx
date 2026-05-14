@@ -28,7 +28,7 @@ export default function AdminTopbar() {
     document.addEventListener('mousedown', handleClickOutside);
 
     // Sync theme from localStorage
-    const saved = localStorage.getItem('samaguri_theme') as ThemeMode | null;
+    const saved = localStorage.getItem('ama_theme') as ThemeMode | null;
     if (saved) setCurrentTheme(saved);
 
     return () => document.removeEventListener('mousedown', handleClickOutside);
@@ -36,7 +36,7 @@ export default function AdminTopbar() {
 
   const applyTheme = (mode: ThemeMode) => {
     setCurrentTheme(mode);
-    localStorage.setItem('samaguri_theme', mode);
+    localStorage.setItem('ama_theme', mode);
     const root = document.documentElement;
     if (mode === 'system') {
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -57,7 +57,7 @@ export default function AdminTopbar() {
   return (
     <header className="admin-topbar">
       <h1 className="admin-topbar-title">
-        Samaguri Satra Admin
+        Assamese Manuscript Archive Admin
       </h1>
 
       <div className="admin-topbar-actions">

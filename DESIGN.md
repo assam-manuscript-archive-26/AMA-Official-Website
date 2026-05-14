@@ -1,8 +1,8 @@
-# Samaguri Satra Website - Design System
+# Assamese Manuscript Archive Website - Design System
 
 ## Overview
 
-Samaguri Satra Website adapts the Claude.com design aesthetic — warm cream canvas, coral accents, and serif display typography — for a **cultural heritage digital platform**. The design maintains the editorial, literary feel of Claude.com while transforming it into a museum/archival experience for Assamese manuscript paintings and Sattras.
+Assamese Manuscript Archive Website adapts the Claude.com design aesthetic — warm cream canvas, coral accents, and serif display typography — for a **cultural heritage digital platform**. The design maintains the editorial, literary feel of Claude.com while transforming it into a museum/archival experience for Assamese manuscript paintings and Sattras.
 
 The base atmosphere is a **tinted cream canvas** (`{colors.canvas}` — #faf9f5) — warm, deliberately not the cool gray-white that typical tech products use. Headlines run a **slab-serif display** (Cormorant Garamond / EB Garamond as substitutes for Copernicus) at weight 500 with subtle letter-spacing, paired with **Inter** body sans. The combination feels like a curated museum catalog, not a typical SaaS product.
 
@@ -13,7 +13,7 @@ The system has three surface modes that alternate page-by-page:
 2. **Light cream cards** (`{colors.surface-card}`) — feature card backgrounds, collection cards
 3. **Dark navy surfaces** (`{colors.surface-dark}`) — artifact detail views, audio player, QR scanner, footer
 
-The dark surfaces are where Samaguri Satra shows its digital archive — artifact detail pages, audio player controls, QR scanner interface, search results. The cream-to-dark contrast creates a rhythmic pacing through the archive experience.
+The dark surfaces are where Assamese Manuscript Archive shows its digital archive — artifact detail pages, audio player controls, QR scanner interface, search results. The cream-to-dark contrast creates a rhythmic pacing through the archive experience.
 
 **Key Characteristics:**
 - Warm cream canvas (`{colors.canvas}` — #faf9f5) with dark warm-ink text (`{colors.ink}` — #141413). The brand's defining color choice — evokes aged manuscript paper.
@@ -386,7 +386,7 @@ When photography is used (rare — testimonials/about), avatars crop to perfect 
 **Column 4 - Find Us:**
 - Heading: text-base, font-semibold, `{colors.primary}` (coral) - "Find Us"
 - Map placeholder: Small box showing location
-- Can use mapPin icon or placeholder for Samaguri Satra location in Majuli
+- Can use mapPin icon or placeholder for Assamese Manuscript Archive location in Majuli
 
 **Mobile Behavior:**
 - Grid changes to single column
@@ -471,7 +471,7 @@ When photography is used (rare — testimonials/about), avatars crop to perfect 
 
 **`cta-band-dark`** — Alternative pre-footer band on artifact-focused pages. Background `{colors.surface-dark}`, text `{colors.on-dark}`, rounded `{rounded.lg}`, padding 64px.
 
-**`footer`** — Dark navy footer. Background `{colors.surface-dark}`, text `{colors.on-dark-soft}`. 4-column link list at desktop covering Collections · Visit · About · Legal. Vertical padding 64px. The Samaguri Satra wordmark sits at the top in `{colors.on-dark}`.
+**`footer`** — Dark navy footer. Background `{colors.surface-dark}`, text `{colors.on-dark-soft}`. 4-column link list at desktop covering Collections · Visit · About · Legal. Vertical padding 64px. The Assamese Manuscript Archive wordmark sits at the top in `{colors.on-dark}`.
 
 ---
 
@@ -574,13 +574,13 @@ The homepage (landing page) must include the following sections **in this exact 
 
 1. **Floating Navbar** (`top-nav-floating`)
    - Use the Artifex-style floating navbar with circular borders
-   - Apply Samaguri colour theme (cream/coral/navy)
+   - Apply Assamese Manuscript Archive colour theme (cream/coral/navy)
    - **REMOVE the login button completely**
 
 2. **Search Bar** (`search-bar-floating`)
    - Position: Above the hero section
    - Must include custom search suggestions dropdown
-   - Use Artifex functionality with Samaguri colours
+   - Use Artifex functionality with Assamese Manuscript Archive colours
 
 3. **Hero Section** (`hero-section`)
    - Light mode only - no dark mode transition
@@ -595,7 +595,7 @@ The homepage (landing page) must include the following sections **in this exact 
    - Horizontal scrolling carousel
    - Animation: auto-scroll every 3 seconds
    - Manual navigation arrows
-   - Use exact same functionality as Artifex, with Samaguri colours
+   - Use exact same functionality as Artifex, with Assamese Manuscript Archive colours
 
 6. **Footer** (`footer-professional`)
    - 4-column professional layout

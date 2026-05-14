@@ -10,7 +10,7 @@ interface Props {
   description?: string;
 }
 
-const { title = 'Samaguri Satra', description = 'Digital archive of Assamese manuscript paintings' } = Astro.props;
+const { title = 'Assamese Manuscript Archive', description = 'Digital archive of Assamese manuscript paintings' } = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -20,7 +20,7 @@ const { title = 'Samaguri Satra', description = 'Digital archive of Assamese man
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>{title} | Samaguri Satra</title>
+    <title>{title} | Assamese Manuscript Archive</title>
     <ThemeInit />
   </head>
   <body class="bg-canvas text-ink min-h-screen flex flex-col">

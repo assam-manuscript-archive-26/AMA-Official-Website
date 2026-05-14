@@ -117,7 +117,7 @@ export default function FloatingNavbar({ initialPath = '/' }: Props) {
                 alt="blankLogo"
                 className="h-8 w-auto rounded-full"
               />
-              <span className="font-display text-lg text-[#141413]">Samaguri Satra</span>
+              <span className="font-display text-lg text-[#141413]">Assamese Manuscript Archive</span>
             </a>
             <button
               onClick={() => setIsMobileMenuOpen(false)}

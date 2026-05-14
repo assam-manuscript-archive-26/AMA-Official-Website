@@ -15,12 +15,12 @@ const { title = 'Admin Dashboard' } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, nofollow" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>{title} | Samaguri Satra Admin</title>
+    <title>{title} | Assamese Manuscript Archive Admin</title>
     <!-- Blocking script: apply saved theme BEFORE paint to prevent flash -->
     <script is:inline>
       (function() {
         try {
-          var theme = localStorage.getItem('samaguri_theme') || 'dark';
+          var theme = localStorage.getItem('ama_theme') || 'dark';
           var attr;
           if (theme === 'system') {
             attr = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'light' : 'dark';

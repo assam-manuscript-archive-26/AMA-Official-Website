@@ -92,7 +92,7 @@ export default function ResourcesPage({ books, journals, digitalArchives, articl
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const resourcesByCategory: Record<Category, Resource[]> = {
+  const resourcesByCategory: Record<Exclude<Category, 'all'>, Resource[]> = {
     books,
     journals,
     digitalArchives,

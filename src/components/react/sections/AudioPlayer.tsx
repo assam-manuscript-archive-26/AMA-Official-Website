@@ -327,7 +327,7 @@ The Majuli Museum preserves artifacts and documents that showcase the rich histo
 };
 
 // Wrapper component that handles data fetching from URL query params
-// This bridges the Samaguri routing (?id=) with the Artifex component interface
+// This bridges the Assamese Manuscript Archive routing (?id=) with the Artifex component interface
 const AudioPlayer: React.FC = () => {
     const [artifactData, setArtifactData] = useState<any>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -386,4 +386,4 @@ const AudioPlayer: React.FC = () => {
     return <AudioPlayerInner artifactData={artifactData} />;
 };
 
-export default AudioPlayer;
+export default AudioPlayer;

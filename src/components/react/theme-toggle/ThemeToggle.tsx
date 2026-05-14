@@ -10,10 +10,10 @@ import '@theme-toggles/react/css/Expand.css';
  * for a circular clip-path page reveal when switching themes.
  *
  * Modes: 'light' | 'dark'
- * Persists to localStorage('samaguri-theme') for cross-tab + cross-route sync.
+ * Persists to localStorage('ama-theme') for cross-tab + cross-route sync.
  */
 
-const STORAGE_KEY = 'samaguri-theme';
+const STORAGE_KEY = 'ama-theme';
 
 interface ThemeToggleProps {
   /** Duration of the circular clip-path reveal animation (ms) */

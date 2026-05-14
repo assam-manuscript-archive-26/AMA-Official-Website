@@ -21,7 +21,7 @@ export default function LoginForm() {
     }
 
     // Check for remembered email
-    const savedEmail = localStorage.getItem('samaguri_remember_user');
+    const savedEmail = localStorage.getItem('ama_remember_user');
     if (savedEmail) {
       setEmail(savedEmail);
       setRememberMe(true);
@@ -44,9 +44,9 @@ export default function LoginForm() {
       if (result.success) {
         // Save remember-me preference
         if (rememberMe) {
-          localStorage.setItem('samaguri_remember_user', email.trim());
+          localStorage.setItem('ama_remember_user', email.trim());
         } else {
-          localStorage.removeItem('samaguri_remember_user');
+          localStorage.removeItem('ama_remember_user');
         }
 
         window.location.href = '/admin';
@@ -71,7 +71,7 @@ export default function LoginForm() {
             <Shield size={28} />
           </div>
           <h2 className="login-title">Admin Portal</h2>
-          <p className="login-subtitle">Sign in to manage the Samaguri Satra archive</p>
+          <p className="login-subtitle">Sign in to manage the Assamese Manuscript Archive archive</p>
         </div>
 
         {/* Error Message */}

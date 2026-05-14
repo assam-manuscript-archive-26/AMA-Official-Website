@@ -1,8 +1,8 @@
-# Samaguri Satra Website
+# Assamese Manuscript Archive Website
 
 ## Project Overview
 
-The Samaguri Satra Website is a digital heritage platform for Samaguri Satra - a cultural institution in Assam, India. The website serves as a digital archive for Assamese manuscript paintings, providing visitors with an interactive museum experience both at the physical location and online.
+The Assamese Manuscript Archive Website is a digital heritage platform for Assamese Manuscript Archive - a cultural institution in Assam, India. The website serves as a digital archive for Assamese manuscript paintings, providing visitors with an interactive museum experience both at the physical location and online.
 
 ### Purpose
 
@@ -72,7 +72,7 @@ The database contains the following collections (from Artifex template):
 ## Project Structure
 
 ```
-Samaguri Satra Website/
+Assamese Manuscript Archive Website/
 ├── src/
 │   ├── backend/
 │   │   ├── actions/          # FrontQL CRUD operations
@@ -142,7 +142,7 @@ Samaguri Satra Website/
 | **Events** | Upcoming events and exhibitions |
 | **News** | Latest news and bulletins |
 | **Visit** | Visit planning information |
-| **About** | About Samaguri Satra |
+| **About** | About Assamese Manuscript Archive |
 | **Feedback** | User feedback form |
 | **Chatbot** | AI-powered real-time assistance |
 
@@ -268,7 +268,7 @@ Static content rendered on server:
 
 ### Theme
 
-The website inherits its design from Artifex with Samaguri Satra branding:
+The website inherits its design from Artifex with Assamese Manuscript Archive branding:
 - Color scheme: Traditional Assamese aesthetics
 - Typography: Mix of traditional and modern
 - Imagery: Assamese manuscript paintings, Sattras
