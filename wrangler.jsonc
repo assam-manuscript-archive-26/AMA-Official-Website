@@ -5,8 +5,7 @@
   "compatibility_date": "2025-01-01",
   "compatibility_flags": ["nodejs_compat"],
   "assets": {
-    "directory": "./dist",
-    "exclude": ["**/majuli.mp4", "assets/majuli.mp4"]
+    "directory": "./dist"
   },
   "vars": {
     "NODE_ENV": "production"
