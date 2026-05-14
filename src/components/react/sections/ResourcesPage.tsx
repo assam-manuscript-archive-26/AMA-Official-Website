@@ -141,13 +141,24 @@ export default function ResourcesPage({ books, journals, digitalArchives, articl
 
   return (
     <div
-      className="w-full max-w-[1400px] mx-auto"
+      className="w-full max-w-[1400px] mx-auto relative"
       style={{
         backgroundColor: 'var(--color-canvas)',
         color: 'var(--color-ink)',
         fontFamily: 'var(--font-body)'
       }}
     >
+      {/* Grain texture overlay - only on background, not content */}
+      <div
+        className="absolute inset-0 pointer-events-none z-[1]"
+        style={{
+          backgroundImage: "url('https://www.transparenttextures.com/patterns/tileable-wood-colored.png')",
+          opacity: 0.45,
+        }}
+      />
+
+      {/* Content wrapper with higher z-index */}
+      <div className="relative z-[2]">
       {/* Header - Matching Events/Collections Style */}
       <div
         className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-0 p-6 sm:p-8 pt-32 sm:pt-32"
@@ -586,6 +597,7 @@ export default function ResourcesPage({ books, journals, digitalArchives, articl
           </button>
         </div>
       )}
+      </div>
     </div>
   );
 }

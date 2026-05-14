@@ -51,7 +51,7 @@ export default function FeedbackManager() {
     })();
   }, []);
 
-  const filtered = feedbacks.filter(f => {
+  const filtered = [...feedbacks].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()).filter(f => {
     if (!searchTerm) return true;
     const t = searchTerm.toLowerCase();
     return f.name?.toLowerCase().includes(t) || f.email?.toLowerCase().includes(t) || f.message?.toLowerCase().includes(t);

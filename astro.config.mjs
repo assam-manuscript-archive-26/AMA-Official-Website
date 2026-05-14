@@ -11,8 +11,23 @@ export default defineConfig({
   integrations: [
     react(),
   ],
-  adapter: cloudflare(),
+  adapter: cloudflare({
+    platformProxy: {
+      enabled: true,
+    },
+  }),
   vite: {
     plugins: [tailwindcss()],
+  },
+  security: {
+    checkOrigin: true,
+    headers: {
+      '/admin/*': {
+        'X-Robots-Tag': 'noindex, nofollow',
+        'X-Frame-Options': 'DENY',
+        'X-Content-Type-Options': 'nosniff',
+        'Referrer-Policy': 'strict-origin-when-cross-origin',
+      },
+    },
   },
 });

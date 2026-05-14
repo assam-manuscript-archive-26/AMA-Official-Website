@@ -141,13 +141,24 @@ const CollectionsPage: React.FC = () => {
 
   return (
     <div
-      className="w-full max-w-[1400px] mx-auto min-h-screen pb-15"
+      className="w-full max-w-[1400px] mx-auto min-h-screen pb-15 relative"
       style={{
         backgroundColor: "var(--color-canvas)",
         color: "var(--color-ink)",
         fontFamily: 'var(--font-body)',
       }}
     >
+      {/* Grain texture overlay - only on background, not content */}
+      <div
+        className="absolute inset-0 pointer-events-none z-[1]"
+        style={{
+          backgroundImage: "url('https://www.transparenttextures.com/patterns/tileable-wood-colored.png')",
+          opacity: 0.45,
+        }}
+      />
+
+      {/* Content wrapper with higher z-index */}
+      <div className="relative z-[2]">
       <CollectionsBanner />
 
       <CollectionsSearchBar
@@ -319,6 +330,7 @@ const CollectionsPage: React.FC = () => {
             </p>
           </div>
         )}
+      </div>
       </div>
     </div>
   );
