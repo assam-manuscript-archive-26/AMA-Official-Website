@@ -1,0 +1,43 @@
+---
+import ProfessionalFooter from '@/components/react/sections/ProfessionalFooter';
+import ThemeInit from '../components/react/theme-toggle/ThemeInit.astro';
+import FloatingNavbar from '@/components/react/navbar/FloatingNavbar';
+import { Chatbot } from '@/components/react';
+import FloatingQRButton from '@/components/react/floatingButton/FloatingQRButton';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = 'Samaguri Satra', description = 'Digital archive of Assamese manuscript paintings' } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title} | Samaguri Satra</title>
+    <ThemeInit />
+  </head>
+  <body class="bg-canvas text-ink min-h-screen flex flex-col">
+    <!-- Floating Navbar -->
+    <FloatingNavbar client:load initialPath={Astro.url.pathname} />
+    <main class="flex-1 relative z-10">
+      <slot />
+    </main>
+    <!-- Professional Footer -->
+    <ProfessionalFooter client:visible />
+    <!-- Floating QR Button -->
+    <FloatingQRButton client:load />
+    <!-- Chatbot -->
+    <Chatbot client:load />
+  </body>
+</html>
+
+<style is:global>
+  @import '../globals.css';
+</style>

@@ -1,0 +1,50 @@
+---
+import '../globals.css';
+
+interface Props {
+  title?: string;
+}
+
+const { title = 'Admin Dashboard' } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title} | Samaguri Satra Admin</title>
+    <!-- Blocking script: apply saved theme BEFORE paint to prevent flash -->
+    <script is:inline>
+      (function() {
+        try {
+          var theme = localStorage.getItem('samaguri_theme') || 'dark';
+          var attr;
+          if (theme === 'system') {
+            attr = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'light' : 'dark';
+          } else {
+            attr = theme === 'dark' ? 'light' : 'dark';
+          }
+          document.documentElement.setAttribute('data-theme', attr);
+        } catch(e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  @import '../globals.css';
+
+  /* Force dark admin surfaces even in light theme */
+  body {
+    margin: 0;
+    padding: 0;
+    background: var(--color-surface-dark);
+    color: var(--color-on-dark);
+  }
+</style>

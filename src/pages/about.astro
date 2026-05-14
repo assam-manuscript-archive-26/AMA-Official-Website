@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AboutPage from '../components/react/sections/AboutPage';
+---
+
+<BaseLayout title="About">
+  <AboutPage client:visible />
+</BaseLayout>
+
+<style>
+  .safe-area-pb {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+</style>

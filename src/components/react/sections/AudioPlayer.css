@@ -1,0 +1,517 @@
+/* ── AudioPlayer.css ──────────────────────────────────────────
+   Samaguri Satra Design System — Theme-aware Audio Player
+   Uses CSS custom properties from globals.css for light/dark mode.
+   All transitions synced with --theme-transition-duration (400ms).
+──────────────────────────────────────────────────────────────── */
+
+/* Base Container */
+.audio-player-container {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+    padding: 20px;
+    padding-top: 130px;
+    box-sizing: border-box;
+    overflow: auto;
+    flex-wrap: wrap;
+    background-color: var(--color-primary);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    transition:
+        background-color var(--theme-transition-duration, 400ms) ease,
+        color var(--theme-transition-duration, 400ms) ease;
+}
+
+/* ── Left Side — Audio Player ────────────────────────────── */
+.audio-player {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 40px;
+    background: var(--color-surface-card);
+    border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+    box-shadow:
+        0 0 0 1px var(--color-hairline),
+        0 10px 30px rgba(0, 0, 0, 0.08);
+    position: relative;
+    overflow: hidden;
+    transition:
+        background-color var(--theme-transition-duration, 400ms) ease,
+        box-shadow var(--theme-transition-duration, 400ms) ease;
+}
+
+.audio-player::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -30%;
+    width: 80%;
+    height: 200%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--color-primary) 6%, transparent) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ── Right Side — Text Description ───────────────────────── */
+.text-description {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: var(--color-surface-soft);
+    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+    margin-left: 2px;
+    box-shadow:
+        0 0 0 1px var(--color-hairline),
+        0 10px 30px rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(10px);
+    overflow-y: auto;
+    position: relative;
+    z-index: 1;
+    transition:
+        background-color var(--theme-transition-duration, 400ms) ease,
+        box-shadow var(--theme-transition-duration, 400ms) ease;
+}
+
+.text-description::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+        radial-gradient(circle at 20% 30%, color-mix(in srgb, var(--color-primary) 5%, transparent) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, color-mix(in srgb, var(--color-accent-gold) 4%, transparent) 0%, transparent 40%);
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.description-title {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    color: var(--color-ink);
+    font-weight: 500;
+    font-family: var(--font-display);
+    position: relative;
+    padding-bottom: 15px;
+    text-align: center;
+    transition: color var(--theme-transition-duration, 400ms) ease;
+}
+
+.description-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: var(--color-primary);
+    border-radius: 3px;
+}
+
+.description-content {
+    line-height: 1.8;
+    font-size: 1.1rem;
+    color: var(--color-body);
+    max-width: 600px;
+    width: 100%;
+    margin: 0 auto;
+    text-align: justify;
+    transition: color var(--theme-transition-duration, 400ms) ease;
+}
+
+.description-paragraph {
+    margin-bottom: 25px;
+}
+
+/* ── Language Selector ───────────────────────────────────── */
+.language-selector {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 2;
+}
+
+.language-dropdown {
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    border: 1px solid color-mix(in srgb, var(--color-primary-active) 60%, transparent);
+    border-radius: var(--radius-pill);
+    padding: 8px 15px;
+    font-size: 0.9rem;
+    font-family: var(--font-body);
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+    transition:
+        all 0.3s ease,
+        background-color var(--theme-transition-duration, 400ms) ease,
+        color var(--theme-transition-duration, 400ms) ease;
+}
+
+.language-dropdown:hover {
+    background: var(--color-primary-active);
+    color: var(--color-on-primary);
+    border-color: var(--color-primary-active);
+}
+
+.language-dropdown option {
+    background: var(--color-surface-card);
+    color: var(--color-ink);
+}
+
+/* ── Exhibit Info ────────────────────────────────────────── */
+.exhibit-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 50px;
+    position: relative;
+    z-index: 1;
+    padding-top: 40px;
+}
+
+.exhibit-thumbnail {
+    width: 220px;
+    height: 220px;
+    border-radius: var(--radius-lg);
+    object-fit: cover;
+    border: 2px solid var(--color-hairline);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    margin-bottom: 25px;
+    transition: transform 0.3s ease, border-color var(--theme-transition-duration, 400ms) ease;
+}
+
+.exhibit-thumbnail:hover {
+    transform: scale(1.02);
+}
+
+.exhibit-text {
+    text-align: center;
+}
+
+.exhibit-title {
+    font-size: 1.8rem;
+    color: var(--color-ink);
+    margin: 0 0 10px 0;
+    font-weight: 500;
+    font-family: var(--font-display);
+    transition: color var(--theme-transition-duration, 400ms) ease;
+}
+
+.exhibit-subtitle {
+    font-size: 1.1rem;
+    color: var(--color-muted);
+    margin: 0;
+    font-weight: 400;
+    transition: color var(--theme-transition-duration, 400ms) ease;
+}
+
+/* ── Audio Controls ──────────────────────────────────────── */
+.audio-controls {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.control-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.skip-button {
+    background: var(--color-surface-soft);
+    color: var(--color-ink);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-pill);
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-family: var(--font-body);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+}
+
+.skip-button:hover {
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    border-color: var(--color-primary);
+    transform: scale(1.05);
+}
+
+.play-pause-button {
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    border: none;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 20px color-mix(in srgb, var(--color-primary) 50%, transparent);
+    border: 2px solid var(--color-hairline-soft);
+}
+
+.play-pause-button:hover {
+    transform: scale(1.1);
+    background: var(--color-primary-active);
+}
+
+/* ── Progress Bar ────────────────────────────────────────── */
+.progress-container {
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.time-display-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+    color: var(--color-muted);
+    transition: color var(--theme-transition-duration, 400ms) ease;
+}
+
+.progress-slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(
+        to right,
+        var(--color-primary) var(--progress, 0%),
+        var(--color-hairline) var(--progress, 0%)
+    );
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+    /* Only animate height on hover, NOT background — prevents trail desync */
+    transition: height 0.2s ease;
+    -webkit-transition: height 0.2s ease;
+}
+
+.progress-slider:hover {
+    height: 7px;
+}
+
+.progress-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+    border: 2px solid var(--color-canvas);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    /* Ensure thumb sits on top of the gradient track */
+    position: relative;
+    z-index: 1;
+}
+
+.progress-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    background: var(--color-primary-active);
+}
+
+.progress-slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    cursor: pointer;
+    border: 2px solid var(--color-canvas);
+}
+
+/* ── Volume Controls ─────────────────────────────────────── */
+.volume-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 40px;
+}
+
+.volume-button {
+    background: none;
+    border: none;
+    color: var(--color-muted);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px;
+    transition: all 0.2s ease, color var(--theme-transition-duration, 400ms) ease;
+}
+
+.volume-button:hover {
+    transform: scale(1.1);
+    color: var(--color-primary);
+}
+
+.volume-slider {
+    -webkit-appearance: none;
+    width: 120px;
+    height: 5px;
+    background: linear-gradient(
+        to right,
+        var(--color-primary) var(--volume, 100%),
+        var(--color-hairline) var(--volume, 100%)
+    );
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+    /* Only animate height on hover, NOT background — prevents trail desync */
+    transition: height 0.2s ease;
+    -webkit-transition: height 0.2s ease;
+}
+
+.volume-slider:hover {
+    height: 7px;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+    border: 2px solid var(--color-canvas);
+    position: relative;
+    z-index: 1;
+}
+
+.volume-slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    cursor: pointer;
+    border: 2px solid var(--color-canvas);
+}
+
+/* ── Official Website Button ─────────────────────────────── */
+.official-website-container {
+    display: flex;
+    justify-content: center;
+}
+
+.official-website-button {
+    background: var(--color-surface-soft);
+    color: var(--color-ink);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-pill);
+    padding: 12px 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s;
+    backdrop-filter: blur(5px);
+}
+
+.official-website-button:hover {
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    transform: scale(1.05);
+}
+
+/* ── Responsive Design ───────────────────────────────────── */
+@media (max-width: 1024px) {
+    .text-description {
+        padding: 30px;
+    }
+
+    .description-title {
+        font-size: 2rem;
+    }
+
+    .description-content {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .audio-player-container {
+        flex-direction: column;
+        height: auto;
+        min-height: 100vh;
+        padding: 15px;
+    }
+
+    .text-description {
+        border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+        margin-left: 0;
+        margin-top: 2px;
+        padding: 30px 20px;
+    }
+
+    .audio-player {
+        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        padding: 30px 20px;
+    }
+
+    .exhibit-thumbnail {
+        width: 180px;
+        height: 180px;
+    }
+
+    .control-buttons {
+        gap: 20px;
+    }
+
+    .language-selector {
+        top: 15px;
+        right: 15px;
+    }
+
+    .language-dropdown {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+    }
+
+    .description-content {
+        text-align: justify;
+        padding: 2%;
+    }
+}
+
+@media (max-width: 480px) {
+    .audio-player-container {
+        padding-top: 120px;
+    }
+
+    .description-title {
+        font-size: 1.8rem;
+    }
+
+    .exhibit-thumbnail {
+        width: 150px;
+        height: 150px;
+    }
+
+    .play-pause-button {
+        width: 70px;
+        height: 70px;
+    }
+
+    .skip-button {
+        padding: 10px 15px;
+    }
+}

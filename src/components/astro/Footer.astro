@@ -1,0 +1,42 @@
+---
+import { footerLinks } from '../../lib/data/navRoutes';
+---
+
+<footer class="bg-surface-dark text-on-dark py-16">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+      <div>
+        <h3 class="font-display text-xl text-on-dark mb-4">Samaguri Satra</h3>
+        <p class="text-on-dark-soft text-sm leading-relaxed">
+          Preserving the rich heritage of Assamese manuscript paintings for future generations.
+        </p>
+      </div>
+
+      {Object.entries(footerLinks).map(([title, links]) => (
+        <div>
+          <h4 class="font-body font-medium text-on-dark mb-4">{title}</h4>
+          <ul class="space-y-2">
+            {links.map((link) => (
+              <li>
+                <a href="#" class="text-on-dark-soft text-sm hover:text-on-dark transition-colors">
+                  {link}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+
+    <div class="border-t border-surface-dark-soft pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+      <p class="text-on-dark-soft text-sm">
+        &copy; {new Date().getFullYear()} Samaguri Satra. All rights reserved.
+      </p>
+      <div class="flex gap-6">
+        <a href="#" class="text-on-dark-soft text-sm hover:text-on-dark">Privacy</a>
+        <a href="#" class="text-on-dark-soft text-sm hover:text-on-dark">Terms</a>
+        <a href="#" class="text-on-dark-soft text-sm hover:text-on-dark">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>

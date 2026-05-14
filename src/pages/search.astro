@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SearchBar from '../components/react/sections/SearchBar';
+import CollectionGrid from '../components/react/sections/CollectionGrid';
+---
+
+<BaseLayout title="Search">
+  <section className="py-24 px-6">
+    <div className="max-w-7xl mx-auto">
+      <h1 className="font-display text-5xl text-ink text-center mb-8">Search</h1>
+
+      <div className="mb-12">
+        <SearchBar client:load />
+      </div>
+
+      <p className="text-body text-center text-muted mb-8">
+        Try searching for: manuscripts, artists, periods, or Satras
+      </p>
+
+      <div className="card-cream">
+        <h2 className="font-display text-2xl text-ink mb-6">Popular Searches</h2>
+        <div className="flex flex-wrap gap-3">
+          {['Manuscript Paintings', 'Religious Art', 'Traditional Crafts', '18th Century', 'Auniati Satra'].map((term) => (
+            <a href={`/search?q=${encodeURIComponent(term)}`} className="px-4 py-2 bg-surface-soft text-body rounded-full text-sm hover:bg-hairline transition-colors">
+              {term}
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

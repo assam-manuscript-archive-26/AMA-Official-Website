@@ -1,0 +1,13 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import AdminShell from '../../components/react/Admin/AdminShell';
+
+// This catch-all handles /admin, /admin/upload, /admin/artifacts, etc.
+// AdminShell handles client-side routing internally (SPA)
+const slug = Astro.params.slug;
+const path = slug ? `/admin/${slug}` : '/admin';
+---
+
+<AdminLayout title="Admin">
+  <AdminShell client:load currentPath={path} />
+</AdminLayout>

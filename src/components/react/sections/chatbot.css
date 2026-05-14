@@ -1,0 +1,87 @@
+/* Chatbot 3D open/close animation - Mac-style */
+.chatbot-container {
+    transform-origin: bottom right;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    will-change: transform, opacity;
+    perspective: 1000px;
+}
+
+.chatbot-open {
+    transform: scale(1) rotateX(0deg);
+    opacity: 1;
+}
+
+.chatbot-close {
+    transform: scale(0.85) rotateX(20deg);
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Dark mode overrides - apply when data-theme="dark" on html */
+[data-theme="dark"] .chatbot-floating-btn {
+    background-color: #252320 !important;
+}
+
+[data-theme="dark"] .chatbot-floating-btn:hover {
+    background-color: #2a2927 !important;
+}
+
+[data-theme="dark"] .chatbot-window {
+    background-color: #181715 !important;
+    border-color: #3a3835 !important;
+}
+
+[data-theme="dark"] .chatbot-header {
+    background-color: #252320 !important;
+}
+
+[data-theme="dark"] .chatbot-messages {
+    background-color: #181715 !important;
+}
+
+[data-theme="dark"] .chatbot-input-area {
+    background-color: #181715 !important;
+    border-color: #3a3835 !important;
+}
+
+[data-theme="dark"] .chatbot-bot-msg {
+    background-color: #222120 !important;
+    color: #faf9f5 !important;
+    border-color: #3a3835 !important;
+}
+
+[data-theme="dark"] .chatbot-user-msg {
+    background-color: #cc785c !important;
+    color: white !important;
+}
+
+[data-theme="dark"] .chatbot-input {
+    background-color: #222120 !important;
+    border-color: #3a3835 !important;
+    color: #faf9f5 !important;
+}
+
+[data-theme="dark"] .chatbot-input::placeholder {
+    color: #a09d96 !important;
+}
+
+[data-theme="dark"] .chatbot-send-btn {
+    background-color: #cc785c !important;
+}
+
+[data-theme="dark"] .chatbot-send-btn:disabled {
+    background-color: #3a3835 !important;
+    color: #6c6a64 !important;
+}
+
+[data-theme="dark"] .chatbot-close-btn {
+    color: #a09d96 !important;
+}
+
+[data-theme="dark"] .chatbot-icon {
+    color: #cc785c !important;
+}
+
+[data-theme="dark"] .chatbot-typing-dot {
+    background-color: #cc785c !important;
+}

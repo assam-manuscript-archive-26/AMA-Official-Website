@@ -1,0 +1,132 @@
+/* QR Scanner Dark Mode Styles */
+
+/* Floating QR Button */
+.qr-floating-btn {
+    background-color: #c9a227 !important;
+    border-color: white !important;
+}
+
+.qr-floating-btn:hover {
+    background-color: #a88a1f !important;
+}
+
+/* QR Scanner Modal Container */
+.qr-scanner-modal {
+    background-color: #faf9f5 !important;
+    border-color: #e6dfd8 !important;
+}
+
+.qr-scanner-modal .modal-title {
+    color: #141413 !important;
+}
+
+.qr-scanner-modal .modal-description {
+    color: #3d3d3a !important;
+}
+
+/* QR Scanner Webcam */
+.qr-scanner-modal .webcam-container {
+    border-color: #e6dfd8 !important;
+    background-color: #1f1e1b !important;
+}
+
+/* QR Scanner Close Button */
+.qr-scanner-modal .close-btn {
+    background-color: #cc785c !important;
+    border-color: #e6dfd8 !important;
+}
+
+.qr-scanner-modal .close-btn:hover {
+    background-color: #a9583e !important;
+}
+
+/* QR Scanner Upload Button */
+.qr-scanner-modal .upload-btn {
+    background-color: #cc785c !important;
+    border-color: #cc785c !important;
+    color: white !important;
+}
+
+.qr-scanner-modal .upload-btn:hover {
+    background-color: #a9583e !important;
+}
+
+/* QR Scanner Success Badge */
+.qr-scanner-modal .success-badge {
+    background-color: #5db872 !important;
+    color: white !important;
+}
+
+/* QR Scanner Visit Button */
+.qr-scanner-modal .visit-btn {
+    background-color: #cc785c !important;
+    border-color: #cc785c !important;
+    color: white !important;
+}
+
+.qr-scanner-modal .visit-btn:hover {
+    background-color: #a9583e !important;
+}
+
+/* Dark Mode Overrides */
+[data-theme="dark"] .qr-scanner-modal {
+    background-color: #181715 !important;
+    border-color: #3a3835 !important;
+}
+
+[data-theme="dark"] .qr-scanner-modal .modal-title {
+    color: #faf9f5 !important;
+}
+
+[data-theme="dark"] .qr-scanner-modal .modal-description {
+    color: #a09d96 !important;
+}
+
+[data-theme="dark"] .qr-scanner-modal .webcam-container {
+    border-color: #3a3835 !important;
+    background-color: #1f1e1b !important;
+}
+
+[data-theme="dark"] .qr-scanner-modal .close-btn {
+    background-color: #cc785c !important;
+    border-color: #3a3835 !important;
+}
+
+[data-theme="dark"] .qr-scanner-modal .close-btn:hover {
+    background-color: #a9583e !important;
+}
+
+/* [data-theme="dark"] .qr-scanner-modal .upload-btn {
+    background-color: #252320 !important;
+    border-color: #3a3835 !important;
+    color: #faf9f5 !important;
+}
+
+[data-theme="dark"] .qr-scanner-modal .upload-btn:hover {
+    background-color: #2a2927 !important;
+} */
+
+[data-theme="dark"] .qr-scanner-modal .success-badge {
+    background-color: #5db872 !important;
+    color: white !important;
+}
+
+[data-theme="dark"] .qr-scanner-modal .visit-btn {
+    background-color: #cc785c !important;
+    border-color: #cc785c !important;
+    color: white !important;
+}
+
+[data-theme="dark"] .qr-scanner-modal .visit-btn:hover {
+    background-color: #a9583e !important;
+}
+
+/* Floating Button Dark Mode */
+[data-theme="dark"] .qr-floating-btn {
+    background-color: #252320 !important;
+    border-color: #c9a227 !important;
+}
+
+[data-theme="dark"] .qr-floating-btn:hover {
+    background-color: #2a2927 !important;
+}

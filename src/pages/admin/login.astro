@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import LoginForm from '../../components/react/Admin/LoginForm';
+---
+
+<BaseLayout title="Admin Login" description="Sign in to manage the Samaguri Satra digital archive">
+  <section class="login-page-section">
+    <LoginForm client:load />
+  </section>
+</BaseLayout>
+
+<style>
+  .login-page-section {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 24px;
+    background: var(--color-surface-soft);
+  }
+</style>

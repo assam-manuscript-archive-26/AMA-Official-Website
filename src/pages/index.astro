@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import LandingHero from '../components/react/hero/LandingHero';
+import MajuliIntro from '../components/react/sections/MajuliIntro';
+import CollectionsCarousel from '../components/react/sections/CollectionsCarousel';
+---
+
+<BaseLayout title="Home">
+
+  <!-- Hero Section (with integrated search bar) -->
+  <LandingHero client:load />
+
+  <!-- Welcome to Majuli Section -->
+  <MajuliIntro client:visible />
+
+  <!-- EXPLORE OUR COLLECTIONS -->
+  <CollectionsCarousel client:visible />
+
+</BaseLayout>
+
+<style>
+  /* Additional spacing for mobile bottom nav */
+  .safe-area-pb {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+</style>

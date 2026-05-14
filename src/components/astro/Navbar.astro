@@ -1,0 +1,55 @@
+---
+import { navRoutes } from '../../lib/data/navRoutes';
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="fixed top-0 left-0 right-0 z-50 bg-canvas border-b border-hairline">
+  <nav class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+    <a href="/" class="flex items-center gap-2">
+      <span class="font-display text-2xl font-medium text-ink">Samaguri Satra</span>
+    </a>
+
+    <div class="hidden md:flex items-center gap-8">
+      {navRoutes.map((route) => (
+        <a
+          href={route.href}
+          class={`text-sm font-medium transition-colors ${
+            currentPath.startsWith(route.href)
+              ? 'text-primary'
+              : 'text-body hover:text-ink'
+          }`}
+        >
+          {route.label}
+        </a>
+      ))}
+    </div>
+
+    <div class="flex items-center gap-4">
+      <a
+        href="/search"
+        class="p-2 text-muted hover:text-ink transition-colors"
+        aria-label="Search"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.3-4.3"></path>
+        </svg>
+      </a>
+      <a
+        href="/qrscanner"
+        class="btn-primary text-sm"
+      >
+        Scan QR
+      </a>
+      <a
+        href="/admin"
+        class="text-sm text-muted hover:text-ink hidden md:inline-block"
+      >
+        Admin
+      </a>
+    </div>
+  </nav>
+</header>
+
+<div class="h-16"></div>

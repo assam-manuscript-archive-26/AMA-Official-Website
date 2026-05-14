@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import NewsGrid from '../components/react/sections/NewsGrid';
+
+const news = [
+  {
+    id: '1',
+    title: 'New Exhibition: Treasures of the Satra',
+    excerpt: 'Discover the hidden gems of Samaguri Satra in our new exhibition opening this month.',
+    image: '/assets/news/exhibition.jpg',
+    published_at: '2026-05-01',
+  },
+  {
+    id: '2',
+    title: 'Multilingual Audio Guides Now Available',
+    excerpt: 'Experience our collection in English, Hindi, and Assamese with our new audio guides.',
+    image: '/assets/news/audio.jpg',
+    published_at: '2026-04-15',
+  },
+  {
+    id: '3',
+    title: 'Digital Archive Launch',
+    excerpt: 'We are excited to announce the launch of our new digital archive platform.',
+    image: '/assets/news/archive.jpg',
+    published_at: '2026-03-20',
+  },
+  {
+    id: '4',
+    title: 'Preservation Project Update',
+    excerpt: 'Learn about our ongoing efforts to preserve ancient manuscripts.',
+    image: '/assets/news/preservation.jpg',
+    published_at: '2026-02-10',
+  },
+];
+---
+
+<BaseLayout title="News">
+  <section className="py-24 px-6">
+    <div className="max-w-7xl mx-auto">
+      <h1 className="font-display text-5xl text-ink text-center mb-4">Latest News</h1>
+      <p className="text-body text-center max-w-2xl mx-auto mb-12">
+        Stay updated with the latest news and announcements from Samaguri Satra.
+      </p>
+
+      <NewsGrid news={news} client:visible />
+    </div>
+  </section>
+</BaseLayout>
