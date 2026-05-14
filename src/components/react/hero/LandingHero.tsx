@@ -126,9 +126,10 @@ export default function LandingHero() {
           muted
           loop
           playsInline
-          poster="/assets/hero-poster.jpg"
+          poster="/assets/bg3.jpg"
         >
-          <source src="/assets/majuli.mp4" type="video/mp4" />
+          <source src="https://uploads.backendservices.in/storage/internship/artifex/videos/177877450165448.mp4" type="video/mp4" />
+
           {/* Fallback to image if video fails */}
           <div className="absolute inset-0 bg-gradient-to-br from-[#5db8a6] via-[#cc785c] to-[#181715]" />
         </video>
