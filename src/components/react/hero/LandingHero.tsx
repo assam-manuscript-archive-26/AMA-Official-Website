@@ -119,6 +119,9 @@ export default function LandingHero() {
   return (
     <div className="relative overflow-visible">
       <section className="relative w-full h-[40vh] min-h-[300px] overflow-visible">
+        {/* Fallback to image if video fails */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#5db8a6] via-[#cc785c] to-[#181715]" />
+
         {/* Video Background */}
         <video
           className="absolute inset-0 w-full h-full object-cover"
@@ -129,9 +132,6 @@ export default function LandingHero() {
           poster="/assets/bg3.jpg"
         >
           <source src="https://uploads.backendservices.in/storage/internship/artifex/videos/177877450165448.mp4" type="video/mp4" />
-
-          {/* Fallback to image if video fails */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[#5db8a6] via-[#cc785c] to-[#181715]" />
         </video>
 
         {/* Dark Overlay for readability */}
