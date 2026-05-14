@@ -120,7 +120,7 @@ export default function LandingHero() {
     <div className="relative overflow-visible">
       <section className="relative w-full h-[40vh] min-h-[300px] overflow-visible">
         {/* Fallback to image if video fails */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#5db8a6] via-[#cc785c] to-[#181715]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#5db8a6] via-[#4c785c] to-[#181715]" />
 
         {/* Video Background */}
         <video
