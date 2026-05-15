@@ -249,19 +249,16 @@ export default function AboutPage() {
               {
                 name: 'Ritanjit Das',
                 initials: 'RD',
-                link: 'https://www.linkedin.com/in/ritanjit-das-530b7b216',
                 message: 'Bringing innovative solutions, one step at a time.'
               },
               {
                 name: 'Sandilya Baruah',
                 initials: 'SB',
-                link: 'https://www.linkedin.com/in/sandilya-baruah-40973a212',
                 message: 'A journey of a thousand miles begins with a single step – and a few lines of code.'
               },
               {
                 name: 'Subhrajyoti Goswami',
                 initials: 'SG',
-                link: 'https://www.linkedin.com/in/subhrajyoti-goswami-6b28a7250',
                 message: 'Tech and creativity – a perfect blend for the future.'
               }
             ].map((member, index) => (
@@ -276,16 +273,6 @@ export default function AboutPage() {
                 <h3 className="font-display text-2xl text-[var(--color-text)] font-medium mb-2">
                   {member.name}
                 </h3>
-                <div className="flex justify-center mt-3">
-                  <a
-                    href={member.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[var(--color-primary)] hover:opacity-80 transition-opacity"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
-                  </a>
-                </div>
                 <p className="mt-4 bg-[var(--color-surface-soft)] p-3 rounded-lg text-[var(--color-text-secondary)] italic text-sm">
                   "{member.message}"
                 </p>
