@@ -537,7 +537,7 @@ When implementing any component, verify:
 
 ---
 
-## Responsive Behavior
+## Responsive Behavior -
 
 ### Breakpoints
 
