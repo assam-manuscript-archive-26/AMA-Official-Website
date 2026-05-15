@@ -14,15 +14,17 @@ const {
   title = 'Assamese Manuscript Archive',
   description = 'Digital archive of Assamese manuscript paintings - preserving the cultural heritage of Assam through digital preservation of ancient manuscripts and paintings from Majuli and Sattras.',
   keywords = 'Assamese manuscripts, manuscript painting, Sattra, Majuli, Assam culture, Vaishnavite manuscripts, ancient manuscripts, digital archive, cultural heritage',
-  image = '/og-image.png',
+  image = '/assets/logo/og-image.png',
   url = '',
   type = 'website',
   noIndex = false,
   noFollow = false
 } = Astro.props;
 
-const canonicalURL = new URL(url, Astro.site || 'https://assamesemanuscriptarchive.com');
-const socialImageURL = new URL(image, Astro.site || 'https://assamesemanuscriptarchive.com');
+// const canonicalURL = new URL(url, Astro.site || 'https://assamesemanuscriptarchive.com');
+// const socialImageURL = new URL(image, Astro.site || 'https://assamesemanuscriptarchive.com');
+const canonicalURL = new URL(url, Astro.site || 'https://assamese-manuscript-archive.ritanjitdas.workers.dev');
+const socialImageURL = new URL(image, Astro.site || 'https://assamese-manuscript-archive.ritanjitdas.workers.dev');
 
 const robots = [
   noIndex ? 'noindex' : 'index',
@@ -33,8 +35,10 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
   "name": "Assamese Manuscript Archive",
-  "url": "https://assamesemanuscriptarchive.com",
-  "logo": "https://assamesemanuscriptarchive.com/logo.svg",
+  // "url": "https://assamesemanuscriptarchive.com",
+  // "logo": "https://assamesemanuscriptarchive.com/assets/logo/logo.svg",
+  "url": "https://assamese-manuscript-archive.ritanjitdas.workers.dev",
+  "logo": "https://assamese-manuscript-archive.ritanjitdas.workers.dev/assets/logo/logo.svg",
   "description": description,
   "address": {
     "@type": "PostalAddress",
