@@ -19,7 +19,7 @@ function toBase64(num: number): string {
 }
 
 export const _DATABASE = import.meta.env.PUBLIC_DATABASE || "s5_intern_database";
-export const _BASE_URL = import.meta.env.PUBLIC_BASE_URL || "https://v5.frontql.dev";
+export const _BASE_URL = import.meta.env.PUBLIC_BASE_URL || "https://v7.frontql.dev";
 const local_host = import.meta.env.PUBLIC_FRONTQL_local_host || "http://localhost:4466";
 
 type HttpMethod = "get" | "post" | "put" | "delete" | "sql";
