@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-The Assamese Manuscript Archive Website is a digital heritage platform for Assamese Manuscript Archive - a cultural institution in Assam, India. The website serves as a digital archive for Assamese manuscript paintings, providing visitors with an interactive museum experience both at the physical location and online.
+The Assamese Manuscript Archive Website is a digital heritage platform for Assamese Manuscript Archive, a cultural institution in Assam, India. The website serves as a digital archive for Assamese manuscript paintings, providing visitors with an interactive museum experience both at the physical location and online.
 
 ### Purpose
 
