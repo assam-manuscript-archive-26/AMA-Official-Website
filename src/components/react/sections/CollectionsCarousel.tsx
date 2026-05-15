@@ -86,7 +86,6 @@ const CollectionsCarousel: React.FC = () => {
         <div className="collections-container">
           <h2 className="collections-title">EXPLORE OUR COLLECTIONS</h2>
           <div className="loading-message">
-            <div className="spinner"></div>
             Loading Collections...
           </div>
         </div>

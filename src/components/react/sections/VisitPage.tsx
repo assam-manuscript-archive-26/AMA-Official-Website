@@ -81,7 +81,9 @@ const VisitPage = () => {
     return (
         <div
             className="py-28 px-4 sm:px-8 md:px-24 lg:px-40"
-            style={{ backgroundColor: 'var(--color-surface-soft)', fontFamily: 'var(--font-body)' }}
+            style={{
+                fontFamily: 'var(--font-body)'
+            }}
         >
             {/* Toast */}
             {toast && (

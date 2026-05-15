@@ -4,13 +4,25 @@ import ThemeInit from '../components/react/theme-toggle/ThemeInit.astro';
 import FloatingNavbar from '@/components/react/navbar/FloatingNavbar';
 import { Chatbot } from '@/components/react';
 import FloatingQRButton from '@/components/react/floatingButton/FloatingQRButton';
+import SEO from '../components/astro/SEO.astro';
 
 interface Props {
   title?: string;
   description?: string;
+  keywords?: string;
+  image?: string;
+  noIndex?: boolean;
+  noFollow?: boolean;
 }
 
-const { title = 'Assamese Manuscript Archive', description = 'Digital archive of Assamese manuscript paintings' } = Astro.props;
+const {
+  title = 'Assamese Manuscript Archive',
+  description = 'Digital archive of Assamese manuscript paintings - preserving the cultural heritage of Assam through digital preservation of ancient manuscripts and paintings from Majuli and Sattras.',
+  keywords = 'Assamese manuscripts, manuscript painting, Sattra, Majuli, Assam culture, Vaishnavite manuscripts, ancient manuscripts, digital archive, cultural heritage',
+  image,
+  noIndex = false,
+  noFollow = false
+} = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -18,12 +30,28 @@ const { title = 'Assamese Manuscript Archive', description = 'Digital archive of
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title} | Assamese Manuscript Archive</title>
+    <SEO
+      title={title}
+      description={description}
+      keywords={keywords}
+      image={image}
+      url={Astro.url.pathname}
+      noIndex={noIndex}
+      noFollow={noFollow}
+    />
     <ThemeInit />
   </head>
   <body class="bg-canvas text-ink min-h-screen flex flex-col">
+    <!-- Grain texture overlay - full page background -->
+    <div
+      class="fixed inset-0 pointer-events-none -z-10"
+      style={{
+        backgroundImage: "url('https://www.transparenttextures.com/patterns/tileable-wood-colored.png')",
+        opacity: 0.45,
+      }}
+    ></div>
     <!-- Floating Navbar -->
     <FloatingNavbar client:load initialPath={Astro.url.pathname} />
     <main class="flex-1 relative z-10">

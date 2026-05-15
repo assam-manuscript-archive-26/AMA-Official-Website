@@ -1,4 +1,32 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <circle cx="50" cy="50" r="45" fill="#cc785c"/>
-  <text x="50" y="65" text-anchor="middle" font-family="serif" font-size="40" font-weight="500" fill="#faf9f5">S</text>
+  <!-- Background circle with traditional Assamese pattern feel -->
+  <circle cx="50" cy="50" r="48" fill="#cc785c"/>
+  <circle cx="50" cy="50" r="42" fill="none" stroke="#faf9f5" stroke-width="2"/>
+
+  <!-- Stylized manuscript scroll/letter S shape -->
+  <path d="M35 30
+           Q35 25 45 25
+           L65 25
+           Q75 25 75 35
+           L75 45
+           Q75 50 65 50
+           L55 50
+           Q50 50 50 55
+           Q50 60 55 60
+           L70 60
+           Q80 60 80 70
+           Q80 80 70 80
+           L40 80
+           Q30 80 30 70
+           L30 40
+           Q30 30 40 30
+           Z"
+        fill="#faf9f5"
+        opacity="0.95"/>
+
+  <!-- Small decorative dots suggesting traditional art -->
+  <circle cx="25" cy="25" r="3" fill="#faf9f5" opacity="0.8"/>
+  <circle cx="75" cy="25" r="3" fill="#faf9f5" opacity="0.8"/>
+  <circle cx="25" cy="75" r="3" fill="#faf9f5" opacity="0.8"/>
+  <circle cx="75" cy="75" r="3" fill="#faf9f5" opacity="0.8"/>
 </svg>

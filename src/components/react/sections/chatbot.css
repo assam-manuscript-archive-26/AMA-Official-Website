@@ -17,6 +17,23 @@
     pointer-events: none;
 }
 
+/* Mobile: animation origin anchored to bottom-right (where the floating button is) */
+@media (max-width: 640px) {
+    .chatbot-container {
+        transform-origin: bottom right;
+    }
+
+    .chatbot-window {
+        max-height: calc(100vh - 10rem);
+        max-height: calc(100dvh - 10rem);
+    }
+
+    /* Prevent body scroll when chatbot is open on mobile */
+    .chatbot-open ~ body {
+        overflow: hidden;
+    }
+}
+
 /* Dark mode overrides - apply when data-theme="dark" on html */
 [data-theme="dark"] .chatbot-floating-btn {
     background-color: #252320 !important;

@@ -15,8 +15,6 @@
     "@astrojs/check": "^0.9.6",
     "@astrojs/cloudflare": "^12.6.12",
     "@astrojs/react": "4.4.2",
-    "@google/genai": "^2.2.0",
-    "@google/generative-ai": "^0.24.1",
     "@tailwindcss/vite": "^4.0.0",
     "@theme-toggles/react": "^4.1.0",
     "animejs": "^4.3.4",

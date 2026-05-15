@@ -58,7 +58,7 @@ export default function FeedbackPage() {
         <div
             className="flex flex-col items-center pt-28 pb-32 px-4 sm:px-8 md:px-24 lg:px-40"
             style={{
-                backgroundColor: 'var(--color-surface-soft)',
+                // backgroundColor: 'var(--color-surface-soft)',
                 color: 'var(--color-ink)',
                 fontFamily: 'var(--font-body)',
             }}

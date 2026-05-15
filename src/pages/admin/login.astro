@@ -3,7 +3,12 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import LoginForm from '../../components/react/Admin/LoginForm';
 ---
 
-<BaseLayout title="Admin Login" description="Sign in to manage the Assamese Manuscript Archive digital archive">
+<BaseLayout
+  title="Admin Login"
+  description="Sign in to manage the Assamese Manuscript Archive digital archive"
+  noIndex={true}
+  noFollow={true}
+>
   <section class="login-page-section">
     <LoginForm client:load />
   </section>

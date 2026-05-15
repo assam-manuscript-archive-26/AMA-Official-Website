@@ -37,7 +37,7 @@ export default function ThemeToggle({
     const domTheme = document.documentElement.getAttribute('data-theme');
 
     // Resolve what the theme should be
-    let resolved: 'light' | 'dark' = 'dark'; // fallback to dark (site default)
+    let resolved: 'light' | 'dark' = 'light'; // fallback to light
 
     if (stored === 'light' || stored === 'dark') {
       resolved = stored;

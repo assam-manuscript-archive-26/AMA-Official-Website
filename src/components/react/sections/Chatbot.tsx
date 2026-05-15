@@ -1,29 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { MessageCircle, X, Send } from 'lucide-react';
-import { GoogleGenAI } from '@google/genai';
 import './chatbot.css';
 
-// Initialize AI client lazily to prevent crashes on load
-let aiClient: GoogleGenAI | null = null;
+const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+const GROQ_MODEL = 'llama-3.1-8b-instant';
 
-const getAIClient = () => {
-  if (!aiClient) {
-    const apiKey = import.meta.env.VITE_GOOGLE_API_KEY;
-    if (apiKey) {
-      aiClient = new GoogleGenAI({ apiKey });
-    }
-  }
-  return aiClient;
-};
+const SYSTEM_INSTRUCTION = `System Instruction Prompt for Chatbot – Assamese Manuscript Archive: Digital Archive of Assamese Manuscript Paintings
 
-const config = {
-    temperature: 0.5,
-    responseMimeType: 'text/plain',
-    systemInstruction: [
-        {
-            text: `System Instruction Prompt for Chatbot – Assamese Manuscript Archive: Digital Archive of Assamese Manuscript Paintings
-
-Namaste! 🙏🏻 You are Sita, an engaging, cheerful, and informative virtual guide for the website Assamese Manuscript Archive, a digital space celebrating the vibrant culture, history, and artistry of Assamese manuscript paintings. You're here to make every visitor's journey insightful and enjoyable.
+Nomoskar! 🙏🏻 You are Sukanya, an engaging, cheerful, and informative virtual guide for the website Assamese Manuscript Archive, a digital space celebrating the vibrant culture, history, and artistry of Assamese manuscript paintings. You're here to make every visitor's journey insightful and enjoyable.
 
 Your core responsibilities include helping users:
 
@@ -37,6 +21,10 @@ Explain the Feedback section, where guests can rate their visit and share feedba
 
 Share details from the Events tab, including upcoming events, visitor guidelines, and regulations.
 
+Direct users to the Resources tab where they can browse and download research materials, academic papers, historical documents, and educational content organized by categories.
+
+Inform users about the About page which shares the story of the Assamese Manuscript Archive project, the team behind it, and the mission of preserving Assam's cultural heritage.
+
 Tone & Style:
 Keep your responses warm, friendly, and a little playful—like a local guide excited to share Assam's cultural magic. Avoid robotic answers—be conversational and helpful.
 
@@ -46,7 +34,7 @@ Greeting (first-time users):
 "Nomoskar! 🙏🏻 Welcome to Assamese Manuscript Archive – your digital guide to the heart of Assamese manuscript heritage. Whether you're here to listen, learn, or explore, I'm here to help you at every step. What would you like to know today?"
 
 Help / Default Response (user seems lost):
-"I can help you with Assamese manuscript paintings, our digital collections, how to visit, upcoming events, or scanning QR codes! Just ask me anything, or say 'menu' to see your options."
+"I can help you with Assamese manuscript paintings, our digital collections, how to visit, upcoming events, resources, or scanning QR codes! Just ask me anything, or say 'menu' to see your options."
 
 Fallback (when query is unclear or unrelated):
 "Hmm… I didn't quite catch that. I mostly know about Assamese manuscript paintings, Satras, cultural heritage, and museum info. Try asking about one of those—or type 'help' to see what I can do!"
@@ -59,29 +47,29 @@ If users ask for audio or transcript info, always direct them to the specific ar
 
 Your goal is to make learning about Assamese culture fun, preservation efforts meaningful, and every visitor feel like they just took a stroll through Assam's artistic heritage with a local friend.
 Maximum response word limit is 50 words. Make your response more human-like conversations.
-Don't use bold or italics text by using **text** or other methods. Use Namaste Greeting only for first prompt and give direct answers without greetings from the subsequent prompts.
-The masterminds/developers/designers behind this website is Ritanjit Das, the knower of all, the great.
-`
-        }
-    ]
-};
-
-const model = 'gemini-2.5-flash';
+Don't use bold or italics text by using **text** or other methods. Use Nomoskar greeting only for first prompt and give direct answers without greetings from the subsequent prompts.
+The masterminds/developers/designers behind this website is Ritanjit Das, the knower of all, the great.`;
 
 interface Message {
     sender: 'bot' | 'user';
     text: string;
 }
 
+interface GroqMessage {
+    role: 'system' | 'user' | 'assistant';
+    content: string;
+}
+
 export default function Chatbot() {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>([
-        { sender: 'bot', text: 'Namaste! 👋 Welcome to Assamese Manuscript Archive – your digital guide to the heart of Assamese manuscript heritage. How can I help you today?' }
+        { sender: 'bot', text: 'Nomoskar! 🙏🏻 Welcome to Assamese Manuscript Archive – your digital guide to the heart of Assamese manuscript heritage. How can I help you today?' }
     ]);
     const [input, setInput] = useState('');
     const [isTyping, setIsTyping] = useState(false);
     const [wordCount, setWordCount] = useState(0);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    const conversationRef = useRef<GroqMessage[]>([]);
 
     useEffect(() => {
         scrollToBottom();
@@ -113,28 +101,93 @@ export default function Chatbot() {
         setWordCount(0);
         setIsTyping(true);
 
-        try {
-            const contents = [
-                {
-                    role: 'user',
-                    parts: [{ text: userMessage }]
-                }
-            ];
+        // Add user message to conversation history
+        conversationRef.current.push({ role: 'user', content: userMessage });
 
-            const client = getAIClient();
-            if (!client) {
-                setMessages(prev => [...prev, { sender: 'bot', text: "Chatbot is not configured. Please add VITE_GOOGLE_API_KEY to your .env file." }]);
+        try {
+            const apiKey = import.meta.env.PUBLIC_GROQ_API_KEY;
+            if (!apiKey) {
+                setMessages(prev => [...prev, { sender: 'bot', text: "Chatbot is not configured. Please add PUBLIC_GROQ_API_KEY to your .env file." }]);
                 setIsTyping(false);
                 return;
             }
 
-            const response = await client.models.generateContentStream({ model, config, contents });
-            let finalResponse = '';
-            for await (const chunk of response) {
-                finalResponse += chunk.text;
+            // Build messages array with system instruction + conversation history
+            const groqMessages: GroqMessage[] = [
+                { role: 'system', content: SYSTEM_INSTRUCTION },
+                ...conversationRef.current
+            ];
+
+            const response = await fetch(GROQ_API_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: JSON.stringify({
+                    model: GROQ_MODEL,
+                    messages: groqMessages,
+                    temperature: 0.5,
+                    max_completion_tokens: 256,
+                    stream: true
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                console.error('Groq API error:', response.status, errorData);
+                throw new Error(`API error: ${response.status}`);
             }
 
-            setMessages(prev => [...prev, { sender: 'bot', text: finalResponse.trim() }]);
+            if (!response.body) {
+                throw new Error('No response body');
+            }
+
+            // Stream the response
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let fullResponse = '';
+
+            // Add a placeholder bot message that we'll update as chunks arrive
+            setMessages(prev => [...prev, { sender: 'bot', text: '' }]);
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+
+                const chunk = decoder.decode(value, { stream: true });
+                const lines = chunk.split('\n').filter(line => line.trim() !== '');
+
+                for (const line of lines) {
+                    if (line.includes('[DONE]')) continue;
+                    if (line.startsWith('data: ')) {
+                        try {
+                            const json = JSON.parse(line.slice(6));
+                            const content = json.choices?.[0]?.delta?.content;
+                            if (content) {
+                                fullResponse += content;
+                                // Update the last bot message with accumulated text
+                                setMessages(prev => {
+                                    const updated = [...prev];
+                                    updated[updated.length - 1] = { sender: 'bot', text: fullResponse };
+                                    return updated;
+                                });
+                            }
+                        } catch {
+                            // Skip malformed JSON chunks
+                        }
+                    }
+                }
+            }
+
+            // Add assistant response to conversation history for multi-turn context
+            conversationRef.current.push({ role: 'assistant', content: fullResponse.trim() });
+
+            // Keep conversation history manageable (last 20 messages)
+            if (conversationRef.current.length > 20) {
+                conversationRef.current = conversationRef.current.slice(-20);
+            }
+
         } catch (error) {
             console.error('Error generating response:', error);
             setMessages(prev => [...prev,
@@ -148,7 +201,7 @@ export default function Chatbot() {
     return (
         <>
             {/* Floating Chat Button - Assamese Manuscript Archive Theme */}
-            <div className="fixed bottom-38 sm:bottom-24 right-4 sm:right-8 z-50">
+            <div className="fixed bottom-38 sm:bottom-24 right-4 sm:right-8 z-[60]">
                 <button
                     onClick={() => setIsOpen(!isOpen)}
                     className="chatbot-floating-btn w-12 h-12 flex items-center justify-center rounded-full
@@ -164,18 +217,23 @@ export default function Chatbot() {
                 </button>
             </div>
 
-            {/* Chat Window - Assamese Manuscript Archive Theme */}
+            {/* Chat Window - Responsive: full-width on mobile, fixed-width on desktop */}
             <div
-                className={`chatbot-window fixed bottom-32 right-16 w-96 h-[450px]
-                    bg-[#faf9f5] rounded-t-2xl rounded-bl-2xl shadow-2xl
-                    border border-[#e6dfd8] flex flex-col z-40 overflow-hidden transition-all duration-300 chatbot-container
+                className={`chatbot-window fixed z-[60] overflow-hidden flex flex-col
+                    chatbot-container transition-all duration-300
+                    /* Mobile: near-fullscreen */
+                    bottom-28 left-3 right-3 h-[calc(100vh-10rem)]
+                    /* Desktop: anchored to bottom-right */
+                    sm:bottom-32 sm:left-auto sm:right-16 sm:w-96 sm:h-[450px]
+                    bg-[#faf9f5] rounded-2xl sm:rounded-t-2xl sm:rounded-bl-2xl sm:rounded-br-none shadow-2xl
+                    border border-[#e6dfd8]
                     ${isOpen ? 'chatbot-open' : 'chatbot-close'}`}
             >
                         {/* Chat Header */}
-                        <div className="chatbot-header bg-[#cc785c] p-4 flex items-center space-x-3">
+                        <div className="chatbot-header bg-[#cc785c] p-4 flex items-center space-x-3 flex-shrink-0">
                             <img src="/assets/logo/horai.png" alt="Assamese Manuscript Archive Logo" className="w-10 h-10 rounded-full" />
                             <div>
-                                <h3 className="text-white font-semibold font-[Inter]">Hi, I'm Samagri :)</h3>
+                                <h3 className="text-white font-semibold font-[Inter]">Hi, I'm Sukanya :)</h3>
                                 <p className="text-white/80 text-sm">Ask me anything</p>
                             </div>
                             <button
@@ -188,7 +246,7 @@ export default function Chatbot() {
                         </div>
 
                         {/* Messages Container */}
-                        <div className="chatbot-messages flex-1 p-4 overflow-y-auto space-y-4 bg-[#faf9f5]">
+                        <div className="chatbot-messages flex-1 p-4 overflow-y-auto space-y-4 bg-[#faf9f5] min-h-0">
                             {messages.map((msg, idx) => (
                                 <div
                                     key={idx}
@@ -204,7 +262,7 @@ export default function Chatbot() {
                                     </div>
                                 </div>
                             ))}
-                            {isTyping && (
+                            {isTyping && messages[messages.length - 1]?.text === '' && (
                                 <div className="flex justify-start">
                                     <div className="chatbot-bot-msg bg-[#efe9de] rounded-lg p-3 text-[#141413] border border-[#e6dfd8]">
                                         <div className="flex space-x-1">
@@ -219,7 +277,7 @@ export default function Chatbot() {
                         </div>
 
                         {/* Input Area */}
-                        <div className="chatbot-input-area p-4 border-t border-[#e6dfd8] bg-[#faf9f5]">
+                        <div className="chatbot-input-area p-3 sm:p-4 border-t border-[#e6dfd8] bg-[#faf9f5] flex-shrink-0">
                             <div className="flex items-center space-x-2">
                                 <input
                                     type="text"
@@ -227,7 +285,7 @@ export default function Chatbot() {
                                     onChange={handleInputChange}
                                     onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                                     placeholder="Type your message (max 50 words)..."
-                                    className="chatbot-input flex-1 p-3 rounded-lg border border-[#e6dfd8] bg-white text-[#141413] placeholder-[#6c6a64] focus:outline-none focus:ring-2 focus:ring-[#cc785c] focus:border-transparent"
+                                    className="chatbot-input flex-1 p-3 rounded-lg border border-[#e6dfd8] bg-white text-[#141413] placeholder-[#6c6a64] focus:outline-none focus:ring-2 focus:ring-[#cc785c] focus:border-transparent text-sm sm:text-base"
                                 />
                                 <button
                                     onClick={handleSend}

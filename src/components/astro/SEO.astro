@@ -1,0 +1,92 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+  keywords?: string;
+  image?: string;
+  url?: string;
+  type?: string;
+  noIndex?: boolean;
+  noFollow?: boolean;
+}
+
+const {
+  title = 'Assamese Manuscript Archive',
+  description = 'Digital archive of Assamese manuscript paintings - preserving the cultural heritage of Assam through digital preservation of ancient manuscripts and paintings from Majuli and Sattras.',
+  keywords = 'Assamese manuscripts, manuscript painting, Sattra, Majuli, Assam culture, Vaishnavite manuscripts, ancient manuscripts, digital archive, cultural heritage',
+  image = '/og-image.png',
+  url = '',
+  type = 'website',
+  noIndex = false,
+  noFollow = false
+} = Astro.props;
+
+const canonicalURL = new URL(url, Astro.site || 'https://assamesemanuscriptarchive.com');
+const socialImageURL = new URL(image, Astro.site || 'https://assamesemanuscriptarchive.com');
+
+const robots = [
+  noIndex ? 'noindex' : 'index',
+  noFollow ? 'nofollow' : 'follow'
+].join(', ');
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Assamese Manuscript Archive",
+  "url": "https://assamesemanuscriptarchive.com",
+  "logo": "https://assamesemanuscriptarchive.com/logo.svg",
+  "description": description,
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Majuli",
+    "addressRegion": "Assam",
+    "addressCountry": "IN"
+  },
+  "sameAs": [
+    "https://facebook.com/assamesemanuscriptarchive",
+    "https://instagram.com/assamesemanuscriptarchive",
+    "https://twitter.com/assamesemanuscriptarchive"
+  ],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "customer service",
+    "availableLanguage": ["English", "Hindi", "Assamese"]
+  }
+};
+---
+
+<!-- Primary Meta Tags -->
+<meta name="title" content={title} />
+<meta name="description" content={description} />
+<meta name="keywords" content={keywords} />
+<meta name="robots" content={robots} />
+<meta name="author" content="Assamese Manuscript Archive" />
+<meta name="generator" content="Astro" />
+
+<!-- Canonical URL -->
+<link rel="canonical" href={canonicalURL.href} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={type} />
+<meta property="og:url" content={canonicalURL.href} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={socialImageURL.href} />
+<meta property="og:site_name" content="Assamese Manuscript Archive" />
+<meta property="og:locale" content="en_IN" />
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content={canonicalURL.href} />
+<meta property="twitter:title" content={title} />
+<meta property="twitter:description" content={description} />
+<meta property="twitter:image" content={socialImageURL.href} />
+
+<!-- Theme Color -->
+<meta name="theme-color" content="#cc785c" />
+
+<!-- Language -->
+<meta http-equiv="content-language" content="en" />
+
+<!-- Structured Data (JSON-LD) -->
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />

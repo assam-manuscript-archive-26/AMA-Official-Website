@@ -149,18 +149,6 @@ const EventsCalendar: React.FC = () => {
 
     return (
         <div className="w-full max-w-[1400px] mx-auto relative" style={{ fontFamily: 'var(--font-body)' }}>
-            {/* Grain texture overlay - only on background, not content */}
-            <div
-                className="absolute inset-0 pointer-events-none z-[1]"
-                style={{
-                    backgroundImage: "url('https://www.transparenttextures.com/patterns/tileable-wood-colored.png')",
-                    opacity: 0.45,
-                }}
-            />
-
-            {/* Content wrapper with higher z-index */}
-            <div className="relative z-[2]">
-
             {/* Toast */}
             {toast && (
                 <div
@@ -657,7 +645,6 @@ const EventsCalendar: React.FC = () => {
                     </div>
                 </div>
             )}
-            </div>
         </div>
     );
 };

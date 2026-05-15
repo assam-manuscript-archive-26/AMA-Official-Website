@@ -8,6 +8,6 @@ const slug = Astro.params.slug;
 const path = slug ? `/admin/${slug}` : '/admin';
 ---
 
-<AdminLayout title="Admin">
+<AdminLayout title="Admin" noIndex={true} noFollow={true}>
   <AdminShell client:load currentPath={path} />
 </AdminLayout>
