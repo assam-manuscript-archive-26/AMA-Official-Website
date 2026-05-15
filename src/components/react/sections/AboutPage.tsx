@@ -240,7 +240,7 @@ export default function AboutPage() {
               Website Developers
             </h2>
             <p className="text-[var(--color-text-secondary)] text-lg max-w-2xl mx-auto">
-              A group of CSE students from Girijananda Chowdhury University driven by a shared passion for art and innovation.
+              A group of CSE students from Girijananda Chowdhury University driven by a shared passion for cultural conservation and innovation.
             </p>
           </div>
 
@@ -249,21 +249,18 @@ export default function AboutPage() {
               {
                 name: 'Ritanjit Das',
                 initials: 'RD',
-                roll: '42',
                 link: 'https://www.linkedin.com/in/ritanjit-das-530b7b216',
                 message: 'Bringing innovative solutions, one step at a time.'
               },
               {
                 name: 'Sandilya Baruah',
                 initials: 'SB',
-                roll: '45',
                 link: 'https://www.linkedin.com/in/sandilya-baruah-40973a212',
                 message: 'A journey of a thousand miles begins with a single step – and a few lines of code.'
               },
               {
                 name: 'Subhrajyoti Goswami',
                 initials: 'SG',
-                roll: '49',
                 link: 'https://www.linkedin.com/in/subhrajyoti-goswami-6b28a7250',
                 message: 'Tech and creativity – a perfect blend for the future.'
               }
@@ -279,8 +276,6 @@ export default function AboutPage() {
                 <h3 className="font-display text-2xl text-[var(--color-text)] font-medium mb-2">
                   {member.name}
                 </h3>
-                <p className="text-sm text-[var(--color-text-secondary)]">Computer Science & Engineering</p>
-                <p className="text-sm text-[var(--color-text-muted)]">Roll No: {member.roll}</p>
                 <div className="flex justify-center mt-3">
                   <a
                     href={member.link}
