@@ -121,7 +121,7 @@ Assamese Manuscript Archive Website/
 │   └── globals.css           # Tailwind + custom styles
 ├── public/                   # Static assets
 ├── astro.config.mjs          # Astro configuration
-├── wrangler.jsonc           # Cloudflare Workers config
+├── wrangler.jsonc            # Cloudflare Workers config
 └── package.json
 ```
 
