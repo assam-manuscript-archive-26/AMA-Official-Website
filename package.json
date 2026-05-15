@@ -4,10 +4,10 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node -e \"import('fs').then(fs => fs.copyFileSync('.assetsignore', 'dist/.assetsignore'))\"",
     "preview": "astro preview",
     "preview:worker": "wrangler dev",
-    "deploy": "astro build && node -e \"import('fs').then(fs => fs.copyFileSync('.assetsignore', 'dist/.assetsignore'))\" && wrangler deploy",
+    "deploy": "npm run build && wrangler deploy",
     "astro": "astro",
     "server": "bun src/backend/apis/server.js"
   },
