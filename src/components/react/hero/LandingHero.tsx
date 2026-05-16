@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useImperativeHandle, forwardRef } from 'react';
 import { ScanQrCode, X } from 'lucide-react';
 import { motion, useAnimation } from 'framer-motion';
+import useArtifacts from '@/hooks/useArtifacts';
 
 // Animated Search Icon (from Artifex)
 const SearchIconHandle = forwardRef<{ startAnimation: () => void; stopAnimation: () => void }, { className?: string; size?: number }>(
@@ -56,15 +57,8 @@ interface SearchSuggestion {
   category: string;
 }
 
-const mockSuggestions: SearchSuggestion[] = [
-  { id: '1', name: 'Manuscript Paintings', category: 'Collections' },
-  { id: '2', name: 'Religious Artifacts', category: 'Collections' },
-  { id: '3', name: 'Satra Textiles', category: 'Collections' },
-  { id: '4', name: 'Annual Festival 2026', category: 'Events' },
-  { id: '5', name: 'Digital Archive Launch', category: 'News' },
-];
-
 export default function LandingHero() {
+  const { artifacts } = useArtifacts();
   const [searchQuery, setSearchQuery] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [filteredSuggestions, setFilteredSuggestions] = useState<SearchSuggestion[]>([]);
@@ -83,32 +77,43 @@ export default function LandingHero() {
   }, []);
 
   useEffect(() => {
-    if (searchQuery.trim()) {
-      const filtered = mockSuggestions
-        .filter(
-          (suggestion) =>
-            suggestion.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            suggestion.category.toLowerCase().includes(searchQuery.toLowerCase())
+    if (searchQuery.trim() && artifacts.length > 0) {
+      const query = searchQuery.toLowerCase();
+      const matches = artifacts.filter((item) => {
+        if (item.name.toLowerCase().includes(query)) return true;
+        if (item.category.toLowerCase().includes(query)) return true;
+        for (const kw of item.keywords || []) {
+          if (kw.toLowerCase().includes(query)) return true;
+        }
+        return false;
+      });
+
+      const uniqueSuggestions = Array.from(
+        new Set(
+          matches.flatMap((item) => [
+            { id: item.id, name: item.name, category: item.category },
+          ])
         )
-        .slice(0, 5);
-      setFilteredSuggestions(filtered);
-      setShowSuggestions(filtered.length > 0);
+      ).slice(0, 5);
+
+      setFilteredSuggestions(uniqueSuggestions);
+      setShowSuggestions(uniqueSuggestions.length > 0);
     } else {
       setShowSuggestions(false);
     }
-  }, [searchQuery]);
+  }, [searchQuery, artifacts]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      window.location.href = `/search?q=${encodeURIComponent(searchQuery)}`;
+      window.location.href = `/collections?search=${encodeURIComponent(searchQuery)}`;
     }
   };
 
   const handleSuggestionClick = (suggestion: SearchSuggestion) => {
     setSearchQuery(suggestion.name);
     setShowSuggestions(false);
-    window.location.href = `/search?q=${encodeURIComponent(suggestion.name)}`;
+    window.location.href = `/collections?search=${encodeURIComponent(suggestion.name)}`;
   };
 
   const clearSearch = () => {
@@ -138,7 +143,7 @@ export default function LandingHero() {
         <div className="absolute inset-0 bg-black/40" />
 
         {/* Content Container */}
-        <div className="relative z-10 h-full flex flex-col items-center justify-center px-4 lg:py-60">
+        <div className="relative z-10 h-full flex flex-col items-center justify-center px-4 py-42 lg:py-52">
 
           {/* Headline */}
           <h1 className="font-display text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight md:leading-[1.1] mb-8 text-center max-w-5xl" style={{ color: 'var(--hero-headline-color, white)', textShadow: '0 4px 20px rgba(0,0,0,0.4), 0 8px 40px rgba(0,0,0,0.2)' }}>

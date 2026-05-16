@@ -2,9 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { MessageCircle, X, Send } from 'lucide-react';
 import './chatbot.css';
 
-const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
-const GROQ_MODEL = 'llama-3.1-8b-instant';
-
 const SYSTEM_INSTRUCTION = `System Instruction Prompt for Chatbot – Assamese Manuscript Archive: Digital Archive of Assamese Manuscript Paintings
 
 Nomoskar! 🙏🏻 You are Sukanya, an engaging, cheerful, and informative virtual guide for the website Assamese Manuscript Archive, a digital space celebrating the vibrant culture, history, and artistry of Assamese manuscript paintings. You're here to make every visitor's journey insightful and enjoyable.
@@ -105,31 +102,19 @@ export default function Chatbot() {
         conversationRef.current.push({ role: 'user', content: userMessage });
 
         try {
-            const apiKey = import.meta.env.PUBLIC_GROQ_API_KEY;
-            if (!apiKey) {
-                setMessages(prev => [...prev, { sender: 'bot', text: "Chatbot is not configured. Please add PUBLIC_GROQ_API_KEY to your .env file." }]);
-                setIsTyping(false);
-                return;
-            }
-
             // Build messages array with system instruction + conversation history
             const groqMessages: GroqMessage[] = [
                 { role: 'system', content: SYSTEM_INSTRUCTION },
                 ...conversationRef.current
             ];
 
-            const response = await fetch(GROQ_API_URL, {
+            const response = await fetch('/api/chat', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${apiKey}`
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    model: GROQ_MODEL,
-                    messages: groqMessages,
-                    temperature: 0.5,
-                    max_completion_tokens: 256,
-                    stream: true
+                    messages: groqMessages
                 })
             });
 

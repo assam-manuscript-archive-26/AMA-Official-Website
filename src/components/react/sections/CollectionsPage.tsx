@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import CollectionsBanner from "./CollectionsBanner";
 import CollectionsSearchBar from "./CollectionsSearchBar";
-import { getAllArtifacts } from "@/backend/actions/artifact";
+import useArtifacts from "@/hooks/useArtifacts";
 
 interface ArtifactItem {
   id: string;
@@ -29,9 +29,7 @@ const CollectionsPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState(getInitialSearchQuery);
   const [showAll, setShowAll] = useState<{ [key: string]: boolean }>({});
   const [searchError, setSearchError] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [artifactsData, setArtifactsData] = useState<ArtifactItem[]>([]);
-  const [apiError, setApiError] = useState(false);
+  const { artifacts: artifactsData, isLoading, error: apiError } = useArtifacts();
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
@@ -47,30 +45,6 @@ const CollectionsPage: React.FC = () => {
     const observer = new MutationObserver(checkTheme);
     observer.observe(document.documentElement, { attributes: true });
     return () => observer.disconnect();
-  }, []);
-
-  // Fetch artifacts from API
-  useEffect(() => {
-    const fetchArtifacts = async () => {
-      try {
-        setIsLoading(true);
-        const result = await getAllArtifacts();
-
-        if (result.success) {
-          setArtifactsData(result.artifacts || []);
-          setApiError(false);
-        } else {
-          setApiError(true);
-        }
-      } catch (err) {
-        console.error("Error fetching artifacts:", err);
-        setApiError(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchArtifacts();
   }, []);
 
   const handleSearch = () => {

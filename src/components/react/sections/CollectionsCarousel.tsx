@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { getAllArtifacts } from "@/backend/actions/artifact";
+import useArtifacts from "@/hooks/useArtifacts";
 import "./CollectionsCarousel.css";
 
 interface CollectionItem {
@@ -17,39 +17,12 @@ interface CollectionItem {
 
 const CollectionsCarousel: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [collections, setCollections] = useState<CollectionItem[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const { artifacts, isLoading, error } = useArtifacts();
 
-  // Fetch collections from API
-  useEffect(() => {
-    const fetchCollections = async () => {
-      try {
-        setIsLoading(true);
-        const result = await getAllArtifacts();
-
-        if (!result.success) {
-          setError(true);
-          setCollections([]);
-        } else {
-          // Filter to only show items with images and limit to 20
-          const allCollections = (result.artifacts || [])
-            .filter((item: CollectionItem) => item.imageUrl)
-            .slice(0, 20);
-
-          setCollections(allCollections);
-          setError(false);
-        }
-      } catch (err) {
-        console.error("Error fetching collections:", err);
-        setError(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchCollections();
-  }, []);
+  // Filter collections to only show items with images and limit to 20
+  const collections = artifacts
+    .filter((item) => item.imageUrl)
+    .slice(0, 20);
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current && scrollRef.current.firstChild instanceof HTMLElement) {

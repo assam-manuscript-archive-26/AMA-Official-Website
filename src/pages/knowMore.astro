@@ -1,6 +1,5 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import KnowMoreBanner from '../components/react/sections/KnowMoreBanner';
+import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
 <BaseLayout
@@ -9,72 +8,161 @@ import KnowMoreBanner from '../components/react/sections/KnowMoreBanner';
   keywords="learn more, Majuli history, Sattra traditions, manuscript painting history, Vaishnavite culture, Assamese cultural heritage, Sankardeva, Madhavdeva"
 >
   {/* Grain texture overlay - only on section background, not inner content */}
-      <div
-        class="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage: "url('https://www.transparenttextures.com/patterns/tileable-wood-colored.png')",
-          opacity: 0.45,
-        }}
-      />
+  <div
+    class="absolute inset-0 pointer-events-none"
+    style={{
+      backgroundImage:
+        "url('https://www.transparenttextures.com/patterns/tileable-wood-colored.png')",
+      opacity: 0.45,
+    }}
+  >
+  </div>
   <div class="bg-canvas text-ink min-h-screen">
-    <KnowMoreBanner client:load />
+
+    <div
+      class="relative z-30 min-h-[180px] sm:min-h-[240px] md:min-h-[280px] overflow-visible flex flex-col
+            items-center justify-center px-4 sm:pt-40 sm:px-6"
+    >
+
+      {/* Content */}
+      <div
+        class="relative z-10 text-black text-center w-full
+            max-w-[1000px] px-2 sm:px-4"
+      >
+        <h1
+          class="text-3xl sm:text-4xl md:text-5xl font-bold font-display leading-tight text-ink"
+        >
+          Learn More About This Topic
+        </h1>
+        <p class="text-base sm:text-xl font-body mt-3 sm:mt-4 text-ink text-muted">
+          Dive Deep into Assam's Rich Manuscript Heritage
+        </p>
+      </div>
+    </div>
 
     <div class="relative z-10 px-4 sm:px-8 py-8 md:py-12">
       <div class="max-w-[1400px] mx-auto p-6 sm:p-10 paper-effect">
         <article class="space-y-12 md:space-y-16">
-
           {/* Title Section */}
           <header class="text-center fade-in">
-            <h1 class="text-3xl sm:text-4xl md:text-5xl font-display font-extrabold leading-tight tracking-tight mb-3 pt-10 text-ink">
+            <h1
+              class="text-3xl sm:text-4xl md:text-5xl font-display font-extrabold leading-tight tracking-tight mb-3 pt-10 text-ink"
+            >
               Majuli and Assamese Manuscripts
             </h1>
             <p class="text-lg text-muted max-w-3xl mx-auto">
-              Discover the sacred art of manuscript preservation in Assam's cultural heartland.
+              Discover the sacred art of manuscript preservation in Assam's
+              cultural heartland.
             </p>
           </header>
 
           {/* Intro Section */}
           <section class="fade-in px-4 sm:px-8 md:px-16 space-y-4 text-justify">
             <p class="text-base sm:text-lg text-body">
-              Majuli, situated on the Brahmaputra River in Assam, is widely recognized as a cultural and spiritual center of the region. Home to numerous Sattras established through the neo-Vaishnavite movement of Srimanta Sankardeva and Madhavdeva, Majuli has long served as a space for religious learning, artistic practice, and manuscript preservation. These monastic institutions nurtured traditions of devotional literature, music, theatre, and visual art that continue to shape Assamese cultural identity.
+              Majuli, situated on the Brahmaputra River in Assam, is widely
+              recognized as a cultural and spiritual center of the region. Home
+              to numerous Sattras established through the neo-Vaishnavite
+              movement of Srimanta Sankardeva and Madhavdeva, Majuli has long
+              served as a space for religious learning, artistic practice, and
+              manuscript preservation. These monastic institutions nurtured
+              traditions of devotional literature, music, theatre, and visual
+              art that continue to shape Assamese cultural identity.
             </p>
             <p class="text-base sm:text-lg text-body">
-              Assamese manuscripts form an important part of this heritage. Carefully handwritten on traditional materials such as sanchipat and tulapat, these texts preserve religious teachings, philosophical reflections, biographies, poetry, and adaptations of epic narratives. Many manuscripts were created and maintained within Sattras, where they functioned not only as literary records but also as living instruments of devotion, performance, and education.
+              Assamese manuscripts form an important part of this heritage.
+              Carefully handwritten on traditional materials such as sanchipat
+              and tulapat, these texts preserve religious teachings,
+              philosophical reflections, biographies, poetry, and adaptations of
+              epic narratives. Many manuscripts were created and maintained
+              within Sattras, where they functioned not only as literary records
+              but also as living instruments of devotion, performance, and
+              education.
             </p>
             <p class="text-base sm:text-lg text-body">
-              Together, Majuli and Assamese manuscripts represent a shared legacy of cultural memory, where text, art, and spirituality intersect. Exploring these traditions offers insight into Assam's rich intellectual history and the communities that continue to sustain it.
+              Together, Majuli and Assamese manuscripts represent a shared
+              legacy of cultural memory, where text, art, and spirituality
+              intersect. Exploring these traditions offers insight into Assam's
+              rich intellectual history and the communities that continue to
+              sustain it.
             </p>
           </section>
 
           {/* Sattras and Vaishnavite Traditions */}
           <section class="fade-in px-4 sm:px-8 md:px-16 space-y-4 text-justify">
-            <h2 class="text-2xl sm:text-3xl font-display font-semibold mb-4 text-ink">Sattras and Vaishnavite Traditions</h2>
+            <h2
+              class="text-2xl sm:text-3xl font-display font-semibold mb-4 text-ink"
+            >
+              Sattras and Vaishnavite Traditions
+            </h2>
             <p class="text-base sm:text-lg text-body">
-              The Sattras of Assam are monastic institutions established through the neo-Vaishnavite movement initiated by Srimanta Sankardeva and later expanded by Madhavdeva. These institutions function as centres of religious practice, learning, and cultural life, where devotion to Krishna is expressed through collective worship, music, dance, and literary traditions. Sattras have played a foundational role in preserving Assamese cultural identity, nurturing both spiritual and artistic practices that continue to be transmitted across generations.
+              The Sattras of Assam are monastic institutions established through
+              the neo-Vaishnavite movement initiated by Srimanta Sankardeva and
+              later expanded by Madhavdeva. These institutions function as
+              centres of religious practice, learning, and cultural life, where
+              devotion to Krishna is expressed through collective worship,
+              music, dance, and literary traditions. Sattras have played a
+              foundational role in preserving Assamese cultural identity,
+              nurturing both spiritual and artistic practices that continue to
+              be transmitted across generations.
             </p>
           </section>
 
           {/* Assamese Manuscripts */}
           <section class="fade-in px-4 sm:px-8 md:px-16 space-y-4 text-justify">
-            <h2 class="text-2xl sm:text-3xl font-display font-semibold mb-4 text-ink">Assamese Manuscripts (History and Heritage)</h2>
+            <h2
+              class="text-2xl sm:text-3xl font-display font-semibold mb-4 text-ink"
+            >
+              Assamese Manuscripts (History and Heritage)
+            </h2>
             <p class="text-base sm:text-lg text-body">
-              Assamese manuscripts represent a long-standing tradition of literary and religious writing that developed within the region's monastic and scholarly environments. Composed and rewritten over centuries, these texts include devotional poetry, religious narratives, biographies of saints, philosophical discourses, and adaptations of epic traditions. Written in Assamese and related script forms on materials such as sanchipat and tulapat, they offer valuable insight into the intellectual, religious, and cultural history of Assam.
+              Assamese manuscripts represent a long-standing tradition of
+              literary and religious writing that developed within the region's
+              monastic and scholarly environments. Composed and rewritten over
+              centuries, these texts include devotional poetry, religious
+              narratives, biographies of saints, philosophical discourses, and
+              adaptations of epic traditions. Written in Assamese and related
+              script forms on materials such as sanchipat and tulapat, they
+              offer valuable insight into the intellectual, religious, and
+              cultural history of Assam.
             </p>
           </section>
 
           {/* Manuscript Painting Traditions */}
           <section class="fade-in px-4 sm:px-8 md:px-16 space-y-4 text-justify">
-            <h2 class="text-2xl sm:text-3xl font-display font-semibold mb-4 text-ink">Manuscript Painting Traditions</h2>
+            <h2
+              class="text-2xl sm:text-3xl font-display font-semibold mb-4 text-ink"
+            >
+              Manuscript Painting Traditions
+            </h2>
             <p class="text-base sm:text-lg text-body">
-              Manuscript painting in Assam is closely associated with the Sattra tradition, where visual and textual cultures developed in tandem. These paintings, often found within illustrated manuscripts, depict scenes from epics, devotional stories, and the lives of Vaishnavite saints. Characterized by vibrant colors, stylized forms, and symbolic imagery, they served both aesthetic and pedagogical purposes, helping to visually communicate religious narratives and moral teachings within monastic communities.
+              Manuscript painting in Assam is closely associated with the Sattra
+              tradition, where visual and textual cultures developed in tandem.
+              These paintings, often found within illustrated manuscripts,
+              depict scenes from epics, devotional stories, and the lives of
+              Vaishnavite saints. Characterized by vibrant colors, stylized
+              forms, and symbolic imagery, they served both aesthetic and
+              pedagogical purposes, helping to visually communicate religious
+              narratives and moral teachings within monastic communities.
             </p>
           </section>
 
           {/* Cultural Significance */}
           <section class="fade-in px-4 sm:px-8 md:px-16 space-y-4 text-justify">
-            <h2 class="text-2xl sm:text-3xl font-display font-semibold mb-4 text-ink">Cultural Significance</h2>
+            <h2
+              class="text-2xl sm:text-3xl font-display font-semibold mb-4 text-ink"
+            >
+              Cultural Significance
+            </h2>
             <p class="text-base sm:text-lg text-body">
-              Together, Assamese manuscripts and manuscript paintings constitute a vital part of the region's cultural memory. They reflect the interwoven nature of text, image, and devotion in Assamese society, where literature and visual art functioned as mediums of spiritual expression and collective identity. Today, these traditions continue to hold significance not only as historical artifacts but also as living cultural practices that connect contemporary communities to their intellectual and religious heritage.
+              Together, Assamese manuscripts and manuscript paintings constitute
+              a vital part of the region's cultural memory. They reflect the
+              interwoven nature of text, image, and devotion in Assamese
+              society, where literature and visual art functioned as mediums of
+              spiritual expression and collective identity. Today, these
+              traditions continue to hold significance not only as historical
+              artifacts but also as living cultural practices that connect
+              contemporary communities to their intellectual and religious
+              heritage.
             </p>
           </section>
 
@@ -89,7 +177,6 @@ import KnowMoreBanner from '../components/react/sections/KnowMoreBanner';
               Explore Our Collections
             </a>
           </div>
-
         </article>
       </div>
     </div>
@@ -116,7 +203,7 @@ import KnowMoreBanner from '../components/react/sections/KnowMoreBanner';
   .paper-effect {
     position: relative;
     background: var(--color-surface-card);
-    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     margin: 26px auto 0;
     min-height: 300px;
   }
@@ -133,7 +220,7 @@ import KnowMoreBanner from '../components/react/sections/KnowMoreBanner';
 
   .paper-effect::before {
     background: var(--color-surface-soft);
-    box-shadow: 0 0 8px rgba(0,0,0,0.2);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
     left: -5px;
     top: 4px;
     transform: rotate(-2.5deg);
@@ -141,7 +228,7 @@ import KnowMoreBanner from '../components/react/sections/KnowMoreBanner';
 
   .paper-effect::after {
     background: var(--color-hairline-soft);
-    box-shadow: 0 0 3px rgba(0,0,0,0.2);
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
     right: -3px;
     top: 1px;
     transform: rotate(1.4deg);

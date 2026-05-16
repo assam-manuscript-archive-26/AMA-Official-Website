@@ -71,9 +71,13 @@ const EventsCalendar: React.FC = () => {
     }, []);
 
     const [events, setEvents] = useState<Event[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchEvents = async () => {
+            setIsLoading(true);
+            setError(null);
             try {
                 const result = await getAllEvents();
                 if (result.success && result.events) {
@@ -85,9 +89,14 @@ const EventsCalendar: React.FC = () => {
                         featured: event.featured || false,
                     }));
                     setEvents(formattedEvents);
+                } else {
+                    setError(result.error || 'Failed to fetch events');
                 }
             } catch (error) {
                 console.error('Failed to fetch events:', error);
+                setError('Failed to fetch events');
+            } finally {
+                setIsLoading(false);
             }
         };
         fetchEvents();
@@ -249,8 +258,47 @@ const EventsCalendar: React.FC = () => {
                 </div>
             </div>
 
-            {/* Search and Filter */}
-            <div className="flex flex-col lg:flex-row gap-4 my-8 px-5 sm:px-8">
+            {/* Loading State */}
+            {isLoading && (
+                <div className="flex flex-col items-center justify-center py-20 px-5 sm:px-8">
+                    <div
+                        className="w-12 h-12 rounded-full animate-spin"
+                        style={{
+                            borderTop: '3px solid var(--color-primary)',
+                            borderBottom: '3px solid var(--color-primary)',
+                            borderLeft: '3px solid transparent',
+                            borderRight: '3px solid transparent',
+                        }}
+                    />
+                    <p
+                        className="mt-4 text-lg"
+                        style={{
+                            color: 'var(--color-muted)',
+                            fontFamily: 'var(--font-body)'
+                        }}
+                    >
+                        Loading events...
+                    </p>
+                </div>
+            )}
+
+            {error && (
+                <div className="flex flex-col items-center justify-center py-20 px-5 sm:px-8">
+                    <p
+                        className="text-lg"
+                        style={{
+                            color: 'var(--color-error)',
+                            fontFamily: 'var(--font-body)'
+                        }}
+                    >
+                        {error}
+                    </p>
+                </div>
+            )}
+
+            {/* Content - Show when not loading and no error */}
+            {!isLoading && !error && (
+                <div className="w-full">
                 <div className="relative flex-1">
                     <Search
                         className="absolute left-3 top-1/2 transform -translate-y-1/2"
@@ -295,7 +343,6 @@ const EventsCalendar: React.FC = () => {
                         </button>
                     ))}
                 </div>
-            </div>
 
             {viewMode === 'calendar' ? (
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 px-5 sm:px-8 mb-10">
@@ -546,6 +593,8 @@ const EventsCalendar: React.FC = () => {
                         </div>
                     ))}
                 </div>
+            )}
+            </div>
             )}
 
             {/* Event Detail Modal */}

@@ -79,6 +79,7 @@ export default function ResourcesPage({ books, journals, digitalArchives, articl
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<Category>('all');
+  const [isLoading, setIsLoading] = useState(true);
 
   // Handle responsive view mode
   useEffect(() => {
@@ -90,6 +91,14 @@ export default function ResourcesPage({ books, journals, digitalArchives, articl
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Simulate loading state (will be replaced with real API fetch)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
+    return () => clearTimeout(timer);
   }, []);
 
   const resourcesByCategory: Record<Exclude<Category, 'all'>, Resource[]> = {
@@ -228,9 +237,35 @@ export default function ResourcesPage({ books, journals, digitalArchives, articl
         </div>
       </div>
 
-      {/* Search and Filter */}
-      <div className="flex flex-col lg:flex-row gap-4 my-8 px-5 sm:px-8">
-        <div className="relative flex-1">
+      {/* Loading State */}
+      {isLoading && (
+        <div className="flex flex-col items-center justify-center py-20 px-5 sm:px-8">
+          <div
+            className="w-12 h-12 rounded-full animate-spin"
+            style={{
+              borderTop: '3px solid var(--color-primary)',
+              borderBottom: '3px solid var(--color-primary)',
+              borderLeft: '3px solid transparent',
+              borderRight: '3px solid transparent',
+            }}
+          />
+          <p
+            className="mt-4 text-lg"
+            style={{
+              color: 'var(--color-muted)',
+              fontFamily: 'var(--font-body)'
+            }}
+          >
+            Loading resources...
+          </p>
+        </div>
+      )}
+
+      {/* Content - Show when not loading */}
+      {!isLoading && (
+        <>
+        <div className="flex flex-col lg:flex-row gap-4 my-8 px-5 sm:px-8">
+          <div className="relative flex-1">
           <Search
             className="absolute left-3 top-1/2 transform -translate-y-1/2"
             size={20}
@@ -585,6 +620,8 @@ export default function ResourcesPage({ books, journals, digitalArchives, articl
             Clear Search
           </button>
         </div>
+      )}
+      </>
       )}
     </div>
   );
