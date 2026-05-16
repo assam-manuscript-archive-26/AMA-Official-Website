@@ -17,15 +17,16 @@ export default function ProfessionalFooter() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-8">
           {/* Column 1 - Logo & Description */}
           <div className="text-center">
-            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#cc785c] flex items-center justify-center">
-              <span className="text-white font-display text-3xl">স</span>
+            <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-[#cc785c] flex items-center justify-center">
+              {/* <span className="text-white font-display text-3xl">স</span> */}
+              <img src="/assets/logo/logo.png" alt="Assamese Manuscript Archive Logo" className="h-18 w-18 rounded-full object-cover" />
             </div>
             <h3 className="font-display text-xl text-[#faf9f5] font-medium mb-3">
               Assamese Manuscript Archive
             </h3>
-            <p className="text-sm text-[#a09d96] max-w-lg mx-auto leading-relaxed">
+            {/* <p className="text-sm text-[#a09d96] max-w-lg mx-auto leading-relaxed">
               Preserving the rich cultural heritage of Assam through digitally.
-            </p>
+            </p> */}
           </div>
 
           {/* Column 2 - Quick Links */}

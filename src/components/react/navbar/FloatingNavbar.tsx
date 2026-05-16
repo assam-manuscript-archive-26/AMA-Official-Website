@@ -124,12 +124,12 @@ export default function FloatingNavbar({ initialPath = '/' }: Props) {
                 maxWidth: '140px',
               }}
             >
-              Assam Manuscript Archive
+              Assamese Manuscript Archive
             </span>
           </a>
 
           {/* Center - Nav Links (like Artifex) */}
-          <ul className="hidden md:flex space-x-4">
+          <ul className="hidden md:flex space-x-4 pr-18">
             {navLinks.map((link) => {
               const isActive = activeLink === link.href;
               return (
