@@ -146,11 +146,11 @@ export default function ThemeToggle({
       <div
         style={{
           position: 'absolute',
-          bottom: '100%',
+          top: '100%',
           right: '0',
-          marginBottom: '0.5rem',
-          background: isDark ? 'oklch(0.96 0.01 260)' : 'oklch(0.12 0 0)',
-          color: isDark ? 'oklch(0.12 0 0)' : 'oklch(0.96 0.01 260)',
+          marginTop: '1rem',
+          background: isDark ? '#252320' : '#efe9de',
+          color: isDark ? '#faf9f5' : '#141413',
           padding: '0.4rem 0.85rem',
           borderRadius: '2px',
           fontSize: '0.6875rem',
@@ -162,7 +162,7 @@ export default function ThemeToggle({
           pointerEvents: 'none',
           zIndex: 10000,
           opacity: showTooltip ? 1 : 0,
-          transform: showTooltip ? 'translateY(0)' : 'translateY(6px)',
+          transform: showTooltip ? 'translateY(0)' : 'translateY(-6px)',
           transition: 'opacity 0.25s ease, transform 0.25s ease',
           boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
         }}

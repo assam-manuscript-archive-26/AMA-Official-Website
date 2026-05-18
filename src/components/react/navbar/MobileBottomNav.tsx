@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { X, ChevronUp, MoreHorizontal, Home, Layers, Calendar, Handshake, Info, Compass, User } from 'lucide-react';
 
 interface MobileBottomNavProps {
@@ -19,88 +19,87 @@ const secondaryNavItems = [
   { href: '/about', label: 'About Us', icon: User },
 ];
 
-function getInitialTheme(): 'light' | 'dark' {
-  if (typeof window === 'undefined') return 'dark';
-  // Read from the authoritative data-theme attribute on <html>
-  // This is set by ThemeInit.astro and ThemeToggle, avoiding localStorage race conditions
+const themeColors = {
+  light: {
+    background: '#d8d5cf',
+    border: '#cc785c',
+    text: '#141413',
+    textMuted: '#141413',
+    active: '#cc785c',
+    activeBg: 'rgba(204, 120, 92, 0.2)',
+    menuBg: '#d8d5cf',
+    menuBorder: '#cc785c',
+  },
+  dark: {
+    background: '#181715',
+    border: '#252320',
+    text: '#6c6a64',
+    textMuted: '#6c6a64',
+    active: '#ffffff',
+    activeBg: 'rgba(255, 255, 255, 0.1)',
+    menuBg: '#181715',
+    menuBorder: '#252320',
+  },
+};
+
+function getThemeFromDOM(): 'light' | 'dark' {
+  if (typeof document === 'undefined') return 'light';
+  const attr = document.documentElement.getAttribute('data-theme');
+  if (attr === 'light' || attr === 'dark') return attr;
+  // Fallback: read localStorage directly (same key as ThemeInit.astro)
   try {
-    const attr = document.documentElement.getAttribute('data-theme');
-    if (attr === 'light' || attr === 'dark') return attr;
+    const stored = localStorage.getItem('ama-theme');
+    if (stored === 'light' || stored === 'dark') return stored;
   } catch {}
-  return 'dark';
+  return 'light';
 }
 
 export default function MobileBottomNav({ initialPath = '/', onNavigate }: MobileBottomNavProps) {
   const [activeLink, setActiveLink] = useState(initialPath);
   const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
-  const [theme, setTheme] = useState<'light' | 'dark'>(getInitialTheme);
+  // This counter forces re-renders when theme changes. The actual theme value
+  // is read from the DOM on every render, so it's always correct.
+  const [, setThemeTick] = useState(0);
 
-  // Listen for theme changes - read from data-theme attribute (authoritative source)
-  useEffect(() => {
-    const getThemeFromDOM = () => {
-      const attr = document.documentElement.getAttribute('data-theme');
-      return (attr === 'light' || attr === 'dark') ? attr : 'dark';
-    };
-
-    const handleStorage = () => {
-      setTheme(getThemeFromDOM());
-    };
-
-    const handleAstroSwap = () => {
-      setTheme(getThemeFromDOM());
-    };
-
-    const handleThemeChange = () => {
-      setTheme(getThemeFromDOM());
-    };
-
-    window.addEventListener('storage', handleStorage);
-    document.addEventListener('astro:after-swap', handleAstroSwap);
-
-    // Listen for theme-toggle custom event (fired by ThemeToggle when theme changes)
-    document.addEventListener('theme-change', handleThemeChange);
-
-    // Also poll for theme changes as fallback
-    const interval = setInterval(() => {
-      setTheme(getThemeFromDOM());
-    }, 100);
-
-    return () => {
-      window.removeEventListener('storage', handleStorage);
-      document.removeEventListener('astro:after-swap', handleAstroSwap);
-      document.removeEventListener('theme-change', handleThemeChange);
-      clearInterval(interval);
-    };
+  const forceThemeRerender = useCallback(() => {
+    setThemeTick(t => t + 1);
   }, []);
 
-  const isDark = theme === 'dark';
+  // Force a re-read after hydration to pick up ThemeInit's changes.
+  // Without this, the SSR-baked dark colors persist until the next mutation.
+  useEffect(() => {
+    forceThemeRerender();
+  }, [forceThemeRerender]);
 
-  const colors = {
-    light: {
-      // Light mode: --color-text-secondary background with coral active, black inactive
-      background: '#d8d5cf', // --color-text-secondary
-      border: '#cc785c', // --color-primary (top border)
-      text: '#141413', // --color-ink (black - non-active icons)
-      textMuted: '#141413', // --color-ink (black - non-active icons)
-      active: '#cc785c', // --color-primary (coral - active icons)
-      activeBg: 'rgba(204, 120, 92, 0.2)', // coral with opacity
-      menuBg: '#d8d5cf',
-      menuBorder: '#cc785c',
-    },
-    dark: {
-      // Dark mode: Dark background with white active, gray inactive
-      background: '#181715', // surface-dark
-      border: '#252320',
-      text: '#6c6a64', // --color-muted (gray - non-active icons)
-      textMuted: '#6c6a64', // --color-muted (gray - non-active icons)
-      active: '#ffffff', // white - active icons
-      activeBg: 'rgba(255, 255, 255, 0.1)',
-      menuBg: '#181715',
-      menuBorder: '#252320',
-    },
-  };
+  useEffect(() => {
+    // MutationObserver watches the data-theme attribute on <html> for changes.
+    // This catches ALL theme changes regardless of source (ThemeToggle, manual DOM, etc.)
+    const observer = new MutationObserver((mutations) => {
+      for (const m of mutations) {
+        if (m.type === 'attributes' && m.attributeName === 'data-theme') {
+          forceThemeRerender();
+        }
+      }
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
-  const c = isDark ? colors.dark : colors.light;
+    // Also listen for custom events from ThemeToggle (for same-page toggles)
+    const handleThemeChange = () => forceThemeRerender();
+    const handleAstroSwap = () => forceThemeRerender();
+    document.addEventListener('theme-change', handleThemeChange);
+    document.addEventListener('astro:after-swap', handleAstroSwap);
+
+    return () => {
+      observer.disconnect();
+      document.removeEventListener('theme-change', handleThemeChange);
+      document.removeEventListener('astro:after-swap', handleAstroSwap);
+    };
+  }, [forceThemeRerender]);
+
+  // Read theme directly from DOM on every render — never stale, no flash.
+  // getThemeFromDOM is a cheap attribute read, no need to memoize.
+  const theme = getThemeFromDOM();
+  const c = themeColors[theme];
 
   return (
     <>
@@ -124,7 +123,6 @@ export default function MobileBottomNav({ initialPath = '/', onNavigate }: Mobil
                 className="flex flex-col items-center justify-center p-2 rounded-xl transition-all"
                 style={{
                   color: isActive ? c.active : c.textMuted,
-                  // backgroundColor: isActive ? c.activeBg : 'transparent',
                 }}
               >
                 <Icon size={20} />
@@ -139,7 +137,6 @@ export default function MobileBottomNav({ initialPath = '/', onNavigate }: Mobil
             className="flex flex-col items-center justify-center p-2 rounded-xl transition-all"
             style={{
               color: isMoreMenuOpen ? c.active : c.textMuted,
-              // backgroundColor: isMoreMenuOpen ? c.activeBg : 'transparent',
             }}
           >
             {isMoreMenuOpen ? <X size={20} /> : <MoreHorizontal size={20} />}
@@ -165,7 +162,7 @@ export default function MobileBottomNav({ initialPath = '/', onNavigate }: Mobil
           <div className="flex justify-center py-2">
             <ChevronUp
               size={16}
-              style={{ color: isDark ? 'rgba(255, 255, 255, 0.3)' : 'rgba(255, 255, 255, 0.3)' }}
+              style={{ color: theme === 'dark' ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)' }}
             />
           </div>
 
