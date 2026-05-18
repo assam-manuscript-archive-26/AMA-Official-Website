@@ -105,7 +105,7 @@ export default function MobileBottomNav({ initialPath = '/', onNavigate }: Mobil
     <>
       {/* Main Bottom Navigation */}
       <nav
-        className="md:hidden fixed bottom-0 left-0 right-0 z-[70] safe-area-pb"
+        className="lg:hidden fixed bottom-0 left-0 right-0 z-[70] safe-area-pb"
         style={{
           backgroundColor: c.background,
           borderTop: `2px solid ${c.border}`,
@@ -147,7 +147,7 @@ export default function MobileBottomNav({ initialPath = '/', onNavigate }: Mobil
 
       {/* Expandable More Menu */}
       <div
-        className={`md:hidden fixed bottom-16 left-0 right-0 z-[60] transition-all duration-300 ease-in-out ${
+        className={`lg:hidden fixed bottom-16 left-0 right-0 z-[60] transition-all duration-300 ease-in-out ${
           isMoreMenuOpen ? 'translate-y-0 opacity-100 mb-2' : 'translate-y-full opacity-0 pointer-events-none'
         }`}
       >

@@ -1,8 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion } from 'motion/react';
 import { X, ChevronDown } from 'lucide-react';
 import ThemeToggle from '../theme-toggle/ThemeToggle';
 import MobileBottomNav from './MobileBottomNav';
+
+/**
+ * Padding between the outermost nav content edge and the pill's inner border (px).
+ * The pill border is 3px when scrolled, so total extra per side = PILL_GAP + 3.
+ */
+const PILL_GAP = 5;
+const PILL_BORDER = 3;
+const PILL_EXTRA = 2 * (PILL_GAP + PILL_BORDER); // 16px total
 
 interface Props {
   initialPath?: string;
@@ -31,10 +39,53 @@ const mobileSecondaryLinks = [
   { label: 'About Us', href: '/about' },
 ];
 
+/**
+ * Returns responsive sizing values based on the current viewport width.
+ * Linearly interpolates between compact (1024px) and full (1920px) sizes.
+ */
+function getResponsiveSizes(width: number) {
+  // Clamp the interpolation factor: 0 at 1024px, 1 at 1920px
+  const t = Math.max(0, Math.min(1, (width - 1024) / (1920 - 1024)));
+
+  // Helper: linear interpolation
+  const lerp = (min: number, max: number) => min + t * (max - min);
+
+  return {
+    // Logo
+    logoSize: lerp(28, 40),              // px — image dimensions
+    logoGap: lerp(6, 12),                // px — gap between image & text
+    logoFontSize: lerp(10, 13),          // px
+    logoMaxWidth: lerp(90, 140),         // px
+
+    // Nav items
+    navFontSize: lerp(0.72, 1),          // rem — base (non-active) size
+    navActiveFontSize: lerp(0.78, 1.05), // rem — active item size
+    navPaddingX: lerp(4, 12),            // px
+    navPaddingY: lerp(4, 8),             // px
+    navGap: lerp(2, 16),                 // px — space between items
+  };
+}
+
 export default function FloatingNavbar({ initialPath = '/' }: Props) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isDesktop, setIsDesktop] = useState(true);
   const [activeLink, setActiveLink] = useState(initialPath);
+  const [viewportWidth, setViewportWidth] = useState(1920);
+  const [navWidth, setNavWidth] = useState(0);
+  const navRef = useRef<HTMLElement>(null);
+
+  // ── Measure nav content width via ResizeObserver ──
+  useEffect(() => {
+    const nav = navRef.current;
+    if (!nav) return;
+
+    const measure = () => setNavWidth(nav.offsetWidth);
+    measure(); // initial
+
+    const ro = new ResizeObserver(measure);
+    ro.observe(nav);
+    return () => ro.disconnect();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -46,8 +97,10 @@ export default function FloatingNavbar({ initialPath = '/' }: Props) {
     };
     
     const handleResize = () => {
-      const desktop = window.innerWidth >= 1024;
+      const w = window.innerWidth;
+      const desktop = w >= 1024;
       setIsDesktop(desktop);
+      setViewportWidth(w);
       if (!desktop) {
         setIsScrolled(false);
       } else {
@@ -66,6 +119,16 @@ export default function FloatingNavbar({ initialPath = '/' }: Props) {
     };
   }, []);
 
+  // Memoize responsive sizes so they only recompute when width changes
+  const sizes = useMemo(() => getResponsiveSizes(viewportWidth), [viewportWidth]);
+
+  // ── Pill width: derived from actual nav content width ──
+  // When scrolled → shrink to exactly wrap the nav content + padding/border.
+  // When un-scrolled → full viewport width (100%).
+  // Both are pixel values so Motion interpolates in a single smooth step.
+  const pillWidthScrolled = navWidth > 0 ? navWidth + PILL_EXTRA : viewportWidth;
+  const pillWidthFull = viewportWidth;
+
   return (
     <>
       {/* Desktop Floating Navbar - Scroll Responsive */}
@@ -75,7 +138,7 @@ export default function FloatingNavbar({ initialPath = '/' }: Props) {
           initial={false}
           animate={{
             x: '-50%',
-            width: isScrolled ? 'min(67%, 1280px)' : 'min(100%, 9999px)',
+            width: isScrolled ? pillWidthScrolled : pillWidthFull,
             y: isScrolled ? 32 : 0,
             borderRadius: isScrolled ? '9999px' : '0px',
             borderTopWidth: isScrolled ? '3px' : '0px',
@@ -98,6 +161,7 @@ export default function FloatingNavbar({ initialPath = '/' }: Props) {
 
         {/* Navbar Content - Fixed horizontally, animates vertically */}
         <motion.nav
+          ref={navRef}
           initial={false}
           animate={{ y: isScrolled ? 32 : 0 }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
@@ -106,39 +170,57 @@ export default function FloatingNavbar({ initialPath = '/' }: Props) {
           {/* Left - Image & Text Logo */}
           <a
             href="/"
-            className="flex items-center gap-3 hover:opacity-80 transition-opacity z-[60]"
+            className="flex items-center hover:opacity-80 transition-opacity z-[60]"
+            style={{ gap: `${sizes.logoGap}px` }}
           >
             <img
               src="/assets/logo/logo.png"
               alt="Assam Manuscript Archive Logo"
-              className="h-10 w-10 rounded-full object-cover"
+              className="rounded-full object-cover flex-shrink-0"
+              style={{
+                height: `${sizes.logoSize}px`,
+                width: `${sizes.logoSize}px`,
+              }}
             />
             <span
               style={{
                 fontFamily: "var(--font-body)",
-                fontSize: '13px',
+                fontSize: `${sizes.logoFontSize}px`,
                 fontWeight: 600,
                 color: '#faf9f5',
                 letterSpacing: '0.04em',
                 lineHeight: 1.3,
-                maxWidth: '140px',
+                maxWidth: `${sizes.logoMaxWidth}px`,
               }}
             >
               Assamese Manuscript Archive
             </span>
           </a>
 
-          {/* Center - Nav Links (like Artifex) */}
-          <ul className="hidden md:flex space-x-4 pr-18">
+          {/* Center - Nav Links — visible only on lg+ (1024px) to avoid cramping */}
+          <ul
+            className="hidden lg:flex items-center"
+            style={{ gap: `${sizes.navGap}px` }}
+          >
             {navLinks.map((link) => {
               const isActive = activeLink === link.href;
               return (
                 <li
                   key={link.href}
-                  className={`relative group font-semibold font-sans transition-all
-                  ${isActive ? 'text-[var(--color-primary)] text-[1.05rem]' : 'text-[#faf9f5] hover:text-[var(--color-primary)]'}`}
+                  className={`relative group font-semibold font-sans transition-all whitespace-nowrap
+                  ${isActive ? 'text-[var(--color-primary)]' : 'text-[#faf9f5] hover:text-[var(--color-primary)]'}`}
+                  style={{
+                    fontSize: isActive ? `${sizes.navActiveFontSize}rem` : `${sizes.navFontSize}rem`,
+                  }}
                 >
-                  <a href={link.href} className="px-3 py-2" onClick={() => setActiveLink(link.href)}>
+                  <a
+                    href={link.href}
+                    onClick={() => setActiveLink(link.href)}
+                    style={{
+                      padding: `${sizes.navPaddingY}px ${sizes.navPaddingX}px`,
+                      display: 'inline-block',
+                    }}
+                  >
                     {link.label}
                   </a>
                   <span className={`absolute left-1/2 transform -translate-x-1/2 bottom-[-6px]
@@ -152,7 +234,7 @@ export default function FloatingNavbar({ initialPath = '/' }: Props) {
             })}
           </ul>
 
-          {/* Right - Theme Toggle (replacing Login button) */}
+          {/* Right - Theme Toggle */}
           <div className="flex items-center space-x-4">
             <ThemeToggle />
           </div>
