@@ -282,9 +282,9 @@ const CollectionsPage: React.FC = () => {
           })
         ) : (
           <div className="text-center py-20">
-            <div className="text-4xl mb-4">🔍</div>
+            <div className="text-4xl mb-4">🙏🏼</div>
             <h3 className="text-xl font-bold mb-2" style={{ color: "var(--color-ink)" }}>
-              No Artifacts Found
+              No Collections Found
             </h3>
             <p style={{ color: "var(--color-muted)" }}>
               {searchQuery

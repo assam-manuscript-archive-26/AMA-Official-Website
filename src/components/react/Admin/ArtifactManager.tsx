@@ -191,7 +191,7 @@ export default function ArtifactManager() {
         })}
       </div>
 
-      {filtered.length === 0 && !loading && <div style={{ textAlign: 'center', padding: 48, color: 'var(--color-on-dark-soft)', fontFamily: 'var(--font-body)', fontSize: 14, opacity: 0.6 }}>No artifacts found</div>}
+      {filtered.length === 0 && !loading && <div style={{ textAlign: 'center', padding: 48, color: 'var(--color-on-dark-soft)', fontFamily: 'var(--font-body)', fontSize: 14, opacity: 0.6 }}>No Collections found</div>}
 
       {/* Delete Confirm Modal */}
       {deleteConfirm.show && (
