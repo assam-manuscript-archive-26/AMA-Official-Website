@@ -42,7 +42,7 @@ const UploadCollectionsImage: FC<UploadCollectionsImageProps> = ({ onUploadSucce
 
     try {
       const compressed = await compressImage(file);
-      const folder = 'ama/collections';
+      const folder = 'assam_manuscript_archive/collections';
       const result = await apiUploadImage(compressed, folder, (progressEvent) => {
         if (progressEvent.total) {
           const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);

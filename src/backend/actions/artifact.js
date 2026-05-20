@@ -2,7 +2,7 @@ import Api from '../apis/Api';
 
 export async function getAllArtifacts(options = {}) {
   try {
-    const response = await Api.get('/artifex-artifacts', {
+    const response = await Api.get('/ama-collections', {
       fields: 'id,name,category,keywords,imageUrl,english_audio_url,hindi_audio_url,assamese_audio_url,english_description,hindi_description,assamese_description,has_audio,audio_guide_id,created_at,updated_at',
       sort: '-created_at',
       page: '1,1000',
@@ -16,7 +16,7 @@ export async function getAllArtifacts(options = {}) {
 
 export async function getArtifactById(id) {
   try {
-    const response = await Api.get(`/artifex-artifacts/${id}`, {
+    const response = await Api.get(`/ama-collections/${id}`, {
       fields: 'id,name,category,keywords,imageUrl,english_audio_url,hindi_audio_url,assamese_audio_url,english_description,hindi_description,assamese_description,has_audio,audio_guide_id,created_at,updated_at',
     });
     if (response.err) return { success: false, error: response.result };
@@ -31,7 +31,7 @@ export async function getArtifactById(id) {
 export async function getArtifactsByCollection(collectionId, options = {}) {
   try {
     const { page = 1, limit = 20 } = options;
-    const response = await Api.get('/artifex-artifacts', {
+    const response = await Api.get('/ama-collections', {
       page,
       limit,
       filter: { collection_id: collectionId },
@@ -46,7 +46,7 @@ export async function getArtifactsByCollection(collectionId, options = {}) {
 
 export async function createArtifact(data) {
   try {
-    const response = await Api.post('/artifex-artifacts', {
+    const response = await Api.post('/ama-collections', {
       body: data,
     });
     if (response.err) return { success: false, error: response.result };
@@ -58,7 +58,7 @@ export async function createArtifact(data) {
 
 export async function updateArtifact(id, data) {
   try {
-    const response = await Api.put(`/artifex-artifacts/${id}`, {
+    const response = await Api.put(`/ama-collections/${id}`, {
       body: data,
     });
     if (response.err) return { success: false, error: response.result };
@@ -70,7 +70,7 @@ export async function updateArtifact(id, data) {
 
 export async function deleteArtifact(id) {
   try {
-    const response = await Api.delete(`/artifex-artifacts/${id}`);
+    const response = await Api.delete(`/ama-collections/${id}`);
     if (response.err) return { success: false, error: response.result };
     return { success: true };
   } catch (error) {
@@ -81,7 +81,7 @@ export async function deleteArtifact(id) {
 export async function searchArtifacts(query, options = {}) {
   try {
     const { filter = {} } = options;
-    const response = await Api.get('/artifex-artifacts', {
+    const response = await Api.get('/ama-collections', {
       search: { title: query, description: query, artist: query },
       filter,
       fields: 'id,title,description,image,year,artist,collection_id',

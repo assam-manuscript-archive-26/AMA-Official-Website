@@ -84,7 +84,7 @@ export default function UploadManager() {
     const uploadKey = `${artifactId}_${language}`;
     try {
       setUploadingStates(p => ({ ...p, [uploadKey]: { ...p[uploadKey], isUploading: true, progress: 0 } }));
-      const result = await uploadAudio(file.fileObject, 'ama/audio', (pe) => {
+      const result = await uploadAudio(file.fileObject, 'assam_manuscript_archive/audio', (pe) => {
         if (pe.total) { const prog = Math.round((pe.loaded * 100) / pe.total); setUploadingStates(p => ({ ...p, [uploadKey]: { ...p[uploadKey], progress: prog } })); }
       });
       const fullUrl = import.meta.env.PUBLIC_IMAGE_URL + result;
