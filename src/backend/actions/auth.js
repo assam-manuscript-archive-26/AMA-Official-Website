@@ -16,7 +16,7 @@ function getCurrentDateTime() {
 
 export async function login(email, password) {
   try {
-    const response = await Api.post('/auth-artifex-users', {
+    const response = await Api.post('/auth-ama-admins', {
       body: { email, password },
       fields: 'id,email',
     });
@@ -93,7 +93,7 @@ export function isAuthenticated() {
 
 export async function getAllAdmins() {
   try {
-    const response = await Api.get('/auth-artifex-users', {
+    const response = await Api.get('/auth-ama-admins', {
       fields: 'id,username,name,is_active,last_login',
     });
     if (response.err) return { success: false, error: response.result };

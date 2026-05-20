@@ -87,7 +87,8 @@ export default function UploadManager() {
       const result = await uploadAudio(file.fileObject, 'assam_manuscript_archive/audio', (pe) => {
         if (pe.total) { const prog = Math.round((pe.loaded * 100) / pe.total); setUploadingStates(p => ({ ...p, [uploadKey]: { ...p[uploadKey], progress: prog } })); }
       });
-      const fullUrl = import.meta.env.PUBLIC_IMAGE_URL + result;
+      const imageUrl = import.meta.env.PUBLIC_IMAGE_URL || "https://uploads.backendservices.in/storage/";
+      const fullUrl = imageUrl + result;
       setUploadingStates(p => ({ ...p, [uploadKey]: { ...p[uploadKey], backendUrl: fullUrl, isUploading: false } }));
       setArtifacts(p => p.map(a => a.id === artifactId ? { ...a, audioFiles: a.audioFiles.map(f => f.language === language ? { ...f, backendUrl: fullUrl } : f) } : a));
     } catch { setUploadingStates(p => ({ ...p, [uploadKey]: { ...p[uploadKey], isUploading: false } })); triggerToast(`Failed to upload ${file.fileName}`, 'error'); }

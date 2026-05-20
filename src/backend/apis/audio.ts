@@ -2,6 +2,10 @@
 import axios from "axios";
 import type { AxiosProgressEvent } from "axios";
 
+const FILE_UPLOAD_URL = import.meta.env.PUBLIC_FILE_UPLOAD_URL || "https://uploads.backendservices.in/api";
+const FILE_UPLOAD_ID = import.meta.env.PUBLIC_FILE_UPLOAD_ID || "internship";
+const FILE_UPLOAD_PASS = import.meta.env.PUBLIC_FILE_UPLOAD_PASS || "internship@2025";
+
 export async function uploadAudio(
     audio: File,
     folderName: string,
@@ -12,13 +16,13 @@ export async function uploadAudio(
     formData.append("audio", audio);
 
     const { data } = await axios.post(
-        import.meta.env.PUBLIC_FILE_UPLOAD_URL!,
+        FILE_UPLOAD_URL,
         formData,
         {
             headers: {
                 "Content-Type": "multipart/form-data",
-                username: import.meta.env.PUBLIC_FILE_UPLOAD_ID,
-                password: import.meta.env.PUBLIC_FILE_UPLOAD_PASS,
+                username: FILE_UPLOAD_ID,
+                password: FILE_UPLOAD_PASS,
             },
             onUploadProgress: onProgress,
         }
@@ -26,3 +30,4 @@ export async function uploadAudio(
 
     return data.files.audio;
 }
+

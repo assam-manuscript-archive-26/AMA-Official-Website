@@ -51,7 +51,8 @@ const UploadCollectionsImage: FC<UploadCollectionsImageProps> = ({ onUploadSucce
       });
 
       if (result) {
-        const fullUrl = import.meta.env.PUBLIC_IMAGE_URL + result;
+        const imageUrl = import.meta.env.PUBLIC_IMAGE_URL || "https://uploads.backendservices.in/storage/";
+        const fullUrl = imageUrl + result;
         setUploadedUrl(fullUrl);
         onUploadSuccess(fullUrl);
       }
