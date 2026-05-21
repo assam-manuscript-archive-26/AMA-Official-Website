@@ -299,302 +299,302 @@ const EventsCalendar: React.FC = () => {
             {/* Content - Show when not loading and no error */}
             {!isLoading && !error && (
                 <div className="w-full">
-                <div className="relative flex-1">
-                    <Search
-                        className="absolute left-3 top-1/2 transform -translate-y-1/2"
-                        size={20}
-                        style={{ color: 'var(--color-muted)' }}
-                    />
-                    <input
-                        type="text"
-                        placeholder="Search events..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full pl-10 pr-4 py-3 transition-all"
-                        style={{
-                            borderRadius: 'var(--radius-lg)',
-                            border: '1px solid var(--color-hairline)',
-                            backgroundColor: 'var(--color-canvas)',
-                            color: 'var(--color-ink)',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '14px',
-                            outline: 'none',
-                        }}
-                        onFocus={(e) => e.target.style.borderColor = 'var(--color-primary)'}
-                        onBlur={(e) => e.target.style.borderColor = 'var(--color-hairline)'}
-                    />
-                </div>
-
-                <div className="flex gap-2 flex-wrap">
-                    {categories.map(category => (
-                        <button
-                            key={category.id}
-                            onClick={() => setSelectedCategory(category.id)}
-                            className="px-4 py-2 text-sm font-medium transition-all"
+                    <div className="relative flex-1">
+                        <Search
+                            className="absolute left-3 top-1/2 transform -translate-y-1/2"
+                            size={20}
+                            style={{ color: 'var(--color-muted)' }}
+                        />
+                        <input
+                            type="text"
+                            placeholder="Search events..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="w-full pl-10 pr-4 py-3 transition-all"
                             style={{
-                                borderRadius: 'var(--radius-md)',
-                                backgroundColor: selectedCategory === category.id ? 'var(--color-primary)' : 'var(--color-surface-card)',
-                                color: selectedCategory === category.id ? 'var(--color-on-primary)' : 'var(--color-ink)',
+                                borderRadius: 'var(--radius-lg)',
+                                border: '1px solid var(--color-hairline)',
+                                backgroundColor: 'var(--color-canvas)',
+                                color: 'var(--color-ink)',
                                 fontFamily: 'var(--font-body)',
-                                border: selectedCategory === category.id ? 'none' : '1px solid var(--color-hairline)',
+                                fontSize: '14px',
+                                outline: 'none',
                             }}
-                        >
-                            {category.name}
-                        </button>
-                    ))}
-                </div>
+                            onFocus={(e) => e.target.style.borderColor = 'var(--color-primary)'}
+                            onBlur={(e) => e.target.style.borderColor = 'var(--color-hairline)'}
+                        />
+                    </div>
 
-            {viewMode === 'calendar' ? (
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 px-5 sm:px-8 mb-10">
-                    {/* Calendar */}
-                    <div
-                        className="lg:col-span-2 p-6"
-                        style={{
-                            backgroundColor: 'var(--color-canvas)',
-                            borderRadius: 'var(--radius-lg)',
-                            border: '1px solid var(--color-hairline)',
-                            boxShadow: '0 4px 24px rgba(0,0,0,0.06)',
-                        }}
-                    >
-                        <div className="flex justify-between items-center mb-6">
+                    <div className="flex gap-2 flex-wrap">
+                        {categories.map(category => (
                             <button
-                                onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1))}
-                                className="p-2 transition-colors"
-                                style={{ borderRadius: 'var(--radius-md)', color: 'var(--color-ink)' }}
+                                key={category.id}
+                                onClick={() => setSelectedCategory(category.id)}
+                                className="px-4 py-2 text-sm font-medium transition-all"
+                                style={{
+                                    borderRadius: 'var(--radius-md)',
+                                    backgroundColor: selectedCategory === category.id ? 'var(--color-primary)' : 'var(--color-surface-card)',
+                                    color: selectedCategory === category.id ? 'var(--color-on-primary)' : 'var(--color-ink)',
+                                    fontFamily: 'var(--font-body)',
+                                    border: selectedCategory === category.id ? 'none' : '1px solid var(--color-hairline)',
+                                }}
                             >
-                                <ChevronLeft size={20} />
+                                {category.name}
                             </button>
-                            <h3
-                                className="text-xl"
-                                style={{ fontFamily: 'var(--font-display)', fontWeight: 500, color: 'var(--color-ink)' }}
+                        ))}
+                    </div>
+
+                    {viewMode === 'calendar' ? (
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 px-5 sm:px-8 mb-10">
+                            {/* Calendar */}
+                            <div
+                                className="lg:col-span-2 p-6"
+                                style={{
+                                    backgroundColor: 'var(--color-canvas)',
+                                    borderRadius: 'var(--radius-lg)',
+                                    border: '1px solid var(--color-hairline)',
+                                    boxShadow: '0 4px 24px rgba(0,0,0,0.06)',
+                                }}
                             >
-                                {currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
-                            </h3>
-                            <button
-                                onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1))}
-                                className="p-2 transition-colors"
-                                style={{ borderRadius: 'var(--radius-md)', color: 'var(--color-ink)' }}
-                            >
-                                <ChevronRight size={20} />
-                            </button>
-                        </div>
-
-                        <div className="grid grid-cols-7 gap-1 mb-2">
-                            {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-                                <div
-                                    key={day}
-                                    className="text-center text-sm py-2"
-                                    style={{ fontWeight: 500, color: 'var(--color-muted)', fontFamily: 'var(--font-body)' }}
-                                >
-                                    {day}
-                                </div>
-                            ))}
-                        </div>
-
-                        <div className="grid grid-cols-7 gap-1">
-                            {calendar.flat().map((date, index) => {
-                                const dayEvents = getEventsForDate(date);
-                                const isCurrentMonth = date.getMonth() === currentDate.getMonth();
-                                const isToday = date.toDateString() === new Date().toDateString();
-                                const isSelected = selectedDate?.toDateString() === date.toDateString();
-
-                                return (
-                                    <div
-                                        key={index}
-                                        onClick={() => handleDateClick(date)}
-                                        className="relative min-h-24 p-2 cursor-pointer transition-all"
-                                        style={{
-                                            borderRadius: 'var(--radius-lg)',
-                                            backgroundColor: isCurrentMonth ? 'var(--color-canvas)' : 'var(--color-surface-soft)',
-                                            border: isSelected ? '2px solid var(--color-primary)' : '1px solid var(--color-hairline-soft)',
-                                            color: isCurrentMonth ? 'var(--color-ink)' : 'var(--color-muted)',
-                                        }}
+                                <div className="flex justify-between items-center mb-6">
+                                    <button
+                                        onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1))}
+                                        className="p-2 transition-colors"
+                                        style={{ borderRadius: 'var(--radius-md)', color: 'var(--color-ink)' }}
                                     >
+                                        <ChevronLeft size={20} />
+                                    </button>
+                                    <h3
+                                        className="text-xl"
+                                        style={{ fontFamily: 'var(--font-display)', fontWeight: 500, color: 'var(--color-ink)' }}
+                                    >
+                                        {currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                                    </h3>
+                                    <button
+                                        onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1))}
+                                        className="p-2 transition-colors"
+                                        style={{ borderRadius: 'var(--radius-md)', color: 'var(--color-ink)' }}
+                                    >
+                                        <ChevronRight size={20} />
+                                    </button>
+                                </div>
+
+                                <div className="grid grid-cols-7 gap-1 mb-2">
+                                    {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
                                         <div
-                                            className="text-sm"
-                                            style={{
-                                                fontWeight: 500,
-                                                color: isToday ? 'var(--color-primary)' : undefined,
-                                            }}
+                                            key={day}
+                                            className="text-center text-sm py-2"
+                                            style={{ fontWeight: 500, color: 'var(--color-muted)', fontFamily: 'var(--font-body)' }}
                                         >
-                                            {date.getDate()}
+                                            {day}
                                         </div>
-                                        {dayEvents.length > 0 && (
-                                            <div className="mt-1 space-y-1">
-                                                {dayEvents.slice(0, 2).map((event, i) => (
-                                                    <div
-                                                        key={i}
-                                                        className="text-xs p-1 truncate"
-                                                        style={{
-                                                            borderRadius: 'var(--radius-sm)',
-                                                            backgroundColor: event.featured
-                                                                ? 'color-mix(in srgb, var(--color-primary) 15%, transparent)'
-                                                                : 'var(--color-surface-card)',
-                                                            color: event.featured ? 'var(--color-primary)' : 'var(--color-body)',
-                                                        }}
-                                                    >
-                                                        {event.title}
-                                                    </div>
-                                                ))}
-                                                {dayEvents.length > 2 && (
-                                                    <div className="text-xs" style={{ color: 'var(--color-muted)' }}>
-                                                        +{dayEvents.length - 2} more
+                                    ))}
+                                </div>
+
+                                <div className="grid grid-cols-7 gap-1">
+                                    {calendar.flat().map((date, index) => {
+                                        const dayEvents = getEventsForDate(date);
+                                        const isCurrentMonth = date.getMonth() === currentDate.getMonth();
+                                        const isToday = date.toDateString() === new Date().toDateString();
+                                        const isSelected = selectedDate?.toDateString() === date.toDateString();
+
+                                        return (
+                                            <div
+                                                key={index}
+                                                onClick={() => handleDateClick(date)}
+                                                className="relative min-h-24 p-2 cursor-pointer transition-all"
+                                                style={{
+                                                    borderRadius: 'var(--radius-lg)',
+                                                    backgroundColor: isCurrentMonth ? 'var(--color-canvas)' : 'var(--color-surface-soft)',
+                                                    border: isSelected ? '2px solid var(--color-primary)' : '1px solid var(--color-hairline-soft)',
+                                                    color: isCurrentMonth ? 'var(--color-ink)' : 'var(--color-muted)',
+                                                }}
+                                            >
+                                                <div
+                                                    className="text-sm"
+                                                    style={{
+                                                        fontWeight: 500,
+                                                        color: isToday ? 'var(--color-primary)' : undefined,
+                                                    }}
+                                                >
+                                                    {date.getDate()}
+                                                </div>
+                                                {dayEvents.length > 0 && (
+                                                    <div className="mt-1 space-y-1">
+                                                        {dayEvents.slice(0, 2).map((event, i) => (
+                                                            <div
+                                                                key={i}
+                                                                className="text-xs p-1 truncate"
+                                                                style={{
+                                                                    borderRadius: 'var(--radius-sm)',
+                                                                    backgroundColor: event.featured
+                                                                        ? 'color-mix(in srgb, var(--color-primary) 15%, transparent)'
+                                                                        : 'var(--color-surface-card)',
+                                                                    color: event.featured ? 'var(--color-primary)' : 'var(--color-body)',
+                                                                }}
+                                                            >
+                                                                {event.title}
+                                                            </div>
+                                                        ))}
+                                                        {dayEvents.length > 2 && (
+                                                            <div className="text-xs" style={{ color: 'var(--color-muted)' }}>
+                                                                +{dayEvents.length - 2} more
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 )}
                                             </div>
-                                        )}
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
 
-                    {/* Events Sidebar */}
-                    <div
-                        className="p-6"
-                        style={{
-                            backgroundColor: 'var(--color-canvas)',
-                            borderRadius: 'var(--radius-lg)',
-                            border: '1px solid var(--color-hairline)',
-                            boxShadow: '0 4px 24px rgba(0,0,0,0.06)',
-                        }}
-                    >
-                        <div className="flex justify-between items-center mb-4">
-                            <h3
-                                className="text-lg"
-                                style={{ fontFamily: 'var(--font-display)', fontWeight: 500, color: 'var(--color-ink)' }}
+                            {/* Events Sidebar */}
+                            <div
+                                className="p-6"
+                                style={{
+                                    backgroundColor: 'var(--color-canvas)',
+                                    borderRadius: 'var(--radius-lg)',
+                                    border: '1px solid var(--color-hairline)',
+                                    boxShadow: '0 4px 24px rgba(0,0,0,0.06)',
+                                }}
                             >
-                                {selectedDate
-                                    ? `Events on ${selectedDate.toLocaleDateString()}`
-                                    : 'Upcoming Events (Next 5)'}
-                            </h3>
-                            {selectedDate && (
-                                <button
-                                    onClick={() => setSelectedDate(null)}
-                                    className="text-sm px-3 py-1 flex items-center gap-1 transition-colors"
-                                    style={{
-                                        borderRadius: 'var(--radius-md)',
-                                        backgroundColor: 'var(--color-surface-card)',
-                                        color: 'var(--color-body)',
-                                        fontFamily: 'var(--font-body)',
-                                    }}
-                                >
-                                    <X size={14} /> Show All
-                                </button>
-                            )}
-                        </div>
+                                <div className="flex justify-between items-center mb-4">
+                                    <h3
+                                        className="text-lg"
+                                        style={{ fontFamily: 'var(--font-display)', fontWeight: 500, color: 'var(--color-ink)' }}
+                                    >
+                                        {selectedDate
+                                            ? `Events on ${selectedDate.toLocaleDateString()}`
+                                            : 'Upcoming Events (Next 5)'}
+                                    </h3>
+                                    {selectedDate && (
+                                        <button
+                                            onClick={() => setSelectedDate(null)}
+                                            className="text-sm px-3 py-1 flex items-center gap-1 transition-colors"
+                                            style={{
+                                                borderRadius: 'var(--radius-md)',
+                                                backgroundColor: 'var(--color-surface-card)',
+                                                color: 'var(--color-body)',
+                                                fontFamily: 'var(--font-body)',
+                                            }}
+                                        >
+                                            <X size={14} /> Show All
+                                        </button>
+                                    )}
+                                </div>
 
-                        <div className="space-y-3 overflow-y-auto pr-2">
-                            {(selectedDate
-                                ? getEventsForDate(selectedDate)
-                                : [...events].sort((a, b) => a.date.getTime() - b.date.getTime()).slice(0, 5)
-                            ).map(event => (
+                                <div className="space-y-3 overflow-y-auto pr-2">
+                                    {(selectedDate
+                                        ? getEventsForDate(selectedDate)
+                                        : [...events].sort((a, b) => a.date.getTime() - b.date.getTime()).slice(0, 5)
+                                    ).map(event => (
+                                        <div
+                                            key={event.id}
+                                            className="p-4 cursor-pointer transition-all"
+                                            style={{
+                                                borderRadius: 'var(--radius-lg)',
+                                                backgroundColor: 'var(--color-surface-soft)',
+                                            }}
+                                            onClick={() => setSelectedEvent(event)}
+                                        >
+                                            <div className="flex justify-between items-start mb-2">
+                                                <h4 style={{ fontWeight: 500, color: 'var(--color-ink)', fontFamily: 'var(--font-body)' }}>
+                                                    {event.title}
+                                                </h4>
+                                            </div>
+                                            <div className="text-xs space-y-1" style={{ color: 'var(--color-muted)' }}>
+                                                <div className="flex items-center gap-1">
+                                                    <Clock size={12} /> {event.time}
+                                                </div>
+                                                <div className="flex items-center gap-1">
+                                                    <MapPin size={12} /> {event.location}
+                                                </div>
+                                            </div>
+                                            <div className="flex justify-between items-center mt-3">
+                                                <span
+                                                    className="px-2 py-1 text-xs"
+                                                    style={{
+                                                        borderRadius: 'var(--radius-pill)',
+                                                        backgroundColor: 'var(--color-surface-card)',
+                                                        color: 'var(--color-body-strong)',
+                                                        fontWeight: 500,
+                                                        textTransform: 'capitalize',
+                                                    }}
+                                                >
+                                                    {event.category}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    ) : (
+                        /* List View */
+                        <div className="space-y-4 px-5 sm:px-8 mb-10">
+                            {filteredEvents.map(event => (
                                 <div
                                     key={event.id}
-                                    className="p-4 cursor-pointer transition-all"
+                                    className="p-6 cursor-pointer transition-all"
                                     style={{
+                                        backgroundColor: 'var(--color-canvas)',
                                         borderRadius: 'var(--radius-lg)',
-                                        backgroundColor: 'var(--color-surface-soft)',
+                                        border: '1px solid var(--color-hairline)',
+                                        boxShadow: '0 2px 12px rgba(0,0,0,0.04)',
                                     }}
                                     onClick={() => setSelectedEvent(event)}
                                 >
-                                    <div className="flex justify-between items-start mb-2">
-                                        <h4 style={{ fontWeight: 500, color: 'var(--color-ink)', fontFamily: 'var(--font-body)' }}>
-                                            {event.title}
-                                        </h4>
-                                    </div>
-                                    <div className="text-xs space-y-1" style={{ color: 'var(--color-muted)' }}>
-                                        <div className="flex items-center gap-1">
-                                            <Clock size={12} /> {event.time}
+                                    <div className="flex flex-col lg:flex-row gap-4">
+                                        <div className="flex-1">
+                                            <div className="flex items-start justify-between mb-3">
+                                                <div>
+                                                    <h3
+                                                        className="text-xl mb-1"
+                                                        style={{ fontFamily: 'var(--font-display)', fontWeight: 500, color: 'var(--color-ink)' }}
+                                                    >
+                                                        {event.title}
+                                                    </h3>
+                                                    <p className="text-sm" style={{ color: 'var(--color-body)' }}>
+                                                        {event.description}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
+                                                <div className="flex items-center gap-2" style={{ color: 'var(--color-body)' }}>
+                                                    <Calendar size={16} style={{ color: 'var(--color-primary)' }} />
+                                                    {event.date.toLocaleDateString()}
+                                                </div>
+                                                <div className="flex items-center gap-2" style={{ color: 'var(--color-body)' }}>
+                                                    <Clock size={16} style={{ color: 'var(--color-primary)' }} />
+                                                    {event.time}
+                                                </div>
+                                                <div className="flex items-center gap-2" style={{ color: 'var(--color-body)' }}>
+                                                    <MapPin size={16} style={{ color: 'var(--color-primary)' }} />
+                                                    {event.location}
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className="flex items-center gap-1">
-                                            <MapPin size={12} /> {event.location}
+                                        <div className="flex flex-col justify-between items-end">
+                                            <span
+                                                className="px-3 py-1 text-sm"
+                                                style={{
+                                                    borderRadius: 'var(--radius-pill)',
+                                                    backgroundColor: 'var(--color-surface-card)',
+                                                    color: 'var(--color-body-strong)',
+                                                    fontWeight: 500,
+                                                    textTransform: 'capitalize',
+                                                }}
+                                            >
+                                                {event.category}
+                                            </span>
                                         </div>
-                                    </div>
-                                    <div className="flex justify-between items-center mt-3">
-                                        <span
-                                            className="px-2 py-1 text-xs"
-                                            style={{
-                                                borderRadius: 'var(--radius-pill)',
-                                                backgroundColor: 'var(--color-surface-card)',
-                                                color: 'var(--color-body-strong)',
-                                                fontWeight: 500,
-                                                textTransform: 'capitalize',
-                                            }}
-                                        >
-                                            {event.category}
-                                        </span>
                                     </div>
                                 </div>
                             ))}
                         </div>
-                    </div>
+                    )}
                 </div>
-            ) : (
-                /* List View */
-                <div className="space-y-4 px-5 sm:px-8 mb-10">
-                    {filteredEvents.map(event => (
-                        <div
-                            key={event.id}
-                            className="p-6 cursor-pointer transition-all"
-                            style={{
-                                backgroundColor: 'var(--color-canvas)',
-                                borderRadius: 'var(--radius-lg)',
-                                border: '1px solid var(--color-hairline)',
-                                boxShadow: '0 2px 12px rgba(0,0,0,0.04)',
-                            }}
-                            onClick={() => setSelectedEvent(event)}
-                        >
-                            <div className="flex flex-col lg:flex-row gap-4">
-                                <div className="flex-1">
-                                    <div className="flex items-start justify-between mb-3">
-                                        <div>
-                                            <h3
-                                                className="text-xl mb-1"
-                                                style={{ fontFamily: 'var(--font-display)', fontWeight: 500, color: 'var(--color-ink)' }}
-                                            >
-                                                {event.title}
-                                            </h3>
-                                            <p className="text-sm" style={{ color: 'var(--color-body)' }}>
-                                                {event.description}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
-                                        <div className="flex items-center gap-2" style={{ color: 'var(--color-body)' }}>
-                                            <Calendar size={16} style={{ color: 'var(--color-primary)' }} />
-                                            {event.date.toLocaleDateString()}
-                                        </div>
-                                        <div className="flex items-center gap-2" style={{ color: 'var(--color-body)' }}>
-                                            <Clock size={16} style={{ color: 'var(--color-primary)' }} />
-                                            {event.time}
-                                        </div>
-                                        <div className="flex items-center gap-2" style={{ color: 'var(--color-body)' }}>
-                                            <MapPin size={16} style={{ color: 'var(--color-primary)' }} />
-                                            {event.location}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="flex flex-col justify-between items-end">
-                                    <span
-                                        className="px-3 py-1 text-sm"
-                                        style={{
-                                            borderRadius: 'var(--radius-pill)',
-                                            backgroundColor: 'var(--color-surface-card)',
-                                            color: 'var(--color-body-strong)',
-                                            fontWeight: 500,
-                                            textTransform: 'capitalize',
-                                        }}
-                                    >
-                                        {event.category}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            )}
-            </div>
             )}
 
             {/* Event Detail Modal */}

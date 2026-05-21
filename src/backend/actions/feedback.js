@@ -3,7 +3,7 @@ import Api from '../apis/Api';
 export async function getAllFeedback(options = {}) {
   try {
     const { page = 1, limit = 20, sort = {} } = options;
-    const response = await Api.get('/artifex-feedback', {
+    const response = await Api.get('/ama-feedback', {
       page,
       limit,
       sort,
@@ -18,7 +18,7 @@ export async function getAllFeedback(options = {}) {
 
 export async function createFeedback(data) {
   try {
-    const response = await Api.post('/artifex-feedback', {
+    const response = await Api.post('/ama-feedback', {
       body: data,
     });
     if (response.err) return { success: false, error: response.result };
@@ -30,7 +30,7 @@ export async function createFeedback(data) {
 
 export async function deleteFeedback(id) {
   try {
-    const response = await Api.delete(`/artifex-feedback/${id}`);
+    const response = await Api.delete(`/ama-feedback/${id}`);
     if (response.err) return { success: false, error: response.result };
     return { success: true };
   } catch (error) {
@@ -40,7 +40,7 @@ export async function deleteFeedback(id) {
 
 export async function getFeedbackStats() {
   try {
-    const response = await Api.get('/artifex-feedback', {
+    const response = await Api.get('/ama-feedback', {
       fields: 'id,rating',
     });
     if (response.err) return { success: false, error: response.result };

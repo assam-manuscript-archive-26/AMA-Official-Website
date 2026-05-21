@@ -66,7 +66,7 @@ export default function FeedbackPage() {
             {/* Toast */}
             {toast && (
                 <div
-                    className="fixed top-6 right-6 z-50 px-6 py-4 max-w-sm"
+                    className="fixed top-6 right-6 z-99999 px-6 py-4 max-w-sm"
                     style={{
                         borderRadius: 'var(--radius-md)',
                         boxShadow: '0 8px 32px rgba(0,0,0,0.15)',
@@ -216,73 +216,7 @@ export default function FeedbackPage() {
                 </motion.form>
 
                 {/* Right Section — Certificate */}
-                <motion.div
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.3 }}
-                    className="w-full md:w-1/2 p-8 flex flex-col items-center text-center"
-                    style={{
-                        backgroundColor: 'var(--color-canvas)',
-                        border: '1px solid var(--color-hairline)',
-                        borderRadius: 'var(--radius-xl)',
-                        boxShadow: '0 4px 24px rgba(0,0,0,0.06)',
-                    }}
-                >
-                    <Award size={48} style={{ color: 'var(--color-accent-gold)', marginBottom: '16px' }} />
-                    <h2
-                        className="text-2xl mb-4"
-                        style={{ fontFamily: 'var(--font-display)', fontWeight: 500, color: 'var(--color-ink)' }}
-                    >
-                        Earn a Digital Certificate!
-                    </h2>
-                    <p className="mb-6" style={{ color: 'var(--color-body)' }}>
-                        Get your certificate for the Audio Guided Course on{' '}
-                        <span style={{ fontStyle: 'italic', color: 'var(--color-primary)' }}>
-                            History of Assamese Manuscript Archive Manuscript Paintings
-                        </span>
-                    </p>
 
-                    <div
-                        className="mb-6 w-full max-w-sm aspect-[4/3] flex items-center justify-center"
-                        style={{
-                            backgroundColor: 'var(--color-surface-card)',
-                            borderRadius: 'var(--radius-lg)',
-                            border: '2px dashed var(--color-hairline)',
-                        }}
-                    >
-                        <div className="text-center p-6">
-                            <Award size={40} style={{ color: 'var(--color-primary)', margin: '0 auto 12px' }} />
-                            <p style={{ fontFamily: 'var(--font-display)', fontWeight: 500, color: 'var(--color-ink)', fontSize: '18px' }}>
-                                Certificate of Completion
-                            </p>
-                            <p className="text-sm mt-2" style={{ color: 'var(--color-muted)' }}>
-                                Assamese Manuscript Archive Heritage Course
-                            </p>
-                        </div>
-                    </div>
-
-                    <p className="mb-6" style={{ color: 'var(--color-body)', fontSize: '14px' }}>
-                        To get the certificate, you need to attempt a short questionnaire.
-                    </p>
-
-                    <a
-                        href="/questionnaire"
-                        className="inline-flex items-center justify-center gap-2 transition-colors"
-                        style={{
-                            backgroundColor: 'var(--color-primary)',
-                            color: 'var(--color-on-primary)',
-                            padding: '14px 24px',
-                            borderRadius: 'var(--radius-md)',
-                            fontFamily: 'var(--font-body)',
-                            fontWeight: 600,
-                            fontSize: '14px',
-                            textDecoration: 'none',
-                            cursor: 'pointer',
-                        }}
-                    >
-                        Attempt Questionnaire
-                    </a>
-                </motion.div>
             </div>
 
             <style>{`
