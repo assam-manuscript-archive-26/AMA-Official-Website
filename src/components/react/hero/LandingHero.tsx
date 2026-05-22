@@ -136,6 +136,7 @@ export default function LandingHero() {
           playsInline
           poster="/assets/bg3.jpg"
         >
+          {/* URL used from ARTIFEX domain. change for production */}
           <source src="https://uploads.backendservices.in/storage/internship/artifex/videos/177945547474873.mp4" type="video/mp4" />
         </video>
 
