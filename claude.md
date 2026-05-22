@@ -55,17 +55,17 @@ The database contains the following collections (from Artifex template):
 
 | Collection | Purpose |
 |------------|---------|
-| `artifex-users` | User authentication |
-| `artifex-collections` | Gallery/collections data |
-| `artifex-artifacts` | Individual paintings with metadata |
-| `artifex-audio-player` | Audio descriptions (EN, HI, AS) |
-| `artifex-feedback` | User feedback submissions |
-| `artifex-questionnaire` | Visitor questionnaire & certificates |
-| `artifex-visitors` | Visitor counter data |
-| `artifex-visitors-history` | Visitor history tracking |
-| `artifex-events` | Events management |
-| `artifex-news` | News/bulletin posts |
-| `artifex-contactUs` | Contact form submissions |
+| `ama-users` | User authentication |
+| `ama-collections` | Gallery/collections data |
+| `ama-artifacts` | Individual paintings with metadata |
+| `ama-audio-player` | Audio descriptions (EN, HI, AS) |
+| `ama-feedback` | User feedback submissions |
+| `ama-questionnaire` | Visitor questionnaire & certificates |
+| `ama-visitors` | Visitor counter data |
+| `ama-visitors-history` | Visitor history tracking |
+| `ama-events` | Events management |
+| `ama-news` | News/bulletin posts |
+| `ama-contactUs` | Contact form submissions |
 
 ---
 

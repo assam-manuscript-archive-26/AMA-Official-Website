@@ -136,7 +136,7 @@ export default function LandingHero() {
           playsInline
           poster="/assets/bg3.jpg"
         >
-          <source src="https://uploads.backendservices.in/storage/internship/artifex/videos/177881337770998.mp4" type="video/mp4" />
+          <source src="https://uploads.backendservices.in/storage/internship/artifex/videos/177945547474873.mp4" type="video/mp4" />
         </video>
 
         {/* Dark Overlay for readability */}
