@@ -5,7 +5,7 @@ import { getAllArtifacts, updateArtifact, deleteArtifact } from '../../../backen
 interface Artifact { id: string; name: string; category: string; keywords: string[]; imageUrl: string; english_audio_url: string; hindi_audio_url: string; assamese_audio_url: string; english_description: string; hindi_description: string; assamese_description: string; created_at: string; updated_at: string; }
 interface AudioState { isPlaying: boolean; currentTime: number; duration: number; volume: number; isMuted: boolean; currentAudioUrl: string | null; currentArtifactId: string | null; currentLanguage: string | null; }
 
-const CATEGORIES = ['All', 'Satras', 'Mukhas', 'Ahom Dynasty', 'Folk Traditions', 'Royal Seals', 'Language & Scripts'];
+const CATEGORIES = ['All', 'Satras', 'Mukhas', 'Ahom Dynasty', 'Folk Traditions', 'Royal Seals', 'Neo-Vaishnavite Manuscripts Preserved at Samaguri Satra'];
 
 const cs: Record<string, React.CSSProperties> = {
   page: { width: '100%' },

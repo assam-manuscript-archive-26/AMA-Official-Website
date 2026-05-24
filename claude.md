@@ -144,7 +144,7 @@ Assamese Manuscript Archive Website/
 | **Visit** | Visit planning information |
 | **About** | About Assamese Manuscript Archive |
 | **Feedback** | User feedback form |
-| **Chatbot (Sukanya)** | AI-powered real-time assistance via Groq AI (llama-3.1-8b-instant) |
+| **Chatbot (Chitralekha)** | AI-powered real-time assistance via Groq AI (llama-3.1-8b-instant) |
 
 ### Admin Features
 

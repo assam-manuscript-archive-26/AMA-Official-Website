@@ -91,11 +91,11 @@ export default function ProfessionalFooter() {
               </li>
               <li>
                 <a
-                  href="mailto:assamesemanuscriptarchive@gmail.com"
+                  href="mailto:info@assammanuscriptarchive.com"
                   className="inline-flex items-center gap-2 text-white hover:text-[#cc785c] transition-colors text-sm"
                 >
                   <Mail size={16} className="text-[#cc785c]" />
-                  <span>assamesemanuscriptarchive@gmail.com</span>
+                  <span>info@assammanuscriptarchive.com</span>
                 </a>
               </li>
             </ul>

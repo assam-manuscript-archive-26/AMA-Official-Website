@@ -21,7 +21,7 @@ Through physical-to-digital QR code integrations in Sattras (monasteries), visit
 *   **🔊 Interactive Multilingual Audio Guide:** Immersive audio narratives available in **English, Hindi, and Assamese**, with a custom audio player UI.
 *   **🔍 Floating Search Bar with Intelligent Suggestions:** A prominent search engine with auto-suggestions categorizing manuscripts by time period, artist, and Satra.
 *   **📱 Edge QR Code Scanner:** Allows in-person museum visitors to scan physical QR codes adjacent to artifacts in Sattras to instantly view their detailed digital record.
-*   **🤖 "Sukanya" AI Assistant:** An interactive cultural helper powered by Groq AI (`llama-3.1-8b-instant`) delivering context-aware assistance on Assamese Sattras.
+*   **🤖 "Chitralekha" AI Assistant:** An interactive cultural helper powered by Groq AI (`llama-3.1-8b-instant`) delivering context-aware assistance on Assamese Sattras.
 *   **🛕 Majuli Introduction & Collections Carousel:** Beautiful storytelling layout celebrating Majuli as the spiritual heart of Assam, complete with auto-scrolling collections.
 
 ### 🔑 Curator & Admin Operations

@@ -16,8 +16,9 @@ export default function MajuliIntro() {
         <div className="bg-[var(--color-bg-elevated)] rounded-3xl shadow-xl overflow-hidden flex flex-col md:flex-row">
           {/* Left Column - Text Content */}
           <div className="p-8 md:p-12 md:w-1/2 flex flex-col justify-center">
-            <h2 className="font-display text-2xl md:text-4xl text-[var(--color-text)] font-bold mb-6">
-              Welcome to The Assamese Manuscript Archive :)
+            <h2 className="font-display text-2xl md:text-4xl text-[var(--color-surface-dark)] font-bold mb-6"
+            style={{fontWeight:"500"}}>
+              Welcome to the Assamese Manuscript Archive
             </h2>
             <div className="space-y-4 text-[var(--color-text-secondary)] leading-relaxed">
               {/* <p>
@@ -64,10 +65,9 @@ export default function MajuliIntro() {
               {/* Content overlay */}
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center p-8">
-                  <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-[#faf9f5]/20 flex items-center justify-center backdrop-blur-sm">
-                    <span className="text-[#faf9f5] font-display text-4xl">স</span>
+                  <div className="w-25 h-25 mx-auto mb-4 rounded-full bg-[#faf9f5]/20 flex items-center justify-center backdrop-blur-sm">
+                    <img src="/assets/logo/logo.png" alt="Assamese Manuscript Archive Logo" className="h-21 w-21 rounded-full object-cover" />
                   </div>
-                  {/* <p className="text-[#faf9f5]/80 text-sm font-body">Assamese Manuscript Archive</p> */}
                 </div>
               </div>
             </div>

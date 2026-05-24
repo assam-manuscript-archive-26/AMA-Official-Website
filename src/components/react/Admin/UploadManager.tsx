@@ -8,7 +8,7 @@ interface AudioFile { id: string; language: string; previewUrl: string; fileName
 interface ArtifactData { id: string; name: string; category: string; keywords: string[]; imageUrl: string; audioFiles: AudioFile[]; descriptions: { English: string; Hindi: string; Assamese: string; }; }
 
 const LANGUAGES = ['Assamese', 'Hindi', 'English'];
-const CATEGORIES = ['Satras', 'Mukhas', 'Ahom Dynasty', 'Folk Traditions', 'Royal Seals', 'Language & Scripts'];
+const CATEGORIES = ['Satras', 'Mukhas', 'Ahom Dynasty', 'Folk Traditions', 'Royal Seals', 'Neo-Vaishnavite Manuscripts Preserved at Samaguri Satra'];
 
 const s: Record<string, React.CSSProperties> = {
   page: { width: '100%', minHeight: '100%' },

@@ -169,7 +169,7 @@ const CollectionsPage: React.FC = () => {
 
             return (
               <section key={section.title} className="mt-25 fade-in">
-                <div className="flex justify-between items-center mb-6">
+                <div className="flex justify-between items-end mb-6">
                   <h2
                     className="text-3xl font-bold font-display"
                     style={{ color: "var(--color-ink)" }}
@@ -184,7 +184,7 @@ const CollectionsPage: React.FC = () => {
                           [section.title]: !isExpanded,
                         }))
                       }
-                      className="text-lg font-bold underline cursor-pointer transition-colors"
+                      className="text-sm sm:text-lg font-bold underline cursor-pointer transition-colors"
                       style={{
                         color: "var(--color-primary)",
                       }}

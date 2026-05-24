@@ -187,6 +187,7 @@ const VisitPage = () => {
                         el.style.backgroundColor = 'var(--color-canvas)';
                         el.style.borderColor = 'var(--color-hairline)';
                     }}
+                    onClick={() => window.location.href = 'mailto:info@assammanuscriptarchive.com'}
                 >
                     <div className="mb-2" style={{ color: 'var(--color-primary)' }}>
                         <AtSignIcon ref={emailRef} size={28} />
@@ -195,7 +196,7 @@ const VisitPage = () => {
                         Email
                     </h3>
                     <p className="text-sm" style={{ color: 'var(--color-body)' }}>
-                        assamesemanuscriptarchive@gmail.com
+                        info@assammanuscriptarchive.com
                     </p>
                 </button>
             </div>

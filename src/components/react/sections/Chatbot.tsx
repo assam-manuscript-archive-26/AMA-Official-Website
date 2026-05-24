@@ -4,7 +4,7 @@ import './chatbot.css';
 
 const SYSTEM_INSTRUCTION = `System Instruction Prompt for Chatbot – Assamese Manuscript Archive: Digital Archive of Assamese Manuscript Paintings
 
-Nomoskar! 🙏🏻 You are Sukanya, an engaging, cheerful, and informative virtual guide for the website Assamese Manuscript Archive, a digital space celebrating the vibrant culture, history, and artistry of Assamese manuscript paintings. You're here to make every visitor's journey insightful and enjoyable.
+Nomoskar! 🙏🏻 You are Chitralekha, an engaging, cheerful, and informative virtual guide for the website Assamese Manuscript Archive, a digital space celebrating the vibrant culture, history, and artistry of Assamese manuscript paintings. You're here to make every visitor's journey insightful and enjoyable.
 
 Your core responsibilities include helping users:
 
@@ -28,7 +28,7 @@ Keep your responses warm, friendly, and a little playful—like a local guide ex
 Chatbot Flow & Behavior Rules:
 
 Greeting (first-time users):
-"Nomoskar! 🙏🏻 Welcome to Assamese Manuscript Archive – your digital guide to the heart of Assamese manuscript heritage. Whether you're here to listen, learn, or explore, I'm here to help you at every step. What would you like to know today?"
+"Nomoskar! 🙏🏻 Welcome to Assamese Manuscript Archive – your digital guide to Assamese Manuscript Heritage. Whether you're here to listen, learn, or explore, I'm here to help you at every step. What would you like to know today?"
 
 Help / Default Response (user seems lost):
 "I can help you with Assamese manuscript paintings, our digital collections, how to visit, upcoming events, resources, or scanning QR codes! Just ask me anything, or say 'menu' to see your options."
@@ -60,7 +60,7 @@ interface GroqMessage {
 export default function Chatbot() {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>([
-        { sender: 'bot', text: 'Nomoskar! 🙏🏻 Welcome to Assamese Manuscript Archive – your digital guide to the heart of Assamese manuscript heritage. How can I help you today?' }
+        { sender: 'bot', text: 'Nomoskar! 🙏🏻 Welcome to Assamese Manuscript Archive - your digital guide to Assamese Manuscript Heritage. How can I help you today?' }
     ]);
     const [input, setInput] = useState('');
     const [isTyping, setIsTyping] = useState(false);
@@ -218,7 +218,7 @@ export default function Chatbot() {
                         <div className="chatbot-header bg-[#cc785c] p-4 flex items-center space-x-3 flex-shrink-0">
                             <img src="/assets/logo/horai.png" alt="Assamese Manuscript Archive Logo" className="w-10 h-10 rounded-full" />
                             <div>
-                                <h3 className="text-white font-semibold font-[Inter]">Hi, I'm Sukanya :)</h3>
+                                <h3 className="text-white font-semibold font-[Inter]" style={{ fontSize: '30px' }}>Hi, I'm Chitralekha :)</h3>
                                 <p className="text-white/80 text-sm">Ask me anything</p>
                             </div>
                             <button
