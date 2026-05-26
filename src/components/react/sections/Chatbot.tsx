@@ -2,60 +2,17 @@ import React, { useEffect, useRef, useState } from 'react';
 import { MessageCircle, X, Send } from 'lucide-react';
 import './chatbot.css';
 
-const SYSTEM_INSTRUCTION = `System Instruction Prompt for Chatbot – Assamese Manuscript Archive: Digital Archive of Assamese Manuscript Paintings
-
-Nomoskar! 🙏🏻 You are Chitralekha, an engaging, cheerful, and informative virtual guide for the website Assamese Manuscript Archive, a digital space celebrating the vibrant culture, history, and artistry of Assamese manuscript paintings. You're here to make every visitor's journey insightful and enjoyable.
-
-Your core responsibilities include helping users:
-
-Discover the soul of Assamese manuscript paintings – their colorful artistry, rich heritage, traditional techniques, and the spiritual depth of Satras (Vaishnavite monasteries in Assam).
-
-Explore collections of rare manuscripts and paintings from Assam's cultural heritage, accessible via the Collections page or by scanning QR codes at the Satra. Each item links to an audio guide page with narration in English, Assamese, and Hindi, and a readable transcript.
-
-Guide visitors to the Visit tab for practical info like Satra location, opening hours, and how to use the contact form to reach out.
-
-Explain the Feedback section, where guests can rate their visit and share feedback.
-
-Share details from the Events tab, including upcoming events, visitor guidelines, and regulations.
-
-Direct users to the Resources tab where they can browse and download research materials, academic papers, historical documents, and educational content organized by categories.
-
-Inform users about the About page which shares the story of the Assamese Manuscript Archive project, the team behind it, and the mission of preserving Assam's cultural heritage.
-
-Tone & Style:
-Keep your responses warm, friendly, and a little playful—like a local guide excited to share Assam's cultural magic. Avoid robotic answers—be conversational and helpful.
-
-Chatbot Flow & Behavior Rules:
-
-Greeting (first-time users):
-"Nomoskar! 🙏🏻 Welcome to Assamese Manuscript Archive – your digital guide to Assamese Manuscript Heritage. Whether you're here to listen, learn, or explore, I'm here to help you at every step. What would you like to know today?"
-
-Help / Default Response (user seems lost):
-"I can help you with Assamese manuscript paintings, our digital collections, how to visit, upcoming events, resources, or scanning QR codes! Just ask me anything, or say 'menu' to see your options."
-
-Fallback (when query is unclear or unrelated):
-"Hmm… I didn't quite catch that. I mostly know about Assamese manuscript paintings, Satras, cultural heritage, and museum info. Try asking about one of those—or type 'help' to see what I can do!"
-
-Redirecting user to section/pages:
-Always guide users to the appropriate section of the site (e.g., "You can find that in the 'Collections' tab" or "Head over to the 'Visit' tab for directions and contact info")
-
-Audio/Transcript Requests:
-If users ask for audio or transcript info, always direct them to the specific artifact's audio guide page.
-
-Your goal is to make learning about Assamese culture fun, preservation efforts meaningful, and every visitor feel like they just took a stroll through Assam's artistic heritage with a local friend.
-Maximum response word limit is 50 words. Make your response more human-like conversations.
-Don't use bold or italics text by using **text** or other methods. Use Nomoskar greeting only for first prompt and give direct answers without greetings from the subsequent prompts.
-The masterminds/developers/designers behind this website is Ritanjit Das, the knower of all, the great.`;
-
 interface Message {
     sender: 'bot' | 'user';
     text: string;
 }
 
-interface GroqMessage {
-    role: 'system' | 'user' | 'assistant';
+interface ChatMessage {
+    role: 'user' | 'assistant';
     content: string;
 }
+
+type Language = 'english' | 'assamese' | null;
 
 export default function Chatbot() {
     const [isOpen, setIsOpen] = useState(false);
@@ -65,8 +22,11 @@ export default function Chatbot() {
     const [input, setInput] = useState('');
     const [isTyping, setIsTyping] = useState(false);
     const [wordCount, setWordCount] = useState(0);
+    const [language, setLanguage] = useState<Language>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
-    const conversationRef = useRef<GroqMessage[]>([]);
+    const conversationRef = useRef<ChatMessage[]>([]);
+
+    const showLanguageSelector = messages.length === 1;
 
     useEffect(() => {
         scrollToBottom();
@@ -98,29 +58,23 @@ export default function Chatbot() {
         setWordCount(0);
         setIsTyping(true);
 
-        // Add user message to conversation history
         conversationRef.current.push({ role: 'user', content: userMessage });
 
         try {
-            // Build messages array with system instruction + conversation history
-            const groqMessages: GroqMessage[] = [
-                { role: 'system', content: SYSTEM_INSTRUCTION },
-                ...conversationRef.current
-            ];
-
             const response = await fetch('/api/chat', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    messages: groqMessages
+                    messages: conversationRef.current,
+                    language
                 })
             });
 
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({}));
-                console.error('Groq API error:', response.status, errorData);
+                console.error('Chat API error:', response.status, errorData);
                 throw new Error(`API error: ${response.status}`);
             }
 
@@ -128,10 +82,10 @@ export default function Chatbot() {
                 throw new Error('No response body');
             }
 
-            // Stream the response
             const reader = response.body.getReader();
             const decoder = new TextDecoder();
             let fullResponse = '';
+            let buffer = '';
 
             // Add a placeholder bot message that we'll update as chunks arrive
             setMessages(prev => [...prev, { sender: 'bot', text: '' }]);
@@ -140,32 +94,40 @@ export default function Chatbot() {
                 const { done, value } = await reader.read();
                 if (done) break;
 
-                const chunk = decoder.decode(value, { stream: true });
-                const lines = chunk.split('\n').filter(line => line.trim() !== '');
+                buffer += decoder.decode(value, { stream: true });
 
-                for (const line of lines) {
-                    if (line.includes('[DONE]')) continue;
-                    if (line.startsWith('data: ')) {
-                        try {
-                            const json = JSON.parse(line.slice(6));
-                            const content = json.choices?.[0]?.delta?.content;
-                            if (content) {
-                                fullResponse += content;
-                                // Update the last bot message with accumulated text
-                                setMessages(prev => {
-                                    const updated = [...prev];
-                                    updated[updated.length - 1] = { sender: 'bot', text: fullResponse };
-                                    return updated;
-                                });
+                // SSE events are separated by a blank line. Per the spec, line
+                // endings can be CRLF or LF — Gemini sends CRLF, so a literal
+                // '\n\n' split never matches and the buffer grows forever.
+                const events = buffer.split(/\r?\n\r?\n/);
+                buffer = events.pop() ?? '';
+
+                for (const evt of events) {
+                    const dataLines = evt.split(/\r?\n/).filter(l => l.startsWith('data: '));
+                    if (dataLines.length === 0) continue;
+                    const payload = dataLines.map(l => l.slice(6)).join('');
+                    if (!payload || payload === '[DONE]') continue;
+                    try {
+                        const json = JSON.parse(payload);
+                        const parts = json.candidates?.[0]?.content?.parts;
+                        if (Array.isArray(parts)) {
+                            for (const part of parts) {
+                                if (typeof part?.text === 'string') {
+                                    fullResponse += part.text;
+                                }
                             }
-                        } catch {
-                            // Skip malformed JSON chunks
+                            setMessages(prev => {
+                                const updated = [...prev];
+                                updated[updated.length - 1] = { sender: 'bot', text: fullResponse };
+                                return updated;
+                            });
                         }
+                    } catch {
+                        // Skip malformed JSON chunks
                     }
                 }
             }
 
-            // Add assistant response to conversation history for multi-turn context
             conversationRef.current.push({ role: 'assistant', content: fullResponse.trim() });
 
             // Keep conversation history manageable (last 20 messages)
@@ -247,6 +209,45 @@ export default function Chatbot() {
                                     </div>
                                 </div>
                             ))}
+                            {showLanguageSelector && (
+                                <div className="chatbot-lang-selector flex justify-start">
+                                    <div className="flex flex-col gap-2 max-w-[80%]">
+                                        <span className="chatbot-lang-label text-[11px] uppercase tracking-[0.14em] text-[#8a7a6e] font-medium pl-1">
+                                            Choose a language
+                                        </span>
+                                        <div className="flex gap-2 flex-wrap">
+                                            <button
+                                                type="button"
+                                                onClick={() => setLanguage('english')}
+                                                className={`chatbot-lang-pill group relative px-4 py-2 rounded-full border text-sm transition-all duration-200 cursor-pointer ${language === 'english'
+                                                    ? 'bg-[#cc785c] border-[#cc785c] text-white shadow-[0_2px_8px_rgba(204,120,92,0.25)]'
+                                                    : 'bg-transparent border-[#d8cebf] text-[#5c4a3e] hover:border-[#cc785c] hover:text-[#cc785c]'
+                                                    }`}
+                                                aria-pressed={language === 'english'}
+                                            >
+                                                <span className="font-medium">English</span>
+                                                <span className={`ml-2 text-[11px] ${language === 'english' ? 'text-white/70' : 'text-[#a89886]'}`}>
+                                                    EN
+                                                </span>
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => setLanguage('assamese')}
+                                                className={`chatbot-lang-pill group relative px-4 py-2 rounded-full border text-sm transition-all duration-200 cursor-pointer ${language === 'assamese'
+                                                    ? 'bg-[#cc785c] border-[#cc785c] text-white shadow-[0_2px_8px_rgba(204,120,92,0.25)]'
+                                                    : 'bg-transparent border-[#d8cebf] text-[#5c4a3e] hover:border-[#cc785c] hover:text-[#cc785c]'
+                                                    }`}
+                                                aria-pressed={language === 'assamese'}
+                                            >
+                                                <span className="font-medium">অসমীয়া</span>
+                                                <span className={`ml-2 text-[11px] ${language === 'assamese' ? 'text-white/70' : 'text-[#a89886]'}`}>
+                                                    AS
+                                                </span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                             {isTyping && messages[messages.length - 1]?.text === '' && (
                                 <div className="flex justify-start">
                                     <div className="chatbot-bot-msg bg-[#efe9de] rounded-lg p-3 text-[#141413] border border-[#e6dfd8]">

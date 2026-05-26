@@ -1,12 +1,14 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Send, Phone, CheckCircle, AlertCircle, X } from 'lucide-react';
+import { CheckCircle, AlertCircle, X } from 'lucide-react';
 import { CursorClickIcon } from '@/components/react/ui/CursorClickIcon';
 import { MapPinIcon } from '@/components/react/ui/MapPinIcon';
 import { AtSignIcon } from '@/components/react/ui/AtSignIcon';
+import { RadioTowerIcon } from '@/components/react/ui/RadioTowerIcon';
 import { createContactSubmission } from '@/backend/actions/contact';
 import type { CursorClickIconHandle } from '@/components/react/ui/CursorClickIcon';
 import type { MapPinIconHandle } from '@/components/react/ui/MapPinIcon';
 import type { AtSignIconHandle } from '@/components/react/ui/AtSignIcon';
+import type { RadioTowerIconHandle } from '@/components/react/ui/RadioTowerIcon';
 
 interface FormData {
     fullName: string;
@@ -19,6 +21,7 @@ const VisitPage = () => {
     const cursorRef = useRef<CursorClickIconHandle>(null);
     const mapPinRef = useRef<MapPinIconHandle>(null);
     const emailRef = useRef<AtSignIconHandle>(null);
+    const phoneRef = useRef<RadioTowerIconHandle>(null);
 
     const [formData, setFormData] = useState<FormData>({
         fullName: '', email: '', phone: '', message: '',
@@ -41,8 +44,22 @@ const VisitPage = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
+        const submitted = formData;
         try {
-            await createContactSubmission({ ...formData, status: 'new', starred: false });
+            await createContactSubmission({ ...submitted, status: 'new', starred: false });
+            // Fire-and-forget courtesy email — never blocks the success toast
+            fetch('/api/send-email', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    type: 'contact',
+                    payload: {
+                        fullName: submitted.fullName,
+                        email: submitted.email,
+                        message: submitted.message,
+                    },
+                }),
+            }).catch(() => { });
             setFormData({ fullName: '', email: '', phone: '', message: '' });
             setToast({ message: 'Thank you! Your message has been sent successfully.', type: 'success' });
         } catch (error) {
@@ -75,7 +92,7 @@ const VisitPage = () => {
         alignItems: 'center',
         textAlign: 'center',
         cursor: 'pointer',
-        transition: 'all 0.3s ease',
+        transition: 'border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease',
     };
 
     return (
@@ -128,13 +145,15 @@ const VisitPage = () => {
                     onMouseEnter={(e) => {
                         mapPinRef.current?.startAnimation();
                         const el = e.currentTarget;
-                        el.style.backgroundColor = 'var(--color-primary)';
                         el.style.borderColor = 'var(--color-primary)';
+                        el.style.transform = 'translateY(-4px)';
+                        el.style.boxShadow = '0 12px 28px rgba(0,0,0,0.10)';
                     }}
                     onMouseLeave={(e) => {
                         const el = e.currentTarget;
-                        el.style.backgroundColor = 'var(--color-canvas)';
                         el.style.borderColor = 'var(--color-hairline)';
+                        el.style.transform = 'translateY(0)';
+                        el.style.boxShadow = 'none';
                     }}
                 >
                     <div className="mb-2" style={{ color: 'var(--color-primary)' }}>
@@ -152,18 +171,21 @@ const VisitPage = () => {
                     className="group"
                     style={contactCardStyle}
                     onMouseEnter={(e) => {
+                        phoneRef.current?.startAnimation();
                         const el = e.currentTarget;
-                        el.style.backgroundColor = 'var(--color-primary)';
                         el.style.borderColor = 'var(--color-primary)';
+                        el.style.transform = 'translateY(-4px)';
+                        el.style.boxShadow = '0 12px 28px rgba(0,0,0,0.10)';
                     }}
                     onMouseLeave={(e) => {
                         const el = e.currentTarget;
-                        el.style.backgroundColor = 'var(--color-canvas)';
                         el.style.borderColor = 'var(--color-hairline)';
+                        el.style.transform = 'translateY(0)';
+                        el.style.boxShadow = 'none';
                     }}
                 >
                     <div className="mb-2" style={{ color: 'var(--color-primary)' }}>
-                        <Phone size={28} />
+                        <RadioTowerIcon ref={phoneRef} size={28} />
                     </div>
                     <h3 className="mb-1" style={{ fontWeight: 600, color: 'var(--color-ink)', fontFamily: 'var(--font-body)', fontSize: '16px' }}>
                         Phone
@@ -179,13 +201,15 @@ const VisitPage = () => {
                     onMouseEnter={(e) => {
                         emailRef.current?.startAnimation();
                         const el = e.currentTarget;
-                        el.style.backgroundColor = 'var(--color-primary)';
                         el.style.borderColor = 'var(--color-primary)';
+                        el.style.transform = 'translateY(-4px)';
+                        el.style.boxShadow = '0 12px 28px rgba(0,0,0,0.10)';
                     }}
                     onMouseLeave={(e) => {
                         const el = e.currentTarget;
-                        el.style.backgroundColor = 'var(--color-canvas)';
                         el.style.borderColor = 'var(--color-hairline)';
+                        el.style.transform = 'translateY(0)';
+                        el.style.boxShadow = 'none';
                     }}
                     onClick={() => window.location.href = 'mailto:info@assammanuscriptarchive.com'}
                 >
@@ -202,6 +226,7 @@ const VisitPage = () => {
             </div>
 
             {/* Virtual Tour Button */}
+            {/*
             <div className="max-w-4xl mx-auto mb-6">
                 <a href="/map" style={{ textDecoration: 'none' }}>
                     <button
@@ -230,6 +255,7 @@ const VisitPage = () => {
                     </button>
                 </a>
             </div>
+            */}
 
             {/* Map and Contact Form */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
@@ -242,10 +268,10 @@ const VisitPage = () => {
                         boxShadow: '0 4px 24px rgba(0,0,0,0.06)',
                     }}
                 >
-                    <div className="relative pb-[100%]">
+                    <div className="relative w-full h-full min-h-[400px]">
                         <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3581.9494672456817!2d91.62025427519629!3d26.13319057712037!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x375a43f4d6353b7d%3A0x5089bf544bea3b23!2sGirijananda%20Chowdhury%20University!5e0!3m2!1sen!2sin!4v1743228907937!5m2!1sen!2sin"
-                            className="absolute top-0 left-0 w-full h-full border-0"
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3556.175674385524!2d94.2642826!3d26.961335599999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3746d051e36cc7e1%3A0x54f05820a3b56d9e!2sSri%20Sri%20Samaguri%20Satra(Majuli)!5e0!3m2!1sen!2sin!4v1779794988725!5m2!1sen!2sin"
+                            className="absolute inset-0 w-full h-full border-0"
                             allowFullScreen
                             loading="lazy"
                             referrerPolicy="no-referrer-when-downgrade"
@@ -303,7 +329,7 @@ const VisitPage = () => {
                         />
                         <button
                             type="submit" disabled={isSubmitting}
-                            className="w-full flex items-center justify-center gap-2 transition-colors"
+                            className="w-full flex items-center justify-center gap-3 transition-colors"
                             style={{
                                 backgroundColor: 'var(--color-primary)',
                                 color: 'var(--color-on-primary)',
@@ -316,9 +342,10 @@ const VisitPage = () => {
                                 cursor: isSubmitting ? 'not-allowed' : 'pointer',
                                 opacity: isSubmitting ? 0.7 : 1,
                             }}
+                            onMouseEnter={() => cursorRef.current?.startAnimation()}
                         >
                             {isSubmitting ? 'Sending...' : (
-                                <><Send size={18} /> Send Message</>
+                                <>Send Message  <CursorClickIcon ref={cursorRef} className="w-[18px] h-[18px]" /></>
                             )}
                         </button>
                     </form>

@@ -23,9 +23,9 @@ const { title = 'Admin Dashboard' } = Astro.props;
           var theme = localStorage.getItem('ama_theme') || 'dark';
           var attr;
           if (theme === 'system') {
-            attr = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'light' : 'dark';
+            attr = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
           } else {
-            attr = theme === 'dark' ? 'light' : 'dark';
+            attr = theme === 'dark' ? 'dark' : 'light';
           }
           document.documentElement.setAttribute('data-theme', attr);
         } catch(e) {}
@@ -39,12 +39,14 @@ const { title = 'Admin Dashboard' } = Astro.props;
 
 <style is:global>
   @import '../globals.css';
+  @import '../components/react/Admin/admin-shared.css';
 
-  /* Force dark admin surfaces even in light theme */
+  /* Admin body — respects current theme */
   body {
     margin: 0;
     padding: 0;
-    background: var(--color-surface-dark);
-    color: var(--color-on-dark);
+    background: var(--admin-bg);
+    color: var(--admin-text);
+    transition: background-color var(--theme-transition-duration) ease, color var(--theme-transition-duration) ease;
   }
 </style>

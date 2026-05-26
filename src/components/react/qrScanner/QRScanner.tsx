@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import WebcamCapture from "./WebcamCapture";
 import jsQR from "jsqr";
 import "./qrScanner.css";
@@ -7,9 +7,14 @@ interface QRScannerProps {
   onClose: () => void;
 }
 
+const ALLOWED_HOST = "www.assammanuscriptarchive.com";
+const INVALID_QR_MESSAGE =
+  "Invalid QR code. Please scan only QR codes for pages under www.assammanuscriptarchive.com";
+
 const QRScanner: React.FC<QRScannerProps> = ({ onClose }) => {
   const [qrCode, setQrCode] = useState<string | null>(null);
-  const [isValidUrl, setIsValidUrl] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const redirectingRef = useRef(false);
 
   const handleScan = (imageSrc: string | null) => {
     if (imageSrc) {
@@ -31,9 +36,13 @@ const QRScanner: React.FC<QRScannerProps> = ({ onClose }) => {
   };
 
   const decodeQRCode = (imageSrc: string) => {
+    if (redirectingRef.current) return;
+
     const image = new Image();
     image.src = imageSrc;
     image.onload = () => {
+      if (redirectingRef.current) return;
+
       const canvas = document.createElement("canvas");
       canvas.width = image.width;
       canvas.height = image.height;
@@ -47,9 +56,15 @@ const QRScanner: React.FC<QRScannerProps> = ({ onClose }) => {
         });
 
         if (code) {
-          setQrCode(code.data);
-          setIsValidUrl(isValidWebsite(code.data));
-          console.log("QR Code:", code.data);
+          if (isValidWebsite(code.data)) {
+            redirectingRef.current = true;
+            setError(null);
+            setQrCode(code.data);
+            window.location.href = code.data;
+          } else {
+            setQrCode(null);
+            setError((prev) => (prev === INVALID_QR_MESSAGE ? prev : INVALID_QR_MESSAGE));
+          }
         }
       }
     };
@@ -58,7 +73,8 @@ const QRScanner: React.FC<QRScannerProps> = ({ onClose }) => {
   const isValidWebsite = (text: string): boolean => {
     try {
       const url = new URL(text);
-      return url.protocol === "http:" || url.protocol === "https:";
+      const isHttp = url.protocol === "http:" || url.protocol === "https:";
+      return isHttp && url.hostname === ALLOWED_HOST;
     } catch {
       return false;
     }
@@ -106,25 +122,22 @@ const QRScanner: React.FC<QRScannerProps> = ({ onClose }) => {
           />
         </div>
 
-        {/* Display Scanned QR Code */}
+        {/* Display Scanned QR Code (briefly visible before redirect) */}
         {qrCode && (
           <div className="success-badge mt-4 p-3 rounded-lg text-center border border-transparent">
-            <p className="font-medium">Scanned QR Code:</p>
+            <p className="font-medium">Redirecting to:</p>
             <span className="font-semibold break-words">{qrCode}</span>
           </div>
         )}
 
-        {/* Redirect Button if it's a valid URL */}
-        {isValidUrl && qrCode && (
-          <a
-            href={qrCode}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="visit-btn mt-4 px-4 py-2 rounded-lg
-            transition block text-center font-semibold border border-transparent"
+        {/* Error Message for Invalid QR */}
+        {error && (
+          <div
+            className="mt-4 p-3 rounded-lg text-center border border-red-500/40 bg-red-500/10 text-red-600 dark:text-red-400"
+            role="alert"
           >
-            Visit the Artifact Page!
-          </a>
+            <p className="font-medium break-words">{error}</p>
+          </div>
         )}
       </div>
     </div>

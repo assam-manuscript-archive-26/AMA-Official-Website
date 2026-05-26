@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   LayoutDashboard, Upload, Image, MessageSquare, CalendarCheck,
-  BookOpen, Mail, Menu, X, MoreHorizontal, ChevronUp,
+  BookOpen, Mail, Cloud, Menu, X, MoreHorizontal, ChevronUp,
   Sun, Moon, Monitor,
 } from 'lucide-react';
 
@@ -15,6 +15,7 @@ const tabs: NavTab[] = [
   { name: 'Events', icon: <CalendarCheck size={20} />, path: '/admin/events' },
   { name: 'Resources', icon: <BookOpen size={20} />, path: '/admin/resources' },
   { name: 'Contact', icon: <Mail size={20} />, path: '/admin/contact' },
+  { name: 'Cloud Upload', icon: <Cloud size={20} />, path: '/admin/cloud-upload' },
 ];
 
 interface AdminSidebarProps { currentPath?: string; onNavigate?: (path: string) => void; isOpen?: boolean; onToggle?: () => void; }
@@ -50,9 +51,9 @@ export default function AdminSidebar({ currentPath = '/admin', onNavigate, isOpe
     const root = document.documentElement;
     if (mode === 'system') {
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      root.setAttribute('data-theme', prefersDark ? 'light' : 'dark');
+      root.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
     } else {
-      root.setAttribute('data-theme', mode === 'dark' ? 'light' : 'dark');
+      root.setAttribute('data-theme', mode === 'dark' ? 'dark' : 'light');
     }
     setThemeMenuOpen(false);
   };
@@ -75,15 +76,36 @@ export default function AdminSidebar({ currentPath = '/admin', onNavigate, isOpe
         <div className={`admin-sidebar ${isOpen ? 'admin-sidebar--open' : 'admin-sidebar--closed'}`}>
           {/* Header */}
           <div className="admin-sidebar-header">
-            {isOpen && (
-              <div className="admin-sidebar-brand">
-                <span className="admin-sidebar-title">Assamese Manuscript Archive</span>
-                <span className="admin-sidebar-subtitle">Admin Panel</span>
-              </div>
+            {isOpen ? (
+              <>
+                <a href="/admin" onClick={(e) => handleNav(e, '/admin')} className="admin-sidebar-logo-link" aria-label="Admin home">
+                  <img
+                    src="/assets/logo/logo.png"
+                    alt="Assamese Manuscript Archive"
+                    className="admin-sidebar-logo"
+                  />
+                </a>
+                <button onClick={onToggle} className="admin-sidebar-toggle" aria-label="Collapse sidebar">
+                  <X size={18} />
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={onToggle}
+                className="admin-sidebar-logo-toggle"
+                aria-label="Expand sidebar"
+                title="Expand sidebar"
+              >
+                <img
+                  src="/assets/logo/logo.png"
+                  alt="Assamese Manuscript Archive"
+                  className="admin-sidebar-logo admin-sidebar-logo--swap"
+                />
+                <span className="admin-sidebar-logo-menu" aria-hidden="true">
+                  <Menu size={18} />
+                </span>
+              </button>
             )}
-            <button onClick={onToggle} className="admin-sidebar-toggle" aria-label={isOpen ? 'Collapse sidebar' : 'Expand sidebar'}>
-              {isOpen ? <X size={18} /> : <Menu size={18} />}
-            </button>
           </div>
 
           {/* Navigation */}
@@ -180,12 +202,12 @@ export default function AdminSidebar({ currentPath = '/admin', onNavigate, isOpe
         }
 
         .admin-sidebar {
-          background: var(--color-surface-dark-elevated);
-          color: var(--color-on-dark);
+          background: var(--admin-surface);
+          color: var(--admin-text);
           display: flex;
           flex-direction: column;
           transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          border-right: 1px solid var(--color-hairline-soft);
+          border-right: 1px solid var(--admin-border);
           overflow: visible;
           height: 100%;
         }
@@ -197,52 +219,120 @@ export default function AdminSidebar({ currentPath = '/admin', onNavigate, isOpe
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: 20px 16px;
-          border-bottom: 1px solid rgba(255,255,255,0.08);
-          min-height: 72px;
+          padding: 16px;
+          border-bottom: 1px solid var(--admin-divider);
+          min-height: 64px;
+          gap: 8px;
         }
 
-        .admin-sidebar-brand {
+        .admin-sidebar-logo-link {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          flex-shrink: 0;
+          transition: opacity 0.15s ease, transform 0.15s ease;
+          outline: none;
+        }
+
+        .admin-sidebar-logo-link:hover { opacity: 0.85; }
+        .admin-sidebar-logo-link:active { transform: scale(0.96); }
+        .admin-sidebar-logo-link:focus-visible { box-shadow: var(--admin-focus-ring); }
+
+        .admin-sidebar-logo {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          object-fit: cover;
+          display: block;
+        }
+
+        /* Collapsed state — logo doubles as expand toggle */
+        .admin-sidebar-logo-toggle {
+          position: relative;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          flex-shrink: 0;
+          background: transparent;
+          border: none;
+          padding: 0;
+          cursor: pointer;
+          outline: none;
+          transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .admin-sidebar-logo-toggle:focus-visible {
+          box-shadow: var(--admin-focus-ring);
+        }
+        .admin-sidebar-logo-toggle:active { transform: scale(0.94); }
+
+        .admin-sidebar-logo--swap {
+          transition: opacity 0.18s ease, transform 0.18s ease;
+        }
+        .admin-sidebar-logo-toggle:hover .admin-sidebar-logo--swap,
+        .admin-sidebar-logo-toggle:focus-visible .admin-sidebar-logo--swap {
+          opacity: 0;
+          transform: scale(0.85);
+        }
+
+        .admin-sidebar-logo-menu {
+          position: absolute;
+          inset: 0;
           display: flex;
-          flex-direction: column;
-          gap: 2px;
-          overflow: hidden;
-          white-space: nowrap;
+          align-items: center;
+          justify-content: center;
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          background: var(--color-primary);
+          color: var(--color-on-primary);
+          opacity: 0;
+          transform: scale(0.85);
+          transition: opacity 0.18s ease, transform 0.18s ease;
+          pointer-events: none;
+        }
+        .admin-sidebar-logo-toggle:hover .admin-sidebar-logo-menu,
+        .admin-sidebar-logo-toggle:focus-visible .admin-sidebar-logo-menu {
+          opacity: 1;
+          transform: scale(1);
         }
 
-        .admin-sidebar-title {
-          font-family: var(--font-display);
-          font-size: 18px;
-          font-weight: 600;
-          color: var(--color-on-dark);
-          line-height: 1.2;
+        .admin-sidebar--closed .admin-sidebar-header {
+          padding: 16px 12px;
+          justify-content: center;
         }
 
-        .admin-sidebar-subtitle {
-          font-family: var(--font-body);
-          font-size: 11px;
-          color: var(--color-on-dark-soft);
-          letter-spacing: 0.04em;
-          text-transform: uppercase;
+        .admin-sidebar--closed .admin-sidebar-toggle {
+          display: none;
         }
 
         .admin-sidebar-toggle {
           background: none;
           border: none;
-          color: var(--color-on-dark-soft);
+          color: var(--admin-text-soft);
           cursor: pointer;
           padding: 6px;
           border-radius: var(--radius-sm);
           display: flex;
           align-items: center;
           justify-content: center;
-          transition: background 0.2s, color 0.2s;
+          transition: background 0.15s ease, color 0.15s ease;
           flex-shrink: 0;
+          outline: none;
         }
 
         .admin-sidebar-toggle:hover {
-          background: rgba(255,255,255,0.08);
-          color: var(--color-on-dark);
+          background: var(--admin-hover-bg);
+          color: var(--admin-text);
+        }
+
+        .admin-sidebar-toggle:focus-visible {
+          box-shadow: var(--admin-focus-ring);
         }
 
         .admin-sidebar-nav {
@@ -263,16 +353,21 @@ export default function AdminSidebar({ currentPath = '/admin', onNavigate, isOpe
           font-family: var(--font-body);
           font-size: 13px;
           font-weight: 500;
-          color: var(--color-on-dark-soft);
+          color: var(--admin-text-soft);
           text-decoration: none;
-          transition: all 0.15s ease;
+          transition: background 0.15s ease, color 0.15s ease;
           white-space: nowrap;
           position: relative;
+          outline: none;
         }
 
         .admin-sidebar-link:hover {
-          background: rgba(255,255,255,0.06);
-          color: var(--color-on-dark);
+          background: var(--admin-hover-bg);
+          color: var(--admin-text);
+        }
+
+        .admin-sidebar-link:focus-visible {
+          box-shadow: var(--admin-focus-ring);
         }
 
         .admin-sidebar-link--active {
@@ -309,7 +404,7 @@ export default function AdminSidebar({ currentPath = '/admin', onNavigate, isOpe
         /* ── Footer + Theme ──────────────────────────── */
         .admin-sidebar-footer {
           padding: 12px 8px 16px;
-          border-top: 1px solid rgba(255,255,255,0.06);
+          border-top: 1px solid var(--admin-divider);
           display: flex;
           flex-direction: column;
           gap: 8px;
@@ -318,8 +413,7 @@ export default function AdminSidebar({ currentPath = '/admin', onNavigate, isOpe
         .admin-sidebar-footer-text {
           font-family: var(--font-body);
           font-size: 11px;
-          color: var(--color-on-dark-soft);
-          opacity: 0.5;
+          color: var(--admin-text-muted);
           padding: 0 12px;
         }
 
@@ -337,18 +431,23 @@ export default function AdminSidebar({ currentPath = '/admin', onNavigate, isOpe
           font-family: var(--font-body);
           font-size: 13px;
           font-weight: 500;
-          color: var(--color-on-dark-soft);
+          color: var(--admin-text-soft);
           background: none;
           border: none;
           cursor: pointer;
-          transition: all 0.15s ease;
+          transition: background 0.15s ease, color 0.15s ease;
           white-space: nowrap;
           text-align: left;
+          outline: none;
         }
 
         .admin-sidebar-theme-btn:hover {
-          background: rgba(255,255,255,0.06);
-          color: var(--color-on-dark);
+          background: var(--admin-hover-bg);
+          color: var(--admin-text);
+        }
+
+        .admin-sidebar-theme-btn:focus-visible {
+          box-shadow: var(--admin-focus-ring);
         }
 
         .admin-sidebar-theme-chevron {
@@ -366,10 +465,10 @@ export default function AdminSidebar({ currentPath = '/admin', onNavigate, isOpe
           bottom: calc(100% + 4px);
           left: 0;
           right: 0;
-          background: var(--color-surface-dark-elevated);
-          border: 1px solid rgba(255,255,255,0.1);
+          background: var(--admin-surface);
+          border: 1px solid var(--admin-border);
           border-radius: var(--radius-lg);
-          box-shadow: 0 -8px 24px rgba(0,0,0,0.4);
+          box-shadow: var(--admin-shadow-lg);
           padding: 6px;
           animation: themeMenuIn 0.15s ease-out;
           z-index: 60;
@@ -389,17 +488,22 @@ export default function AdminSidebar({ currentPath = '/admin', onNavigate, isOpe
           border-radius: var(--radius-md);
           font-family: var(--font-body);
           font-size: 13px;
-          color: var(--color-on-dark-soft);
+          color: var(--admin-text-soft);
           background: none;
           border: none;
           cursor: pointer;
-          transition: all 0.1s;
+          transition: background 0.15s ease, color 0.15s ease;
           text-align: left;
+          outline: none;
         }
 
         .admin-sidebar-theme-option:hover {
-          background: rgba(255,255,255,0.06);
-          color: var(--color-on-dark);
+          background: var(--admin-hover-bg);
+          color: var(--admin-text);
+        }
+
+        .admin-sidebar-theme-option:focus-visible {
+          box-shadow: var(--admin-focus-ring);
         }
 
         .admin-sidebar-theme-option--active {
@@ -417,8 +521,8 @@ export default function AdminSidebar({ currentPath = '/admin', onNavigate, isOpe
           left: 0;
           right: 0;
           z-index: 70;
-          background: var(--color-surface-dark-elevated);
-          border-top: 1px solid rgba(255,255,255,0.08);
+          background: var(--admin-surface);
+          border-top: 1px solid var(--admin-border);
           backdrop-filter: blur(16px);
           padding: 6px 8px;
           padding-bottom: max(6px, env(safe-area-inset-bottom));
@@ -437,23 +541,23 @@ export default function AdminSidebar({ currentPath = '/admin', onNavigate, isOpe
           justify-content: center;
           padding: 6px 12px;
           border-radius: var(--radius-lg);
-          color: var(--color-on-dark-soft);
+          color: var(--admin-text-soft);
           text-decoration: none;
           background: none;
           border: none;
           cursor: pointer;
-          transition: all 0.15s ease;
+          transition: background 0.15s ease, color 0.15s ease;
           font-family: var(--font-body);
         }
 
         .admin-mobile-item:hover {
-          color: var(--color-on-dark);
-          background: rgba(255,255,255,0.06);
+          color: var(--admin-text);
+          background: var(--admin-hover-bg);
         }
 
         .admin-mobile-item--active {
           color: var(--color-primary) !important;
-          background: rgba(204, 120, 92, 0.12);
+          background: color-mix(in srgb, var(--color-primary) 12%, transparent);
         }
 
         .admin-mobile-item-label {
@@ -484,10 +588,10 @@ export default function AdminSidebar({ currentPath = '/admin', onNavigate, isOpe
         .admin-mobile-more-panel {
           margin: 0 16px 8px;
           border-radius: var(--radius-xl);
-          background: var(--color-surface-dark-elevated);
-          border: 1px solid rgba(255,255,255,0.08);
+          background: var(--admin-surface);
+          border: 1px solid var(--admin-border);
           backdrop-filter: blur(16px);
-          box-shadow: 0 -8px 32px rgba(0,0,0,0.3);
+          box-shadow: var(--admin-shadow-lg);
           overflow: hidden;
         }
 
@@ -495,8 +599,7 @@ export default function AdminSidebar({ currentPath = '/admin', onNavigate, isOpe
           display: flex;
           justify-content: center;
           padding: 8px 0 4px;
-          color: var(--color-on-dark-soft);
-          opacity: 0.4;
+          color: var(--admin-text-muted);
         }
 
         .admin-mobile-more-grid {
@@ -513,14 +616,14 @@ export default function AdminSidebar({ currentPath = '/admin', onNavigate, isOpe
           justify-content: center;
           padding: 16px 8px;
           border-radius: var(--radius-lg);
-          color: var(--color-on-dark-soft);
+          color: var(--admin-text-soft);
           text-decoration: none;
-          transition: all 0.15s ease;
+          transition: background 0.15s ease, color 0.15s ease;
         }
 
         .admin-mobile-more-item:hover {
-          color: var(--color-on-dark);
-          background: rgba(255,255,255,0.06);
+          color: var(--admin-text);
+          background: var(--admin-hover-bg);
         }
 
         .admin-mobile-more-item-icon { margin-bottom: 6px; }
@@ -536,7 +639,7 @@ export default function AdminSidebar({ currentPath = '/admin', onNavigate, isOpe
         .admin-mobile-overlay {
           position: fixed;
           inset: 0;
-          background: rgba(0,0,0,0.3);
+          background: rgba(20,20,19,0.4);
           backdrop-filter: blur(4px);
           z-index: 20;
         }

@@ -1,0 +1,536 @@
+/* ─────────────────────────────────────────────────────────
+ * Admin shared utilities — .ax-*
+ * Theme-aware via tokens defined in globals.css
+ * ─────────────────────────────────────────────────────── */
+
+/* ── Form controls ──────────────────────────────────────── */
+.ax-input,
+.ax-select,
+.ax-textarea {
+  width: 100%;
+  padding: 10px 14px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--admin-text);
+  background: var(--admin-input-bg);
+  border: 1px solid var(--admin-input-border);
+  border-radius: var(--radius-md);
+  outline: none;
+  box-sizing: border-box;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.ax-input::placeholder,
+.ax-textarea::placeholder {
+  color: var(--admin-text-muted);
+  opacity: 0.7;
+}
+
+.ax-input:hover,
+.ax-select:hover,
+.ax-textarea:hover {
+  border-color: var(--admin-input-border-hover);
+}
+
+.ax-input:focus,
+.ax-input:focus-visible,
+.ax-select:focus,
+.ax-select:focus-visible,
+.ax-textarea:focus,
+.ax-textarea:focus-visible {
+  border-color: var(--color-primary);
+  box-shadow: var(--admin-focus-ring);
+}
+
+.ax-input:disabled,
+.ax-select:disabled,
+.ax-textarea:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.ax-textarea {
+  resize: vertical;
+  min-height: 88px;
+  line-height: 1.5;
+}
+
+.ax-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'><path d='M1 1.5L6 6.5L11 1.5' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
+/* Search input variant — has left icon */
+.ax-search-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+}
+
+.ax-search-wrap > svg:first-child {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--admin-text-muted);
+  pointer-events: none;
+}
+
+.ax-search-input {
+  width: 100%;
+  padding: 10px 14px 10px 40px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--admin-text);
+  background: var(--admin-input-bg);
+  border: 1px solid var(--admin-input-border);
+  border-radius: var(--radius-md);
+  outline: none;
+  box-sizing: border-box;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.ax-search-input::placeholder {
+  color: var(--admin-text-muted);
+  opacity: 0.7;
+}
+
+.ax-search-input:hover {
+  border-color: var(--admin-input-border-hover);
+}
+
+.ax-search-input:focus,
+.ax-search-input:focus-visible {
+  border-color: var(--color-primary);
+  box-shadow: var(--admin-focus-ring);
+}
+
+/* Label */
+.ax-label {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--admin-text-soft);
+  margin-bottom: 6px;
+  display: block;
+  letter-spacing: 0.01em;
+}
+
+.ax-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ── Filter chips ───────────────────────────────────────── */
+.ax-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--admin-chip-border);
+  background: var(--admin-chip-bg);
+  color: var(--admin-text-soft);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  outline: none;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.12s ease, box-shadow 0.15s ease;
+}
+
+.ax-chip:hover {
+  background: var(--admin-chip-hover-bg);
+  border-color: var(--admin-border-strong);
+  color: var(--admin-text);
+}
+
+.ax-chip:active {
+  transform: translateY(1px);
+}
+
+.ax-chip:focus-visible {
+  box-shadow: var(--admin-focus-ring);
+}
+
+.ax-chip--active,
+.ax-chip--active:hover {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-on-primary);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(204,120,92,0.24);
+}
+
+.ax-chip--active-gold,
+.ax-chip--active-gold:hover {
+  background: var(--color-accent-gold);
+  border-color: var(--color-accent-gold);
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(201,162,39,0.28);
+}
+
+/* ── Buttons ────────────────────────────────────────────── */
+.ax-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 18px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.12s ease, box-shadow 0.15s ease;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.ax-btn:focus-visible {
+  box-shadow: var(--admin-focus-ring);
+}
+
+.ax-btn:active {
+  transform: translateY(1px);
+}
+
+.ax-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.ax-btn--primary {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  border-color: var(--color-primary);
+  font-weight: 600;
+}
+
+.ax-btn--primary:hover:not(:disabled) {
+  background: var(--color-primary-active);
+  border-color: var(--color-primary-active);
+}
+
+.ax-btn--secondary {
+  background: var(--admin-input-bg);
+  color: var(--admin-text);
+  border-color: var(--admin-input-border);
+}
+
+.ax-btn--secondary:hover:not(:disabled) {
+  background: var(--admin-surface-hover);
+  border-color: var(--admin-border-strong);
+}
+
+.ax-btn--ghost {
+  background: transparent;
+  color: var(--admin-text-soft);
+  border-color: transparent;
+}
+
+.ax-btn--ghost:hover:not(:disabled) {
+  background: var(--admin-hover-bg);
+  color: var(--admin-text);
+}
+
+.ax-btn--danger {
+  background: var(--color-error);
+  color: #ffffff;
+  border-color: var(--color-error);
+}
+
+.ax-btn--danger:hover:not(:disabled) {
+  filter: brightness(0.92);
+}
+
+/* ── Icon button (square 36px) ──────────────────────────── */
+.ax-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  background: var(--admin-input-bg);
+  border: 1px solid var(--admin-input-border);
+  color: var(--admin-text-soft);
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.12s ease, box-shadow 0.15s ease;
+}
+
+.ax-icon-btn:hover {
+  background: var(--admin-surface-hover);
+  border-color: var(--admin-border-strong);
+  color: var(--admin-text);
+}
+
+.ax-icon-btn:focus-visible {
+  box-shadow: var(--admin-focus-ring);
+}
+
+.ax-icon-btn:active {
+  transform: translateY(1px);
+}
+
+/* ── Action buttons (edit/delete/feature) ─────────────── */
+.ax-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.12s ease, box-shadow 0.15s ease;
+}
+
+.ax-action-btn:focus-visible {
+  box-shadow: var(--admin-focus-ring);
+}
+
+.ax-action-btn:active {
+  transform: translateY(1px);
+}
+
+/* Edit (teal) */
+.ax-action-btn--edit {
+  background: rgba(93,184,166,0.16);
+  color: #2c8775;
+  border-color: rgba(93,184,166,0.32);
+}
+
+.ax-action-btn--edit:hover {
+  background: rgba(93,184,166,0.24);
+  border-color: rgba(93,184,166,0.48);
+}
+
+[data-theme="dark"] .ax-action-btn--edit {
+  background: rgba(93,184,166,0.18);
+  color: #5db8a6;
+  border-color: rgba(93,184,166,0.32);
+}
+
+[data-theme="dark"] .ax-action-btn--edit:hover {
+  background: rgba(93,184,166,0.28);
+  border-color: rgba(93,184,166,0.48);
+}
+
+/* Delete (error) */
+.ax-action-btn--delete {
+  background: rgba(198,69,69,0.12);
+  color: #a83434;
+  border-color: rgba(198,69,69,0.28);
+}
+
+.ax-action-btn--delete:hover {
+  background: rgba(198,69,69,0.20);
+  border-color: rgba(198,69,69,0.44);
+}
+
+[data-theme="dark"] .ax-action-btn--delete {
+  background: rgba(198,69,69,0.16);
+  color: #e87878;
+  border-color: rgba(198,69,69,0.32);
+}
+
+[data-theme="dark"] .ax-action-btn--delete:hover {
+  background: rgba(198,69,69,0.26);
+  border-color: rgba(198,69,69,0.48);
+}
+
+/* Feature (gold) */
+.ax-action-btn--feature {
+  background: rgba(201,162,39,0.14);
+  color: #8c6d10;
+  border-color: rgba(201,162,39,0.32);
+}
+
+.ax-action-btn--feature:hover {
+  background: rgba(201,162,39,0.22);
+  border-color: rgba(201,162,39,0.48);
+}
+
+[data-theme="dark"] .ax-action-btn--feature {
+  background: rgba(201,162,39,0.16);
+  color: #e3bf3a;
+  border-color: rgba(201,162,39,0.32);
+}
+
+[data-theme="dark"] .ax-action-btn--feature:hover {
+  background: rgba(201,162,39,0.26);
+  border-color: rgba(201,162,39,0.48);
+}
+
+/* Active feature toggle (already starred) */
+.ax-action-btn--feature-active {
+  background: var(--color-accent-gold);
+  color: #ffffff;
+  border-color: var(--color-accent-gold);
+}
+
+.ax-action-btn--feature-active:hover {
+  filter: brightness(0.94);
+}
+
+/* ── Cards & panels ─────────────────────────────────────── */
+.ax-card {
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--radius-lg);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.ax-card--interactive:hover {
+  border-color: var(--admin-border-strong);
+  box-shadow: var(--admin-shadow-md);
+}
+
+.ax-panel {
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.ax-divider {
+  height: 1px;
+  background: var(--admin-divider);
+  border: none;
+  margin: 0;
+}
+
+/* ── Toasts ─────────────────────────────────────────────── */
+.ax-toast {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 1000;
+  padding: 14px 20px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  color: #ffffff;
+  box-shadow: var(--admin-shadow-lg);
+  animation: adminScaleIn 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+  max-width: min(400px, calc(100vw - 48px));
+}
+
+.ax-toast--success {
+  background: var(--color-success);
+}
+
+.ax-toast--error {
+  background: var(--color-error);
+}
+
+.ax-toast--info {
+  background: var(--color-primary);
+}
+
+/* ── Page heading area ──────────────────────────────────── */
+.ax-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.ax-page-title {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--admin-text);
+  margin: 0;
+  line-height: 1.1;
+}
+
+.ax-page-subtitle {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--admin-text-soft);
+  margin: 4px 0 0;
+}
+
+@media (max-width: 640px) {
+  .ax-page-title { font-size: 26px; }
+}
+
+/* ── Tool row (search + filter row) ─────────────────────── */
+.ax-tool-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.ax-filter-bar {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+/* ── Empty state ────────────────────────────────────────── */
+.ax-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 64px 24px;
+  text-align: center;
+  color: var(--admin-text-soft);
+  font-family: var(--font-body);
+  font-size: 14px;
+}
+
+.ax-empty-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--admin-chip-bg);
+  border: 1px solid var(--admin-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--admin-text-muted);
+  margin-bottom: 4px;
+}
+
+.ax-empty-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--admin-text);
+  margin: 0;
+}
+
+/* ── Stat colour helper for icon backgrounds ────────────── */
+.ax-stat-tint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+}

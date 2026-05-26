@@ -40,9 +40,9 @@ export default function AdminTopbar() {
     const root = document.documentElement;
     if (mode === 'system') {
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      root.setAttribute('data-theme', prefersDark ? 'light' : 'dark');
+      root.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
     } else {
-      root.setAttribute('data-theme', mode === 'dark' ? 'light' : 'dark');
+      root.setAttribute('data-theme', mode === 'dark' ? 'dark' : 'light');
     }
   };
 
@@ -129,17 +129,17 @@ export default function AdminTopbar() {
           justify-content: space-between;
           padding: 0 24px;
           height: 56px;
-          background: var(--color-surface-dark-elevated);
-          border-bottom: 1px solid rgba(255,255,255,0.06);
+          background: var(--admin-surface);
+          border-bottom: 1px solid var(--admin-border);
           backdrop-filter: blur(12px);
           flex-shrink: 0;
         }
 
         .admin-topbar-title {
-          font-family: var(--font-display) !important;
-          font-size: 18px !important;
-          font-weight: 600 !important;
-          color: var(--color-on-dark);
+          font-family: var(--font-display);
+          font-size: 18px;
+          font-weight: 600;
+          color: var(--admin-text);
           margin: 0;
           line-height: 1;
         }
@@ -160,16 +160,22 @@ export default function AdminTopbar() {
           width: 36px;
           height: 36px;
           border-radius: 50%;
-          background: none;
-          border: 1px solid rgba(255,255,255,0.1);
-          color: var(--color-on-dark-soft);
+          background: var(--admin-input-bg);
+          border: 1px solid var(--admin-input-border);
+          color: var(--admin-text-soft);
           cursor: pointer;
-          transition: all 0.15s ease;
+          transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+          outline: none;
         }
 
         .admin-topbar-icon-btn:hover {
-          background: rgba(255,255,255,0.06);
-          color: var(--color-on-dark);
+          background: var(--admin-surface-hover);
+          border-color: var(--admin-border-strong);
+          color: var(--admin-text);
+        }
+
+        .admin-topbar-icon-btn:focus-visible {
+          box-shadow: var(--admin-focus-ring);
         }
 
         .admin-topbar-notif-badge {
@@ -180,7 +186,7 @@ export default function AdminTopbar() {
           height: 8px;
           border-radius: 50%;
           background: var(--color-primary);
-          border: 2px solid var(--color-surface-dark-elevated);
+          border: 2px solid var(--admin-surface);
         }
 
         .admin-topbar-profile-btn {
@@ -189,15 +195,23 @@ export default function AdminTopbar() {
           gap: 8px;
           padding: 4px 12px 4px 4px;
           border-radius: var(--radius-pill);
-          background: none;
-          border: 1px solid rgba(255,255,255,0.1);
-          color: var(--color-on-dark);
+          background: var(--admin-input-bg);
+          border: 1px solid var(--admin-input-border);
+          color: var(--admin-text);
           cursor: pointer;
-          transition: all 0.15s ease;
+          transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
           font-family: var(--font-body);
+          outline: none;
         }
 
-        .admin-topbar-profile-btn:hover { background: rgba(255,255,255,0.06); }
+        .admin-topbar-profile-btn:hover {
+          background: var(--admin-surface-hover);
+          border-color: var(--admin-border-strong);
+        }
+
+        .admin-topbar-profile-btn:focus-visible {
+          box-shadow: var(--admin-focus-ring);
+        }
 
         .admin-topbar-avatar {
           display: flex;
@@ -218,10 +232,10 @@ export default function AdminTopbar() {
           position: absolute;
           right: 0;
           top: calc(100% + 8px);
-          background: var(--color-surface-dark-elevated);
-          border: 1px solid rgba(255,255,255,0.1);
+          background: var(--admin-surface);
+          border: 1px solid var(--admin-border);
           border-radius: var(--radius-lg);
-          box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+          box-shadow: var(--admin-shadow-lg);
           overflow: hidden;
           animation: topbarDropdownIn 0.15s ease-out;
         }
@@ -239,11 +253,11 @@ export default function AdminTopbar() {
           align-items: center;
           justify-content: space-between;
           padding: 12px 16px;
-          border-bottom: 1px solid rgba(255,255,255,0.06);
+          border-bottom: 1px solid var(--admin-divider);
           font-family: var(--font-body);
           font-size: 13px;
           font-weight: 600;
-          color: var(--color-on-dark);
+          color: var(--admin-text);
         }
 
         .admin-topbar-dropdown-action {
@@ -270,12 +284,12 @@ export default function AdminTopbar() {
           padding: 10px 16px;
           font-family: var(--font-body);
           font-size: 13px;
-          color: var(--color-on-dark-soft);
-          border-bottom: 1px solid rgba(255,255,255,0.04);
-          transition: background 0.1s;
+          color: var(--admin-text-soft);
+          border-bottom: 1px solid var(--admin-divider);
+          transition: background 0.15s ease;
         }
 
-        .admin-topbar-notif-item:hover { background: rgba(255,255,255,0.04); }
+        .admin-topbar-notif-item:hover { background: var(--admin-hover-bg); }
         .admin-topbar-notif-item:last-child { border-bottom: none; }
 
         .admin-topbar-dropdown-item {
@@ -288,23 +302,23 @@ export default function AdminTopbar() {
           border: none;
           font-family: var(--font-body);
           font-size: 13px;
-          color: var(--color-on-dark-soft);
+          color: var(--admin-text-soft);
           cursor: pointer;
-          transition: all 0.1s ease;
+          transition: background 0.15s ease, color 0.15s ease;
           text-decoration: none;
         }
 
         .admin-topbar-dropdown-item:hover {
-          background: rgba(255,255,255,0.06);
-          color: var(--color-on-dark);
+          background: var(--admin-hover-bg);
+          color: var(--admin-text);
         }
 
         .admin-topbar-dropdown-item--danger { color: var(--color-error) !important; }
-        .admin-topbar-dropdown-item--danger:hover { background: rgba(198, 69, 69, 0.1); }
+        .admin-topbar-dropdown-item--danger:hover { background: color-mix(in srgb, var(--color-error) 12%, transparent); }
 
         .admin-topbar-dropdown-divider {
           height: 1px;
-          background: rgba(255,255,255,0.06);
+          background: var(--admin-divider);
           margin: 4px 0;
         }
       `}</style>

@@ -11,6 +11,7 @@ import FeedbackManager from './FeedbackManager';
 import EventsAdmin from './EventsAdmin';
 import ResourcesAdmin from './ResourcesAdmin';
 import ContactAdmin from './ContactAdmin';
+import CloudUploadAdmin from './CloudUploadAdmin';
 
 const ROUTES: Record<string, React.ComponentType> = {
   '/admin': Dashboard,
@@ -20,6 +21,7 @@ const ROUTES: Record<string, React.ComponentType> = {
   '/admin/events': EventsAdmin,
   '/admin/resources': ResourcesAdmin,
   '/admin/contact': ContactAdmin,
+  '/admin/cloud-upload': CloudUploadAdmin,
 };
 
 interface AdminShellProps {
@@ -81,8 +83,8 @@ export default function AdminShell({ currentPath }: AdminShellProps) {
         .admin-shell {
           display: flex;
           min-height: 100vh;
-          background: var(--color-surface-dark);
-          color: var(--color-on-dark);
+          background: var(--admin-bg);
+          color: var(--admin-text);
         }
 
         .admin-shell-main {

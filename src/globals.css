@@ -61,6 +61,28 @@
 
   /* Transition for theme changes - synced with reveal animation */
   --theme-transition-duration: 400ms;
+
+  /* ── Admin surface tokens — theme-aware ──────────────────── */
+  --admin-bg: var(--color-canvas);
+  --admin-surface: #ffffff;
+  --admin-surface-hover: #faf7f2;
+  --admin-border: #e2dccf;
+  --admin-border-strong: #cdc5b4;
+  --admin-input-bg: #ffffff;
+  --admin-input-border: #d8d1c2;
+  --admin-input-border-hover: #b8ad96;
+  --admin-chip-bg: #f5f0e8;
+  --admin-chip-border: #d8d1c2;
+  --admin-chip-hover-bg: #ebe3d3;
+  --admin-hover-bg: rgba(20,20,19,0.04);
+  --admin-divider: #ebe6db;
+  --admin-text: var(--color-ink);
+  --admin-text-soft: var(--color-body);
+  --admin-text-muted: var(--color-muted);
+  --admin-shadow-sm: 0 1px 2px rgba(20,20,19,0.04), 0 1px 1px rgba(20,20,19,0.03);
+  --admin-shadow-md: 0 4px 16px rgba(20,20,19,0.06), 0 1px 3px rgba(20,20,19,0.04);
+  --admin-shadow-lg: 0 16px 48px rgba(20,20,19,0.12), 0 4px 12px rgba(20,20,19,0.06);
+  --admin-focus-ring: 0 0 0 3px rgba(204,120,92,0.18);
 }
 
 /* ── Dark Theme ─────────────────────────────────────────────── */
@@ -98,6 +120,28 @@
   --color-text-secondary: #d8d5cf;
   --color-text-muted: #a09d96;
   --color-border: #3a3835;
+
+  /* ── Admin surface tokens — dark theme overrides ─────────── */
+  --admin-bg: #181715;
+  --admin-surface: #252320;
+  --admin-surface-hover: #2d2b27;
+  --admin-border: rgba(255,255,255,0.08);
+  --admin-border-strong: rgba(255,255,255,0.16);
+  --admin-input-bg: rgba(255,255,255,0.04);
+  --admin-input-border: rgba(255,255,255,0.12);
+  --admin-input-border-hover: rgba(255,255,255,0.22);
+  --admin-chip-bg: rgba(255,255,255,0.04);
+  --admin-chip-border: rgba(255,255,255,0.10);
+  --admin-chip-hover-bg: rgba(255,255,255,0.08);
+  --admin-hover-bg: rgba(255,255,255,0.06);
+  --admin-divider: rgba(255,255,255,0.06);
+  --admin-text: #faf9f5;
+  --admin-text-soft: #a09d96;
+  --admin-text-muted: #8e8b82;
+  --admin-shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+  --admin-shadow-md: 0 4px 16px rgba(0,0,0,0.4);
+  --admin-shadow-lg: 0 16px 48px rgba(0,0,0,0.5);
+  --admin-focus-ring: 0 0 0 3px rgba(204,120,92,0.32);
 }
 
 /* ── Light Theme (Explicit) ─────────────────────────────────── */
@@ -321,5 +365,26 @@ h6 { font-size: 18px; }
   to {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+/* ── Admin shared keyframes ─────────────────────────────── */
+@keyframes adminSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes adminFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes adminScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
   }
 }

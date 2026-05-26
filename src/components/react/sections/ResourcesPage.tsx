@@ -16,6 +16,7 @@ import {
   Database,
   FileQuestion
 } from 'lucide-react';
+import { getAllResources } from '@/backend/actions/resources';
 
 interface Resource {
   id: string;
@@ -24,16 +25,11 @@ interface Resource {
   source?: string;
   year?: string;
   url: string;
+  category: ResourceCategory;
 }
 
-interface ResourcesPageProps {
-  books: Resource[];
-  journals: Resource[];
-  digitalArchives: Resource[];
-  articles: Resource[];
-}
-
-type Category = 'all' | 'books' | 'journals' | 'digitalArchives' | 'articles';
+type ResourceCategory = 'books' | 'journals' | 'digitalArchives' | 'articles';
+type Category = 'all' | ResourceCategory;
 
 const categoryConfig: Record<Category, {
   label: string;
@@ -67,21 +63,26 @@ const categoryConfig: Record<Category, {
   }
 };
 
-const iconMap: Record<Category, React.ComponentType<{ size?: number; className?: string }>> = {
-  all: Layers,
+const iconMap: Record<ResourceCategory, React.ComponentType<{ size?: number; className?: string }>> = {
   books: BookOpen,
   journals: FileText,
   digitalArchives: Globe,
   articles: Archive
 };
 
-export default function ResourcesPage({ books, journals, digitalArchives, articles }: ResourcesPageProps) {
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+export default function ResourcesPage() {
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>(() => {
+    if (typeof window !== 'undefined') {
+      return window.matchMedia('(max-width: 1023px)').matches ? 'list' : 'grid';
+    }
+    return 'grid';
+  });
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<Category>('all');
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [resources, setResources] = useState<Resource[]>([]);
 
-  // Handle responsive view mode
   useEffect(() => {
     const handleResize = () => {
       if (window.matchMedia('(max-width: 1023px)').matches) {
@@ -93,46 +94,55 @@ export default function ResourcesPage({ books, journals, digitalArchives, articl
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Simulate loading state (will be replaced with real API fetch)
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 500);
-    return () => clearTimeout(timer);
+    const fetchResources = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const result = await getAllResources();
+        if (result.success && result.resources) {
+          setResources(result.resources as Resource[]);
+        } else {
+          setError(result.error || 'Failed to fetch resources');
+        }
+      } catch (err) {
+        console.error('Failed to fetch resources:', err);
+        setError('Failed to fetch resources');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchResources();
   }, []);
 
-  const resourcesByCategory: Record<Exclude<Category, 'all'>, Resource[]> = {
-    books,
-    journals,
-    digitalArchives,
-    articles
-  };
-
-  const allResources = useMemo(() => [
-    ...books, ...journals, ...digitalArchives, ...articles
-  ], [books, journals, digitalArchives, articles]);
+  const resourcesByCategory = useMemo<Record<ResourceCategory, Resource[]>>(() => ({
+    books: resources.filter(r => r.category === 'books'),
+    journals: resources.filter(r => r.category === 'journals'),
+    digitalArchives: resources.filter(r => r.category === 'digitalArchives'),
+    articles: resources.filter(r => r.category === 'articles')
+  }), [resources]);
 
   const currentResources = useMemo(() => {
-    const resources = selectedCategory === 'all'
-      ? allResources
+    const list = selectedCategory === 'all'
+      ? resources
       : resourcesByCategory[selectedCategory];
-    if (!searchTerm.trim()) return resources;
+    if (!searchTerm.trim()) return list;
 
     const query = searchTerm.toLowerCase();
-    return resources.filter(
+    return list.filter(
       resource =>
         resource.title.toLowerCase().includes(query) ||
         resource.author?.toLowerCase().includes(query) ||
         resource.source?.toLowerCase().includes(query)
     );
-  }, [selectedCategory, searchTerm, books, journals, digitalArchives, articles, allResources]);
+  }, [selectedCategory, searchTerm, resources, resourcesByCategory]);
 
   const categoryCounts: Record<Category, number> = {
-    all: books.length + journals.length + digitalArchives.length + articles.length,
-    books: books.length,
-    journals: journals.length,
-    digitalArchives: digitalArchives.length,
-    articles: articles.length
+    all: resources.length,
+    books: resourcesByCategory.books.length,
+    journals: resourcesByCategory.journals.length,
+    digitalArchives: resourcesByCategory.digitalArchives.length,
+    articles: resourcesByCategory.articles.length
   };
 
   const categories = [
@@ -143,21 +153,17 @@ export default function ResourcesPage({ books, journals, digitalArchives, articl
     { id: 'articles' as Category, name: 'Articles' }
   ];
 
-  const getCategoryIcon = (category: Category) => {
-    const Icon = iconMap[category];
-    return Icon;
-  };
+  const getResourceIcon = (resource: Resource) => iconMap[resource.category] ?? Layers;
 
   return (
     <div
       className="w-full max-w-[1400px] mx-auto relative"
       style={{
-        // backgroundColor: 'var(--color-canvas)',
         color: 'var(--color-ink)',
         fontFamily: 'var(--font-body)'
       }}
     >
-      {/* Header - Matching Events/Collections Style */}
+      {/* Header */}
       <div
         className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-0 p-6 sm:p-8 pt-32 sm:pt-32"
         style={{
@@ -192,22 +198,8 @@ export default function ResourcesPage({ books, journals, digitalArchives, articl
             }}
           >
             <button
-              onClick={() => setViewMode('list')}
-              className="px-4 py-2 flex items-center gap-2 transition-colors lg:hidden"
-              style={{
-                borderRadius: 'var(--radius-md)',
-                backgroundColor: viewMode === 'list' ? 'rgba(255,255,255,0.25)' : 'transparent',
-                color: '#fff',
-                fontFamily: 'var(--font-body)',
-                fontWeight: 500,
-                fontSize: '14px'
-              }}
-            >
-              <List size={16} /> List
-            </button>
-            <button
               onClick={() => setViewMode('grid')}
-              className="px-4 py-2 flex items-center gap-2 transition-colors"
+              className="px-4 py-2 hidden lg:flex items-center gap-2 transition-colors"
               style={{
                 borderRadius: 'var(--radius-md)',
                 backgroundColor: viewMode === 'grid' ? 'rgba(255,255,255,0.25)' : 'transparent',
@@ -221,7 +213,7 @@ export default function ResourcesPage({ books, journals, digitalArchives, articl
             </button>
             <button
               onClick={() => setViewMode('list')}
-              className="px-4 py-2 items-center gap-2 transition-colors hidden lg:flex"
+              className="px-4 py-2 flex items-center gap-2 transition-colors"
               style={{
                 borderRadius: 'var(--radius-md)',
                 backgroundColor: viewMode === 'list' ? 'rgba(255,255,255,0.25)' : 'transparent',
@@ -261,252 +253,158 @@ export default function ResourcesPage({ books, journals, digitalArchives, articl
         </div>
       )}
 
-      {/* Content - Show when not loading */}
-      {!isLoading && (
-        <>
-        <div className="flex flex-col lg:flex-row gap-4 my-8 px-5 sm:px-8">
-          <div className="relative flex-1">
-          <Search
-            className="absolute left-3 top-1/2 transform -translate-y-1/2"
-            size={20}
-            style={{ color: 'var(--color-muted)' }}
-          />
-          <input
-            type="text"
-            placeholder={`Search ${categoryConfig[selectedCategory].label.toLowerCase()}...`}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 transition-all"
+      {/* Error State */}
+      {!isLoading && error && (
+        <div className="flex flex-col items-center justify-center py-20 px-5 sm:px-8">
+          <p
+            className="text-lg"
             style={{
-              borderRadius: 'var(--radius-lg)',
-              border: '1px solid var(--color-hairline)',
-              backgroundColor: 'var(--color-canvas)',
-              color: 'var(--color-ink)',
-              fontFamily: 'var(--font-body)',
-              fontSize: '14px',
-              outline: 'none'
+              color: 'var(--color-error)',
+              fontFamily: 'var(--font-body)'
             }}
-            onFocus={(e) => e.target.style.borderColor = 'var(--color-primary)'}
-            onBlur={(e) => e.target.style.borderColor = 'var(--color-hairline)'}
-          />
-        </div>
-
-        <div className="flex gap-3 flex-wrap mb-2">
-          {categories.map(category => (
-            <button
-              key={category.id}
-              onClick={() => {
-                setSelectedCategory(category.id);
-                setSearchTerm('');
-              }}
-              className="px-5 py-2.5 text-sm font-medium transition-all"
-              style={{
-                borderRadius: 'var(--radius-md)',
-                backgroundColor: selectedCategory === category.id ? 'var(--color-primary)' : 'var(--color-surface-card)',
-                color: selectedCategory === category.id ? 'var(--color-on-primary)' : 'var(--color-ink)',
-                fontFamily: 'var(--font-body)',
-                border: selectedCategory === category.id ? 'none' : '1px solid var(--color-hairline)'
-              }}
-            >
-              {category.name} ({categoryCounts[category.id]})
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Category Description */}
-      <div className="px-5 sm:px-8 mb-8">
-        <p
-          style={{
-            color: 'var(--color-body)',
-            fontFamily: 'var(--font-body)',
-            fontSize: '15px',
-            lineHeight: 1.6
-          }}
-        >
-          {categoryConfig[selectedCategory].description}
-        </p>
-      </div>
-
-      {/* Results Count */}
-      <div className="flex items-center justify-between mb-6 px-5 sm:px-8">
-        <span
-          style={{
-            color: 'var(--color-muted)',
-            fontFamily: 'var(--font-body)',
-            fontSize: '14px'
-          }}
-        >
-          Showing {currentResources.length} of {selectedCategory === 'all' ? allResources.length : resourcesByCategory[selectedCategory].length} resources
-        </span>
-        {searchTerm && (
-          <button
-            onClick={() => setSearchTerm('')}
-            className="text-sm font-medium hover:underline"
-            style={{ color: 'var(--color-primary)', fontFamily: 'var(--font-body)' }}
           >
-            Clear search
-          </button>
-        )}
-      </div>
+            {error}
+          </p>
+        </div>
+      )}
 
-      {/* Resources Grid/List */}
-      {viewMode === 'grid' ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 px-5 sm:px-8 mb-12">
-          {currentResources.map((resource, index) => {
-            const CategoryIcon = getCategoryIcon(selectedCategory);
-
-            return (
-              <article
-                key={resource.id}
-                className="group cursor-pointer"
+      {/* Content */}
+      {!isLoading && !error && (
+        <>
+          <div className="flex flex-col lg:flex-row gap-4 my-8 px-5 sm:px-8">
+            <div className="relative flex-1">
+              <Search
+                className="absolute left-3 top-1/2 transform -translate-y-1/2"
+                size={20}
+                style={{ color: 'var(--color-muted)' }}
+              />
+              <input
+                type="text"
+                placeholder={`Search ${categoryConfig[selectedCategory].label.toLowerCase()}...`}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-3"
                 style={{
-                  backgroundColor: 'var(--color-surface-card)',
                   borderRadius: 'var(--radius-lg)',
                   border: '1px solid var(--color-hairline)',
-                  padding: 'var(--spacing-xl)',
-                  paddingTop: 'var(--spacing-lg)',
-                  paddingBottom: 'var(--spacing-lg)',
-                  transition: 'all 0.3s ease'
+                  backgroundColor: 'var(--color-canvas)',
+                  color: 'var(--color-ink)',
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '14px',
+                  outline: 'none',
+                  transition: 'border-color 0.2s ease'
                 }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-4px)';
-                  e.currentTarget.style.boxShadow = '0 12px 40px rgba(0,0,0,0.12)';
-                  e.currentTarget.style.borderColor = 'var(--color-primary)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = 'none';
-                  e.currentTarget.style.borderColor = 'var(--color-hairline)';
-                }}
+                onFocus={(e) => e.target.style.borderColor = 'var(--color-primary)'}
+                onBlur={(e) => e.target.style.borderColor = 'var(--color-hairline)'}
+              />
+            </div>
+
+            <div className="flex gap-3 flex-wrap mb-2">
+              {categories.map(category => (
+                <button
+                  key={category.id}
+                  onClick={() => {
+                    setSelectedCategory(category.id);
+                    setSearchTerm('');
+                  }}
+                  className="px-5 py-2.5 text-sm font-medium transition-all"
+                  style={{
+                    borderRadius: 'var(--radius-md)',
+                    backgroundColor: selectedCategory === category.id ? 'var(--color-primary)' : 'var(--color-surface-card)',
+                    color: selectedCategory === category.id ? 'var(--color-on-primary)' : 'var(--color-ink)',
+                    fontFamily: 'var(--font-body)',
+                    border: selectedCategory === category.id ? 'none' : '1px solid var(--color-hairline)'
+                  }}
+                >
+                  {category.name} ({categoryCounts[category.id]})
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Category Description */}
+          <div className="px-5 sm:px-8 mb-8">
+            <p
+              style={{
+                color: 'var(--color-body)',
+                fontFamily: 'var(--font-body)',
+                fontSize: '15px',
+                lineHeight: 1.6
+              }}
+            >
+              {categoryConfig[selectedCategory].description}
+            </p>
+          </div>
+
+          {/* Results Count */}
+          <div className="flex items-center justify-between mb-6 px-5 sm:px-8">
+            <span
+              style={{
+                color: 'var(--color-muted)',
+                fontFamily: 'var(--font-body)',
+                fontSize: '14px'
+              }}
+            >
+              Showing {currentResources.length} of {selectedCategory === 'all' ? resources.length : resourcesByCategory[selectedCategory].length} resources
+            </span>
+            {searchTerm && (
+              <button
+                onClick={() => setSearchTerm('')}
+                className="text-sm font-medium hover:underline"
+                style={{ color: 'var(--color-primary)', fontFamily: 'var(--font-body)' }}
               >
-                {/* Left Accent Bar */}
-                <div
-                  className="absolute left-0 top-0 bottom-0 w-1.5 transition-all group-hover:w-2 rounded-l-lg"
-                  style={{ backgroundColor: 'var(--color-primary)' }}
-                />
+                Clear search
+              </button>
+            )}
+          </div>
 
-                <div className="relative pl-5 pr-3">
-                  {/* Category Icon */}
-                  <div className="flex items-center justify-between mb-5 mt-1">
-                    <div
-                      className="p-3 rounded-lg"
-                      style={{
-                        backgroundColor: 'var(--color-primary)',
-                        color: 'var(--color-on-primary)'
-                      }}
-                    >
-                      <CategoryIcon size={22} />
-                    </div>
-                    {resource.year && (
-                      <span
-                        className="px-3 py-1.5 text-xs font-medium rounded-full"
-                        style={{
-                          backgroundColor: 'var(--color-surface-soft)',
-                          color: 'var(--color-muted)',
-                          fontFamily: 'var(--font-body)'
-                        }}
-                      >
-                        {resource.year}
-                      </span>
-                    )}
-                  </div>
+          {/* Resources Grid/List */}
+          {viewMode === 'grid' ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-5 sm:px-8 mb-12">
+              {currentResources.map((resource) => {
+                const CategoryIcon = getResourceIcon(resource);
 
-                  {/* Title */}
-                  <h3
-                    className="mb-3 line-clamp-2 group-hover:text-[var(--color-primary)] transition-colors"
-                    style={{
-                      fontFamily: 'var(--font-display)',
-                      fontWeight: 500,
-                      fontSize: '19px',
-                      lineHeight: 1.35,
-                      color: 'var(--color-ink)'
-                    }}
-                  >
-                    {resource.title}
-                  </h3>
-
-                  {/* Author */}
-                  {resource.author && (
-                    <p
-                      className="mb-1.5"
-                      style={{
-                        color: 'var(--color-body-strong)',
-                        fontFamily: 'var(--font-body)',
-                        fontSize: '14px',
-                        fontWeight: 500
-                      }}
-                    >
-                      {resource.author}
-                    </p>
-                  )}
-
-                  {/* Source */}
-                  {resource.source && (
-                    <p
-                      className="mb-5 line-clamp-2"
-                      style={{
-                        color: 'var(--color-muted)',
-                        fontFamily: 'var(--font-body)',
-                        fontSize: '13px',
-                        lineHeight: 1.5
-                      }}
-                    >
-                      {resource.source}
-                    </p>
-                  )}
-
-                  {/* External Link */}
+                return (
                   <a
+                    key={resource.id}
                     href={resource.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2.5 text-sm font-medium mt-auto pt-2 transition-all group/link"
+                    className="group block p-7"
                     style={{
-                      color: 'var(--color-primary)',
-                      fontFamily: 'var(--font-body)'
+                      backgroundColor: 'var(--color-surface-card)',
+                      borderRadius: 'var(--radius-lg)',
+                      border: '1px solid var(--color-hairline)',
+                      position: 'relative',
+                      overflow: 'hidden',
+                      boxShadow: '0 2px 12px rgba(0,0,0,0.04)',
+                      transition: 'transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease',
+                      color: 'inherit',
+                      textDecoration: 'none'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'translateY(-4px)';
+                      e.currentTarget.style.boxShadow = '0 12px 40px rgba(0,0,0,0.12)';
+                      e.currentTarget.style.borderColor = 'var(--color-primary)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.04)';
+                      e.currentTarget.style.borderColor = 'var(--color-hairline)';
                     }}
                   >
-                    <ExternalLink
-                      size={17}
-                      className="group-hover/link:translate-x-1 group-hover/link:-translate-y-0.5 transition-transform"
+                    {/* Left Accent Bar — hidden by default, slides in on hover */}
+                    <div
+                      className="absolute left-0 top-0 bottom-0 w-0 transition-all duration-300 group-hover:w-1"
+                      style={{
+                        backgroundColor: 'var(--color-primary)',
+                        zIndex: 1
+                      }}
                     />
-                    <span>Access Resource</span>
-                  </a>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-      ) : (
-        /* List View */
-        <div className="space-y-5 px-5 sm:px-8 mb-10">
-          {currentResources.map((resource) => {
-            const CategoryIcon = getCategoryIcon(selectedCategory);
 
-            return (
-              <div
-                key={resource.id}
-                className="p-7 cursor-pointer transition-all"
-                style={{
-                  backgroundColor: 'var(--color-surface-card)',
-                  borderRadius: 'var(--radius-lg)',
-                  border: '1px solid var(--color-hairline)',
-                  boxShadow: '0 2px 12px rgba(0,0,0,0.04)'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = 'var(--color-primary)';
-                  e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.08)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = 'var(--color-hairline)';
-                  e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.04)';
-                }}
-              >
-                <div className="flex flex-col lg:flex-row gap-6">
-                  <div className="flex-1">
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex items-center gap-4">
+                    <div className="relative">
+                      {/* Category Icon */}
+                      <div className="flex items-center justify-between mb-4">
                         <div
                           className="p-3 rounded-lg"
                           style={{
@@ -514,114 +412,233 @@ export default function ResourcesPage({ books, journals, digitalArchives, articl
                             color: 'var(--color-on-primary)'
                           }}
                         >
-                          <CategoryIcon size={20} />
+                          <CategoryIcon size={22} />
                         </div>
-                        <div>
-                          <h3
-                            className="text-xl mb-2"
+                        {resource.year && (
+                          <span
+                            className="px-3 py-1.5 text-xs font-medium rounded-full"
                             style={{
-                              fontFamily: 'var(--font-display)',
-                              fontWeight: 500,
-                              color: 'var(--color-ink)'
+                              backgroundColor: 'var(--color-surface-soft)',
+                              color: 'var(--color-muted)',
+                              fontFamily: 'var(--font-body)'
                             }}
                           >
-                            {resource.title}
-                          </h3>
-                          {resource.author && (
-                            <p className="text-sm mb-1.5" style={{ color: 'var(--color-body-strong)' }}>
-                              {resource.author}
-                            </p>
-                          )}
-                        </div>
+                            {resource.year}
+                          </span>
+                        )}
                       </div>
-                    </div>
-                    {resource.source && (
-                      <p className="text-sm mb-3 mt-1" style={{ color: 'var(--color-muted)' }}>
-                        {resource.source}
-                      </p>
-                    )}
-                    {resource.year && (
-                      <span
-                        className="px-3.5 py-1.5 text-xs"
+
+                      {/* Title */}
+                      <h3
+                        className="mb-2 line-clamp-2 group-hover:text-[var(--color-primary)] transition-colors"
                         style={{
-                          borderRadius: 'var(--radius-pill)',
-                          backgroundColor: 'var(--color-surface-soft)',
-                          color: 'var(--color-muted)',
+                          fontFamily: 'var(--font-display)',
+                          fontWeight: 500,
+                          fontSize: '19px',
+                          lineHeight: 1.35,
+                          color: 'var(--color-ink)'
+                        }}
+                      >
+                        {resource.title}
+                      </h3>
+
+                      {/* Author */}
+                      {resource.author && (
+                        <p
+                          className="mb-1.5"
+                          style={{
+                            color: 'var(--color-body-strong)',
+                            fontFamily: 'var(--font-body)',
+                            fontSize: '14px',
+                            fontWeight: 500
+                          }}
+                        >
+                          {resource.author}
+                        </p>
+                      )}
+
+                      {/* Source */}
+                      {resource.source && (
+                        <p
+                          className="mb-5 line-clamp-2"
+                          style={{
+                            color: 'var(--color-muted)',
+                            fontFamily: 'var(--font-body)',
+                            fontSize: '13px',
+                            lineHeight: 1.5
+                          }}
+                        >
+                          {resource.source}
+                        </p>
+                      )}
+
+                      {/* Access Resource CTA */}
+                      <span
+                        className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold rounded-lg transition-all group-hover:gap-3"
+                        style={{
+                          backgroundColor: 'var(--color-primary)',
+                          color: 'var(--color-on-primary)',
                           fontFamily: 'var(--font-body)'
                         }}
                       >
-                        {resource.year}
+                        <span>Access Resource</span>
+                        <ExternalLink
+                          size={16}
+                          className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                        />
                       </span>
-                    )}
-                  </div>
-                  <div className="flex flex-col justify-center items-end pl-4">
-                    <a
-                      href={resource.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2.5 px-5 py-2.5 text-sm font-medium transition-colors"
-                      style={{
-                        backgroundColor: 'var(--color-primary)',
-                        color: 'var(--color-on-primary)',
-                        borderRadius: 'var(--radius-md)',
-                        fontFamily: 'var(--font-body)'
-                      }}
-                    >
-                      <ExternalLink size={16} />
-                      View Resource
-                    </a>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
+                    </div>
+                  </a>
+                );
+              })}
+            </div>
+          ) : (
+            /* List View */
+            <div className="space-y-6 px-5 sm:px-8 mb-10">
+              {currentResources.map((resource) => {
+                const CategoryIcon = getResourceIcon(resource);
 
-      {/* Empty State */}
-      {currentResources.length === 0 && (
-        <div className="text-center py-20 px-5 sm:px-8">
-          <div
-            className="inline-flex items-center justify-center w-20 h-20 rounded-full mb-6"
-            style={{ backgroundColor: 'var(--color-surface-card)' }}
-          >
-            <Search size={32} style={{ color: 'var(--color-muted)' }} />
-          </div>
-          <h3
-            className="mb-2"
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontWeight: 500,
-              fontSize: '24px',
-              color: 'var(--color-ink)'
-            }}
-          >
-            No resources found
-          </h3>
-          <p
-            className="max-w-md mx-auto mb-6"
-            style={{
-              color: 'var(--color-muted)',
-              fontFamily: 'var(--font-body)',
-              fontSize: '15px'
-            }}
-          >
-            Try adjusting your search or browse all resources in this category.
-          </p>
-          <button
-            onClick={() => setSearchTerm('')}
-            className="px-6 py-3 rounded-lg font-medium transition-colors"
-            style={{
-              backgroundColor: 'var(--color-primary)',
-              color: 'var(--color-on-primary)',
-              fontFamily: 'var(--font-body)'
-            }}
-          >
-            Clear Search
-          </button>
-        </div>
-      )}
-      </>
+                return (
+                  <a
+                    key={resource.id}
+                    href={resource.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block p-7"
+                    style={{
+                      backgroundColor: 'var(--color-surface-card)',
+                      borderRadius: 'var(--radius-lg)',
+                      border: '1px solid var(--color-hairline)',
+                      boxShadow: '0 2px 12px rgba(0,0,0,0.04)',
+                      transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
+                      color: 'inherit',
+                      textDecoration: 'none'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.borderColor = 'var(--color-primary)';
+                      e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.08)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.borderColor = 'var(--color-hairline)';
+                      e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.04)';
+                    }}
+                  >
+                    <div className="flex flex-col lg:flex-row gap-6">
+                      <div className="flex-1">
+                        <div className="flex items-start justify-between mb-4">
+                          <div className="flex items-center gap-4">
+                            <div
+                              className="p-3 rounded-lg shrink-0"
+                              style={{
+                                backgroundColor: 'var(--color-primary)',
+                                color: 'var(--color-on-primary)'
+                              }}
+                            >
+                              <CategoryIcon size={20} />
+                            </div>
+                            <div>
+                              <h3
+                                className="text-xl mb-2"
+                                style={{
+                                  fontFamily: 'var(--font-display)',
+                                  fontWeight: 500,
+                                  color: 'var(--color-ink)'
+                                }}
+                              >
+                                {resource.title}
+                              </h3>
+                              {resource.author && (
+                                <p className="text-sm mb-1.5" style={{ color: 'var(--color-body-strong)' }}>
+                                  {resource.author}
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        {resource.source && (
+                          <p className="text-sm mb-3 mt-1" style={{ color: 'var(--color-muted)' }}>
+                            {resource.source}
+                          </p>
+                        )}
+                        {resource.year && (
+                          <span
+                            className="px-3.5 py-1.5 text-xs"
+                            style={{
+                              borderRadius: 'var(--radius-pill)',
+                              backgroundColor: 'var(--color-surface-soft)',
+                              color: 'var(--color-muted)',
+                              fontFamily: 'var(--font-body)'
+                            }}
+                          >
+                            {resource.year}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex flex-col justify-center items-end pl-4">
+                        <span
+                          className="inline-flex items-center gap-2.5 px-5 py-2.5 text-sm font-medium transition-colors"
+                          style={{
+                            backgroundColor: 'var(--color-primary)',
+                            color: 'var(--color-on-primary)',
+                            borderRadius: 'var(--radius-md)',
+                            fontFamily: 'var(--font-body)'
+                          }}
+                        >
+                          <ExternalLink size={16} />
+                          View Resource
+                        </span>
+                      </div>
+                    </div>
+                  </a>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Empty State */}
+          {currentResources.length === 0 && (
+            <div className="text-center py-20 px-5 sm:px-8">
+              <div
+                className="inline-flex items-center justify-center w-20 h-20 rounded-full mb-6"
+                style={{ backgroundColor: 'var(--color-surface-card)' }}
+              >
+                <Search size={32} style={{ color: 'var(--color-muted)' }} />
+              </div>
+              <h3
+                className="mb-2"
+                style={{
+                  fontFamily: 'var(--font-display)',
+                  fontWeight: 500,
+                  fontSize: '24px',
+                  color: 'var(--color-ink)'
+                }}
+              >
+                No resources found
+              </h3>
+              <p
+                className="max-w-md mx-auto mb-6"
+                style={{
+                  color: 'var(--color-muted)',
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '15px'
+                }}
+              >
+                Try adjusting your search or browse all resources in this category.
+              </p>
+              <button
+                onClick={() => setSearchTerm('')}
+                className="px-6 py-3 rounded-lg font-medium transition-colors"
+                style={{
+                  backgroundColor: 'var(--color-primary)',
+                  color: 'var(--color-on-primary)',
+                  fontFamily: 'var(--font-body)'
+                }}
+              >
+                Clear Search
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

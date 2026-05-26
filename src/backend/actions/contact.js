@@ -3,7 +3,7 @@ import Api from '../apis/Api';
 export async function getAllContactSubmissions(options = {}) {
   try {
     const { page = 1, limit = 1000 } = options;
-    const response = await Api.get('/artifex-contactUs', {
+    const response = await Api.get('/ama-contact', {
       page,
       limit,
       sort: { created_at: 'desc' },
@@ -18,7 +18,7 @@ export async function getAllContactSubmissions(options = {}) {
 
 export async function createContactSubmission(data) {
   try {
-    const response = await Api.post('/artifex-contactUs', { body: data });
+    const response = await Api.post('/ama-contact', { body: data });
     if (response.err) return { success: false, error: response.result };
     return { success: true, contact: response.result };
   } catch (error) {
@@ -28,7 +28,7 @@ export async function createContactSubmission(data) {
 
 export async function updateContactSubmission(id, updates) {
   try {
-    const response = await Api.put(`/artifex-contactUs/${id}`, { body: updates });
+    const response = await Api.put(`/ama-contact/${id}`, { body: updates });
     if (response.err) return { success: false, error: response.result };
     return { success: true };
   } catch (error) {
@@ -52,7 +52,7 @@ export async function sendReplyEmail(data) {
 
 export async function deleteContactSubmission(id) {
   try {
-    const response = await Api.delete(`/artifex-contactUs/${id}`);
+    const response = await Api.delete(`/ama-contact/${id}`);
     if (response.err) return { success: false, error: response.result };
     return { success: true };
   } catch (error) {

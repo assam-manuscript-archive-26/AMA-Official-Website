@@ -102,3 +102,52 @@
 [data-theme="dark"] .chatbot-typing-dot {
     background-color: #cc785c !important;
 }
+
+/* Language selector — soft fade-in, sits below the intro bubble */
+.chatbot-lang-selector {
+    animation: chatbot-lang-fade-in 0.45s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation-delay: 0.15s;
+}
+
+@keyframes chatbot-lang-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.chatbot-lang-pill {
+    backdrop-filter: blur(2px);
+}
+
+.chatbot-lang-pill:hover {
+    transform: translateY(-1px);
+}
+
+.chatbot-lang-pill:active {
+    transform: translateY(0);
+}
+
+[data-theme="dark"] .chatbot-lang-label {
+    color: #8a8278 !important;
+}
+
+[data-theme="dark"] .chatbot-lang-pill {
+    border-color: #3a3835 !important;
+    color: #c9c4ba !important;
+}
+
+[data-theme="dark"] .chatbot-lang-pill:hover {
+    border-color: #cc785c !important;
+    color: #cc785c !important;
+}
+
+[data-theme="dark"] .chatbot-lang-pill[aria-pressed="true"] {
+    background-color: #cc785c !important;
+    border-color: #cc785c !important;
+    color: white !important;
+}

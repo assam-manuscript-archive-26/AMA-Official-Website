@@ -23,6 +23,9 @@ export default defineConfig({
         'react-dom/server': 'react-dom/server.edge',
       } : {},
     },
+    ssr: {
+      noExternal: ['@react-email/*', 'resend'],
+    },
   },
   security: {
     checkOrigin: true,

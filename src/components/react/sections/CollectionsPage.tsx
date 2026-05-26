@@ -245,29 +245,35 @@ const CollectionsPage: React.FC = () => {
                           onMouseEnter={() => setHoveredId(item.id)}
                           onMouseLeave={() => setHoveredId(null)}
                         >
-                          <h6
-                            className="font-semibold text-sm leading-6 text-center"
-                            style={{
-                              color: hoveredId === item.id && isDarkMode
-                                ? "var(--color-on-primary)"
-                                : isDarkMode
-                                  ? "var(--color-ink)"
-                                  : "var(--color-on-primary)",
-                              fontFamily: "'Courier New', Courier, monospace",
-                              fontWeight: 900
-                            }}
+                          <div
+                            className="flex items-center justify-center"
+                            style={{ minHeight: '3rem' }}
                           >
-                            {item.name}
-                          </h6>
+                            <h6
+                              className="font-semibold text-sm leading-6 text-center line-clamp-2"
+                              style={{
+                                color: hoveredId === item.id && isDarkMode
+                                  ? "var(--color-on-primary)"
+                                  : isDarkMode
+                                    ? "var(--color-ink)"
+                                    : "var(--color-on-primary)",
+                                fontFamily: "'Courier New', Courier, monospace",
+                                fontWeight: 900,
+                              }}
+                            >
+                              {item.name}
+                            </h6>
+                          </div>
                           <p
-                            className="text-xs leading-5 text-center"
+                            className="text-xs leading-5 text-center line-clamp-3"
                             style={{
                               color: hoveredId === item.id && isDarkMode
                                 ? "var(--color-on-primary)"
                                 : isDarkMode
                                   ? "var(--color-body)"
                                   : "var(--color-on-primary)",
-                              opacity: 0.8
+                              opacity: 0.8,
+                              minHeight: '3.75rem',
                             }}
                           >
                             {section.title} Collection

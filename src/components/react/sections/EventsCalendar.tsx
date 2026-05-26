@@ -111,6 +111,15 @@ const EventsCalendar: React.FC = () => {
         { id: 'special', name: 'Special' },
     ];
 
+    const categoryCounts: Record<string, number> = {
+        all: events.length,
+        exhibition: events.filter(e => e.category === 'exhibition').length,
+        workshop: events.filter(e => e.category === 'workshop').length,
+        lecture: events.filter(e => e.category === 'lecture').length,
+        cultural: events.filter(e => e.category === 'cultural').length,
+        special: events.filter(e => e.category === 'special').length,
+    };
+
     const filteredEvents = events.filter(event => {
         const matchesSearch = event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
             event.description.toLowerCase().includes(searchTerm.toLowerCase());
@@ -299,49 +308,51 @@ const EventsCalendar: React.FC = () => {
             {/* Content - Show when not loading and no error */}
             {!isLoading && !error && (
                 <div className="w-full">
-                    <div className="relative flex-1">
-                        <Search
-                            className="absolute left-3 top-1/2 transform -translate-y-1/2"
-                            size={20}
-                            style={{ color: 'var(--color-muted)' }}
-                        />
-                        <input
-                            type="text"
-                            placeholder="Search events..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full pl-10 pr-4 py-3 transition-all"
-                            style={{
-                                borderRadius: 'var(--radius-lg)',
-                                border: '1px solid var(--color-hairline)',
-                                backgroundColor: 'var(--color-canvas)',
-                                color: 'var(--color-ink)',
-                                fontFamily: 'var(--font-body)',
-                                fontSize: '14px',
-                                outline: 'none',
-                            }}
-                            onFocus={(e) => e.target.style.borderColor = 'var(--color-primary)'}
-                            onBlur={(e) => e.target.style.borderColor = 'var(--color-hairline)'}
-                        />
-                    </div>
-
-                    <div className="flex gap-2 flex-wrap">
-                        {categories.map(category => (
-                            <button
-                                key={category.id}
-                                onClick={() => setSelectedCategory(category.id)}
-                                className="px-4 py-2 text-sm font-medium transition-all"
+                    <div className="flex flex-col lg:flex-row gap-4 my-8 px-5 sm:px-8">
+                        <div className="relative flex-1">
+                            <Search
+                                className="absolute left-3 top-1/2 transform -translate-y-1/2"
+                                size={20}
+                                style={{ color: 'var(--color-muted)' }}
+                            />
+                            <input
+                                type="text"
+                                placeholder="Search events..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="w-full pl-10 pr-4 py-3 transition-all"
                                 style={{
-                                    borderRadius: 'var(--radius-md)',
-                                    backgroundColor: selectedCategory === category.id ? 'var(--color-primary)' : 'var(--color-surface-card)',
-                                    color: selectedCategory === category.id ? 'var(--color-on-primary)' : 'var(--color-ink)',
+                                    borderRadius: 'var(--radius-lg)',
+                                    border: '1px solid var(--color-hairline)',
+                                    backgroundColor: 'var(--color-canvas)',
+                                    color: 'var(--color-ink)',
                                     fontFamily: 'var(--font-body)',
-                                    border: selectedCategory === category.id ? 'none' : '1px solid var(--color-hairline)',
+                                    fontSize: '14px',
+                                    outline: 'none',
                                 }}
-                            >
-                                {category.name}
-                            </button>
-                        ))}
+                                onFocus={(e) => e.target.style.borderColor = 'var(--color-primary)'}
+                                onBlur={(e) => e.target.style.borderColor = 'var(--color-hairline)'}
+                            />
+                        </div>
+
+                        <div className="flex gap-3 flex-wrap mb-2">
+                            {categories.map(category => (
+                                <button
+                                    key={category.id}
+                                    onClick={() => setSelectedCategory(category.id)}
+                                    className="px-5 py-2.5 text-sm font-medium transition-all"
+                                    style={{
+                                        borderRadius: 'var(--radius-md)',
+                                        backgroundColor: selectedCategory === category.id ? 'var(--color-primary)' : 'var(--color-surface-card)',
+                                        color: selectedCategory === category.id ? 'var(--color-on-primary)' : 'var(--color-ink)',
+                                        fontFamily: 'var(--font-body)',
+                                        border: selectedCategory === category.id ? 'none' : '1px solid var(--color-hairline)',
+                                    }}
+                                >
+                                    {category.name} ({categoryCounts[category.id]})
+                                </button>
+                            ))}
+                        </div>
                     </div>
 
                     {viewMode === 'calendar' ? (

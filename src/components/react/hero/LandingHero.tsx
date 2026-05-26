@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, useImperativeHandle, forwardRef } f
 import { ScanQrCode, X } from 'lucide-react';
 import { motion, useAnimation } from 'framer-motion';
 import useArtifacts from '@/hooks/useArtifacts';
+import QRScanner from '../qrScanner/QRScanner';
 
 // Animated Search Icon (from Artifex)
 const SearchIconHandle = forwardRef<{ startAnimation: () => void; stopAnimation: () => void }, { className?: string; size?: number }>(
@@ -62,6 +63,7 @@ export default function LandingHero() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [filteredSuggestions, setFilteredSuggestions] = useState<SearchSuggestion[]>([]);
+  const [showScanner, setShowScanner] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   const searchIconRef = useRef<{ startAnimation: () => void; stopAnimation: () => void }>(null);
 
@@ -185,12 +187,14 @@ export default function LandingHero() {
                 )}
 
                 {/* QR Scanner Button - Hidden on mobile */}
-                <a
-                  href="/qrscanner"
-                  className="hidden sm:flex absolute md:right-16 items-center gap-1.5 text-[var(--color-primary)] hover:text-[var(--color-primary-active)] transition-colors pr-12"
+                <button
+                  type="button"
+                  onClick={() => setShowScanner(true)}
+                  className="hidden sm:flex absolute md:right-16 items-center gap-1.5 text-[var(--color-primary)] hover:text-[var(--color-primary-active)] transition-colors pr-12 cursor-pointer"
+                  aria-label="Open QR Scanner"
                 >
                   <ScanQrCode size={20} className="transition-colors group-hover:text-amber-500" />
-                </a>
+                </button>
 
                 {/* Search Button - Hidden on md */}
                 <button
@@ -224,6 +228,9 @@ export default function LandingHero() {
           </div>
         </div>
       </section>
+
+      {/* QR Scanner Overlay */}
+      {showScanner && <QRScanner onClose={() => setShowScanner(false)} />}
     </div>
   );
 }

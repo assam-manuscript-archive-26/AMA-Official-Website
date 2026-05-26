@@ -94,25 +94,25 @@ export default function Dashboard() {
       label: 'Total Visitors',
       value: stats.visitors.toLocaleString(),
       icon: <Users size={22} />,
-      color: '#cc785c',
+      color: 'var(--color-primary)',
     },
     {
       label: 'Feedback Received',
       value: stats.feedbacks,
       icon: <MessageSquare size={22} />,
-      color: '#5db8a6',
+      color: 'var(--color-accent-teal)',
     },
     {
       label: 'Average Rating',
       value: `${stats.avgRating} / 5`,
       icon: <Star size={22} />,
-      color: '#c9a227',
+      color: 'var(--color-accent-gold)',
     },
     {
       label: 'Total Artifacts',
       value: stats.artifacts,
       icon: <Image size={22} />,
-      color: '#a9583e',
+      color: 'var(--color-primary-active)',
     },
   ];
 
@@ -190,7 +190,10 @@ export default function Dashboard() {
             <div className="dashboard-stat-header">
               <div
                 className="dashboard-stat-icon"
-                style={{ background: `${stat.color}15`, color: stat.color }}
+                style={{
+                  background: `color-mix(in srgb, ${stat.color} 16%, transparent)`,
+                  color: stat.color,
+                }}
               >
                 {stat.icon}
               </div>
@@ -291,18 +294,19 @@ export default function Dashboard() {
         }
 
         .dashboard-title {
-          font-family: var(--font-display) !important;
-          font-size: 32px !important;
-          font-weight: 600 !important;
-          color: var(--color-on-dark);
+          font-family: var(--font-display);
+          font-size: 32px;
+          font-weight: 600;
+          color: var(--admin-text);
           margin: 0 0 4px 0;
           line-height: 1.1;
+          letter-spacing: -0.01em;
         }
 
         .dashboard-subtitle {
           font-family: var(--font-body);
           font-size: 14px;
-          color: var(--color-on-dark-soft);
+          color: var(--admin-text-soft);
           margin: 0;
         }
 
@@ -314,17 +318,23 @@ export default function Dashboard() {
           font-family: var(--font-body);
           font-size: 13px;
           font-weight: 500;
-          color: var(--color-on-dark-soft);
-          background: rgba(255,255,255,0.06);
-          border: 1px solid rgba(255,255,255,0.1);
+          color: var(--admin-text-soft);
+          background: var(--admin-input-bg);
+          border: 1px solid var(--admin-input-border);
           border-radius: var(--radius-md);
           cursor: pointer;
-          transition: all 0.15s ease;
+          transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+          outline: none;
         }
 
         .dashboard-refresh:hover {
-          background: rgba(255,255,255,0.1);
-          color: var(--color-on-dark);
+          background: var(--admin-surface-hover);
+          border-color: var(--admin-border-strong);
+          color: var(--admin-text);
+        }
+
+        .dashboard-refresh:focus-visible {
+          box-shadow: var(--admin-focus-ring);
         }
 
         /* Stat Cards Grid */
@@ -347,11 +357,17 @@ export default function Dashboard() {
         }
 
         .dashboard-stat-card {
-          background: var(--color-surface-dark-elevated);
-          border: 1px solid rgba(255,255,255,0.06);
+          background: var(--admin-surface);
+          border: 1px solid var(--admin-border);
           border-radius: var(--radius-lg);
           padding: 24px;
           animation: dashCardIn 0.4s ease-out both;
+          transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+        }
+        .dashboard-stat-card:hover {
+          border-color: var(--admin-border-strong);
+          box-shadow: var(--admin-shadow-sm);
+          transform: translateY(-1px);
         }
 
         @keyframes dashCardIn {
@@ -384,7 +400,7 @@ export default function Dashboard() {
           font-family: var(--font-display);
           font-size: 28px;
           font-weight: 600;
-          color: var(--color-on-dark);
+          color: var(--admin-text);
           margin: 0 0 4px 0;
           line-height: 1.2;
         }
@@ -392,7 +408,7 @@ export default function Dashboard() {
         .dashboard-stat-label {
           font-family: var(--font-body);
           font-size: 13px;
-          color: var(--color-on-dark-soft);
+          color: var(--admin-text-soft);
           margin: 0;
         }
 
@@ -410,8 +426,8 @@ export default function Dashboard() {
         }
 
         .dashboard-panel {
-          background: var(--color-surface-dark-elevated);
-          border: 1px solid rgba(255,255,255,0.06);
+          background: var(--admin-surface);
+          border: 1px solid var(--admin-border);
           border-radius: var(--radius-lg);
           overflow: hidden;
         }
@@ -424,10 +440,10 @@ export default function Dashboard() {
         }
 
         .dashboard-panel-title {
-          font-family: var(--font-display) !important;
-          font-size: 20px !important;
-          font-weight: 500 !important;
-          color: var(--color-on-dark);
+          font-family: var(--font-display);
+          font-size: 20px;
+          font-weight: 500;
+          color: var(--admin-text);
           margin: 0;
         }
 
@@ -437,11 +453,12 @@ export default function Dashboard() {
           color: var(--color-primary);
           text-decoration: none;
           font-weight: 500;
-          transition: color 0.15s;
+          transition: color 0.15s, transform 0.15s;
         }
 
         .dashboard-panel-link:hover {
           color: var(--color-primary-active);
+          transform: translateX(2px);
         }
 
         .dashboard-panel-body {
@@ -451,16 +468,15 @@ export default function Dashboard() {
         .dashboard-empty {
           font-family: var(--font-body);
           font-size: 13px;
-          color: var(--color-on-dark-soft);
+          color: var(--admin-text-muted);
           text-align: center;
           padding: 32px 0;
-          opacity: 0.6;
         }
 
         /* Feedback Items */
         .dashboard-feedback-item {
           padding: 14px 0;
-          border-bottom: 1px solid rgba(255,255,255,0.04);
+          border-bottom: 1px solid var(--admin-divider);
         }
 
         .dashboard-feedback-item:last-child {
@@ -479,7 +495,7 @@ export default function Dashboard() {
           font-family: var(--font-body);
           font-size: 14px;
           font-weight: 500;
-          color: var(--color-on-dark);
+          color: var(--admin-text);
         }
 
         .dashboard-feedback-rating {
@@ -491,7 +507,7 @@ export default function Dashboard() {
         .dashboard-feedback-message {
           font-family: var(--font-body);
           font-size: 13px;
-          color: var(--color-on-dark-soft);
+          color: var(--admin-text-soft);
           margin: 0 0 6px 0;
           line-height: 1.5;
         }
@@ -502,8 +518,7 @@ export default function Dashboard() {
           gap: 4px;
           font-family: var(--font-body);
           font-size: 11px;
-          color: var(--color-on-dark-soft);
-          opacity: 0.6;
+          color: var(--admin-text-muted);
         }
 
         /* Quick Actions */
@@ -519,21 +534,22 @@ export default function Dashboard() {
           align-items: center;
           justify-content: space-between;
           padding: 14px 16px;
-          background: rgba(255,255,255,0.03);
-          border: 1px solid rgba(255,255,255,0.06);
+          background: var(--admin-chip-bg);
+          border: 1px solid var(--admin-chip-border);
           border-radius: var(--radius-md);
           font-family: var(--font-body);
           font-size: 13px;
           font-weight: 500;
-          color: var(--color-on-dark-soft);
+          color: var(--admin-text-soft);
           text-decoration: none;
-          transition: all 0.15s ease;
+          transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
         }
 
         .dashboard-action-card:hover {
-          background: rgba(255,255,255,0.06);
-          color: var(--color-on-dark);
+          background: var(--admin-chip-hover-bg);
+          color: var(--admin-text);
           border-color: var(--color-primary);
+          transform: translateY(-1px);
         }
 
         /* Summary */
@@ -543,7 +559,7 @@ export default function Dashboard() {
           justify-content: center;
           gap: 0;
           padding: 20px 24px;
-          border-top: 1px solid rgba(255,255,255,0.04);
+          border-top: 1px solid var(--admin-divider);
         }
 
         .dashboard-summary-item {
@@ -558,21 +574,21 @@ export default function Dashboard() {
           font-family: var(--font-display);
           font-size: 22px;
           font-weight: 600;
-          color: var(--color-on-dark);
+          color: var(--admin-text);
         }
 
         .dashboard-summary-label {
           font-family: var(--font-body);
           font-size: 11px;
-          color: var(--color-on-dark-soft);
+          color: var(--admin-text-muted);
           text-transform: uppercase;
-          letter-spacing: 0.04em;
+          letter-spacing: 0.06em;
         }
 
         .dashboard-summary-divider {
           width: 1px;
           height: 36px;
-          background: rgba(255,255,255,0.06);
+          background: var(--admin-divider);
         }
       `}</style>
     </div>

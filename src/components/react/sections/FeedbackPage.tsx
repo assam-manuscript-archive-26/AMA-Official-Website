@@ -31,6 +31,12 @@ export default function FeedbackPage() {
         setIsSubmitting(true);
         try {
             await createFeedback(feedbackData);
+            // Fire-and-forget courtesy email — never blocks the success toast
+            fetch('/api/send-email', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ type: 'feedback', payload: feedbackData }),
+            }).catch(() => { });
             setToast({ message: 'Thank you for your feedback!', type: 'success' });
             setRating(0);
             (e.target as HTMLFormElement).reset();

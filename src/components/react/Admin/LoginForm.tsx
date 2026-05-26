@@ -203,9 +203,9 @@ export default function LoginForm() {
         }
 
         .login-title {
-          font-family: var(--font-display) !important;
-          font-size: 32px !important;
-          font-weight: 600 !important;
+          font-family: var(--font-display);
+          font-size: 32px;
+          font-weight: 600;
           color: var(--color-ink);
           margin: 0 0 8px 0;
           line-height: 1.1;

@@ -1,64 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, Phone, Clock, Trash2, Search, Eye, X, Loader2, Star, Reply, Download, Filter } from 'lucide-react';
-import { getAllContactSubmissions, updateContactSubmission, sendReplyEmail, deleteContactSubmission } from '../../../backend/actions/contact';
+import { Mail, Phone, Clock, Trash2, Search, Eye, X, Star, Reply } from 'lucide-react';
+import { getAllContactSubmissions, updateContactSubmission, deleteContactSubmission } from '../../../backend/actions/contact';
+import EditDialog, { DialogGrid } from './EditDialog';
+import AdminSpinner from './AdminSpinner';
 
 interface Contact { id: string; fullName: string; email: string; phone?: string; message: string; subject?: string; created_at: string; status: 'new' | 'read' | 'replied'; starred: boolean; }
 
-const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
-  new: { bg: 'rgba(198,69,69,0.15)', text: '#c64545' }, read: { bg: 'rgba(74,144,217,0.15)', text: '#4a90d9' }, replied: { bg: 'rgba(93,184,166,0.15)', text: '#5db8a6' },
-};
-
-const cs: Record<string, React.CSSProperties> = {
-  page: { width: '100%' },
-  header: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24, flexWrap: 'wrap' as const, gap: 12 },
-  title: { fontFamily: 'var(--font-display)', fontSize: 32, fontWeight: 600, color: 'var(--color-on-dark)', margin: 0 },
-  subtitle: { fontFamily: 'var(--font-body)', fontSize: 14, color: 'var(--color-on-dark-soft)', margin: '4px 0 0' },
-  statsGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 12, marginBottom: 24 },
-  stat: { background: 'var(--color-surface-dark-elevated)', borderRadius: 'var(--radius-lg)', border: '1px solid rgba(255,255,255,0.06)', padding: 16, textAlign: 'center' as const },
-  statVal: { fontFamily: 'var(--font-display)', fontSize: 24, fontWeight: 600, color: 'var(--color-on-dark)', margin: '4px 0' },
-  statLbl: { fontFamily: 'var(--font-body)', fontSize: 12, color: 'var(--color-on-dark-soft)' },
-  toolRow: { display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' as const },
-  searchWrap: { position: 'relative' as const, flex: 1, minWidth: 200 },
-  searchInput: { width: '100%', padding: '10px 14px 10px 40px', fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--color-on-dark)', background: 'var(--color-surface-dark-elevated)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 'var(--radius-md)', outline: 'none', boxSizing: 'border-box' as const },
-  filterSelect: { padding: '10px 14px', fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--color-on-dark)', background: 'var(--color-surface-dark-elevated)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 'var(--radius-md)', outline: 'none', cursor: 'pointer' },
-  exportBtn: { display: 'flex', alignItems: 'center', gap: 6, padding: '10px 16px', background: 'var(--color-primary)', color: 'var(--color-on-primary)', border: 'none', borderRadius: 'var(--radius-md)', cursor: 'pointer', fontSize: 13, fontFamily: 'var(--font-body)', fontWeight: 500 },
-  mainGrid: { display: 'grid', gridTemplateColumns: '1fr 380px', gap: 16, alignItems: 'start' },
-  listCard: { background: 'var(--color-surface-dark-elevated)', borderRadius: 'var(--radius-lg)', border: '1px solid rgba(255,255,255,0.06)', overflow: 'hidden' },
-  listHead: { padding: '16px 20px', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
-  listHeadTitle: { fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 600, color: 'var(--color-on-dark)', margin: 0 },
-  listBody: { maxHeight: 500, overflowY: 'auto' as const },
-  listItem: { padding: '16px 20px', borderBottom: '1px solid rgba(255,255,255,0.06)', cursor: 'pointer', transition: 'background 0.15s', borderLeft: '3px solid transparent' },
-  listItemActive: { background: 'rgba(255,255,255,0.04)', borderLeftColor: 'var(--color-primary)' },
-  itemHead: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
-  avatar: { width: 40, height: 40, borderRadius: '50%', background: 'var(--color-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-display)', fontSize: 16, fontWeight: 600, color: 'var(--color-on-primary)' },
-  itemName: { fontFamily: 'var(--font-body)', fontSize: 15, fontWeight: 600, color: 'var(--color-on-dark)' },
-  itemEmail: { fontFamily: 'var(--font-body)', fontSize: 12, color: 'var(--color-on-dark-soft)' },
-  badge: { padding: '2px 10px', borderRadius: 'var(--radius-pill)', fontSize: 11, fontFamily: 'var(--font-body)', fontWeight: 600, textTransform: 'capitalize' as const },
-  starBtn: { background: 'none', border: 'none', cursor: 'pointer', padding: 4, display: 'flex', alignItems: 'center' },
-  itemMsg: { fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--color-on-dark-soft)', lineHeight: 1.5, marginBottom: 8 },
-  itemMeta: { display: 'flex', gap: 12, fontSize: 12, fontFamily: 'var(--font-body)', color: 'var(--color-on-dark-soft)', opacity: 0.6 },
-  detailCard: { background: 'var(--color-surface-dark-elevated)', borderRadius: 'var(--radius-lg)', border: '1px solid rgba(255,255,255,0.06)', padding: 20 },
-  detailHead: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 },
-  detailTitle: { fontFamily: 'var(--font-display)', fontSize: 20, fontWeight: 600, color: 'var(--color-on-dark)', margin: 0 },
-  detailContact: { display: 'flex', alignItems: 'center', gap: 12, padding: 12, background: 'rgba(255,255,255,0.04)', borderRadius: 'var(--radius-md)', marginBottom: 16 },
-  detailAvatar: { width: 48, height: 48, borderRadius: '50%', background: 'var(--color-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-display)', fontSize: 20, fontWeight: 600, color: 'var(--color-on-primary)' },
-  detailContactName: { fontFamily: 'var(--font-body)', fontSize: 16, fontWeight: 600, color: 'var(--color-on-dark)' },
-  detailContactEmail: { fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--color-on-dark-soft)' },
-  detailContactPhone: { fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--color-on-dark-soft)' },
-  detailSection: { marginBottom: 16 },
-  detailLabel: { fontFamily: 'var(--font-body)', fontSize: 12, color: 'var(--color-on-dark-soft)', marginBottom: 4 },
-  detailMsg: { fontFamily: 'var(--font-body)', fontSize: 14, color: 'var(--color-on-dark)', lineHeight: 1.6, padding: 12, background: 'rgba(255,255,255,0.04)', borderRadius: 'var(--radius-md)' },
-  detailFooter: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 13, color: 'var(--color-on-dark-soft)', marginBottom: 16 },
-  actionRow: { display: 'flex', gap: 8, paddingTop: 16, borderTop: '1px solid rgba(255,255,255,0.06)' },
-  actionBtn: { flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '10px 12px', borderRadius: 'var(--radius-md)', border: 'none', cursor: 'pointer', fontSize: 12, fontFamily: 'var(--font-body)', fontWeight: 500 },
-  modal: { position: 'fixed' as const, inset: 0, zIndex: 90, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)' },
-  modalBox: { background: 'var(--color-surface-dark-elevated)', borderRadius: 'var(--radius-lg)', padding: 28, border: '1px solid rgba(255,255,255,0.1)', maxWidth: 520, width: '90%' },
-  modalInput: { width: '100%', padding: '12px 14px', fontFamily: 'var(--font-body)', fontSize: 14, color: 'var(--color-on-dark)', background: 'var(--color-surface-dark)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 'var(--radius-md)', outline: 'none', boxSizing: 'border-box' as const },
-  modalTextarea: { width: '100%', padding: '12px 14px', fontFamily: 'var(--font-body)', fontSize: 14, color: 'var(--color-on-dark)', background: 'var(--color-surface-dark)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 'var(--radius-md)', outline: 'none', boxSizing: 'border-box' as const, resize: 'vertical' as const, minHeight: 160 },
-  cancelBtn: { padding: '10px 20px', background: 'rgba(255,255,255,0.06)', color: 'var(--color-on-dark-soft)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 'var(--radius-md)', cursor: 'pointer', fontSize: 13, fontFamily: 'var(--font-body)' },
-  delBtn: { display: 'flex', alignItems: 'center', gap: 6, padding: '10px 16px', background: 'var(--color-error)', color: '#fff', border: 'none', borderRadius: 'var(--radius-md)', cursor: 'pointer', fontSize: 13, fontFamily: 'var(--font-body)', fontWeight: 500 },
-  toast: { position: 'fixed' as const, top: 24, right: 24, zIndex: 100, padding: '14px 24px', borderRadius: 'var(--radius-md)', color: '#fff', fontSize: 14, fontFamily: 'var(--font-body)', boxShadow: '0 8px 32px rgba(0,0,0,0.3)' },
-  empty: { textAlign: 'center', padding: 48, color: 'var(--color-on-dark-soft)', fontFamily: 'var(--font-body)', opacity: 0.6 },
+const STATUS_TOKENS: Record<string, { color: string; tint: string; border: string }> = {
+  new: {
+    color: 'var(--color-error)',
+    tint: 'color-mix(in srgb, var(--color-error) 14%, transparent)',
+    border: 'color-mix(in srgb, var(--color-error) 30%, transparent)',
+  },
+  read: {
+    color: '#3a78c0',
+    tint: 'color-mix(in srgb, #3a78c0 14%, transparent)',
+    border: 'color-mix(in srgb, #3a78c0 30%, transparent)',
+  },
+  replied: {
+    color: 'var(--color-accent-teal)',
+    tint: 'color-mix(in srgb, var(--color-accent-teal) 16%, transparent)',
+    border: 'color-mix(in srgb, var(--color-accent-teal) 32%, transparent)',
+  },
 };
 
 export default function ContactAdmin() {
@@ -69,6 +32,7 @@ export default function ContactAdmin() {
   const [selected, setSelected] = useState<Contact | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const [showReplyModal, setShowReplyModal] = useState(false);
+  const [sending, setSending] = useState(false);
   const [replySubject, setReplySubject] = useState('');
   const [replyMessage, setReplyMessage] = useState('');
   const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
@@ -76,7 +40,14 @@ export default function ContactAdmin() {
   const showToast = (msg: string, type: 'success' | 'error') => { setToast({ msg, type }); setTimeout(() => setToast(null), 4000); };
   const formatDate = (d: string) => { try { return new Date(d).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }); } catch { return d; } };
 
-  useEffect(() => { (async () => { setLoading(true); const res = await getAllContactSubmissions(); if (res.success) setContacts(res.contacts || []); setLoading(false); })(); }, []);
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      const res = await getAllContactSubmissions();
+      if (res.success) setContacts(res.contacts || []);
+      setLoading(false);
+    })();
+  }, []);
 
   const filtered = contacts.filter(c => {
     const s = searchTerm.toLowerCase();
@@ -86,133 +57,670 @@ export default function ContactAdmin() {
   });
 
   const handleStatusUpdate = async (id: string, status: string) => {
-    try { await updateContactSubmission(id, { status }); setContacts(p => p.map(c => c.id === id ? { ...c, status: status as Contact['status'] } : c)); if (selected?.id === id) setSelected({ ...selected, status: status as Contact['status'] }); showToast('Status updated', 'success'); }
-    catch { showToast('Update failed', 'error'); }
+    try {
+      await updateContactSubmission(id, { status });
+      setContacts(p => p.map(c => c.id === id ? { ...c, status: status as Contact['status'] } : c));
+      if (selected?.id === id) setSelected({ ...selected, status: status as Contact['status'] });
+    } catch { showToast('Update failed', 'error'); }
   };
 
   const handleToggleStar = async (id: string, starred: boolean) => {
-    try { await updateContactSubmission(id, { starred }); setContacts(p => p.map(c => c.id === id ? { ...c, starred } : c)); if (selected?.id === id) setSelected({ ...selected, starred }); showToast(starred ? 'Starred' : 'Unstarred', 'success'); }
-    catch { showToast('Update failed', 'error'); }
+    try {
+      await updateContactSubmission(id, { starred });
+      setContacts(p => p.map(c => c.id === id ? { ...c, starred } : c));
+      if (selected?.id === id) setSelected({ ...selected, starred });
+    } catch { showToast('Update failed', 'error'); }
   };
 
   const handleDelete = async () => {
     if (!deleteConfirm) return;
-    try { await deleteContactSubmission(deleteConfirm); setContacts(p => p.filter(c => c.id !== deleteConfirm)); setDeleteConfirm(null); if (selected?.id === deleteConfirm) setSelected(null); showToast('Submission deleted', 'success'); }
-    catch { showToast('Delete failed', 'error'); }
+    try {
+      await deleteContactSubmission(deleteConfirm);
+      setContacts(p => p.filter(c => c.id !== deleteConfirm));
+      setDeleteConfirm(null);
+      if (selected?.id === deleteConfirm) setSelected(null);
+      showToast('Submission deleted', 'success');
+    } catch { showToast('Delete failed', 'error'); }
   };
 
-  const handleSendReply = () => {
+  const handleSendReply = async () => {
     if (!selected) return;
+    setSending(true);
     const encodedSubject = encodeURIComponent(replySubject);
     const encodedBody = encodeURIComponent(replyMessage);
     window.location.href = `mailto:${selected.email}?subject=${encodedSubject}&body=${encodedBody}`;
-    updateContactSubmission(selected.id, { status: 'replied' }).then(() => {
+    try {
+      await updateContactSubmission(selected.id, { status: 'replied' });
       setContacts(p => p.map(c => c.id === selected.id ? { ...c, status: 'replied' } : c));
-      if (selected) setSelected({ ...selected, status: 'replied' });
-    });
+      setSelected(s => s ? { ...s, status: 'replied' } : s);
+    } catch {}
     setShowReplyModal(false);
+    setSending(false);
     showToast('Opening email client...', 'success');
   };
 
-  const stats = { total: contacts.length, new: contacts.filter(c => c.status === 'new').length, replied: contacts.filter(c => c.status === 'replied').length, starred: contacts.filter(c => c.starred).length };
+  const stats = {
+    total: contacts.length,
+    new: contacts.filter(c => c.status === 'new').length,
+    replied: contacts.filter(c => c.status === 'replied').length,
+    starred: contacts.filter(c => c.starred).length,
+  };
 
-  if (loading) return <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 400, gap: 12, color: 'var(--color-on-dark-soft)', fontFamily: 'var(--font-body)' }}><Loader2 size={24} style={{ animation: 'spin 1s linear infinite' }} /> Loading submissions...</div>;
+  if (loading) return <AdminSpinner label="Loading submissions..." />;
 
   return (
-    <div style={cs.page}>
-      {toast && <div style={{ ...cs.toast, background: toast.type === 'success' ? 'var(--color-success)' : 'var(--color-error)' }}>{toast.msg}</div>}
-      <div style={cs.header}>
-        <div><h2 style={cs.title}>Contact Submissions</h2><p style={cs.subtitle}>{contacts.length} total submissions</p></div>
+    <div className="contact-page">
+      {toast && (
+        <div className={`ax-toast ${toast.type === 'success' ? 'ax-toast--success' : 'ax-toast--error'}`}>
+          {toast.msg}
+        </div>
+      )}
+
+      <div className="ax-page-header">
+        <div>
+          <h2 className="ax-page-title">Contact Submissions</h2>
+          <p className="ax-page-subtitle">{contacts.length} total submissions</p>
+        </div>
       </div>
-      <div style={cs.statsGrid}>
-        <div style={cs.stat}><p style={cs.statVal}>{stats.total}</p><p style={cs.statLbl}>Total</p></div>
-        <div style={cs.stat}><p style={{ ...cs.statVal, color: '#c64545' }}>{stats.new}</p><p style={cs.statLbl}>New</p></div>
-        <div style={cs.stat}><p style={{ ...cs.statVal, color: '#5db8a6' }}>{stats.replied}</p><p style={cs.statLbl}>Replied</p></div>
-        <div style={cs.stat}><p style={{ ...cs.statVal, color: '#f59e0b' }}>{stats.starred}</p><p style={cs.statLbl}>Starred</p></div>
+
+      {/* Stats */}
+      <div className="contact-stats-grid">
+        <div className="contact-stat">
+          <p className="contact-stat-val">{stats.total}</p>
+          <p className="contact-stat-lbl">Total</p>
+        </div>
+        <div className="contact-stat">
+          <p className="contact-stat-val" style={{ color: 'var(--color-error)' }}>{stats.new}</p>
+          <p className="contact-stat-lbl">New</p>
+        </div>
+        <div className="contact-stat">
+          <p className="contact-stat-val" style={{ color: 'var(--color-accent-teal)' }}>{stats.replied}</p>
+          <p className="contact-stat-lbl">Replied</p>
+        </div>
+        <div className="contact-stat">
+          <p className="contact-stat-val" style={{ color: 'var(--color-accent-gold)' }}>{stats.starred}</p>
+          <p className="contact-stat-lbl">Starred</p>
+        </div>
       </div>
-      <div style={cs.toolRow}>
-        <div style={cs.searchWrap}><Search size={16} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--color-on-dark-soft)', opacity: 0.5 }} /><input style={cs.searchInput} placeholder="Search by name, email, or message..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} /></div>
-        <select style={cs.filterSelect} value={filterStatus} onChange={e => setFilterStatus(e.target.value)}>
-          <option value="all">All Status</option><option value="new">New</option><option value="read">Read</option><option value="replied">Replied</option>
+
+      {/* Tools */}
+      <div className="ax-tool-row">
+        <div className="ax-search-wrap">
+          <Search size={15} />
+          <input
+            className="ax-search-input"
+            placeholder="Search by name, email, or message..."
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
+          />
+        </div>
+        <select
+          className="ax-select"
+          style={{ width: 'auto', minWidth: 160 }}
+          value={filterStatus}
+          onChange={e => setFilterStatus(e.target.value)}
+        >
+          <option value="all">All Status</option>
+          <option value="new">New</option>
+          <option value="read">Read</option>
+          <option value="replied">Replied</option>
         </select>
       </div>
-      <div style={cs.mainGrid}>
-        <div style={cs.listCard}>
-          <div style={cs.listHead}><h3 style={cs.listHeadTitle}>Submissions ({filtered.length})</h3></div>
-          <div style={cs.listBody}>
-            {filtered.map(c => { const sc = STATUS_COLORS[c.status] || STATUS_COLORS.new; return (
-              <div key={c.id} style={{ ...cs.listItem, ...(selected?.id === c.id ? cs.listItemActive : {}) }} onClick={() => { setSelected(c); if (c.status === 'new') handleStatusUpdate(c.id, 'read'); }}>
-                <div style={cs.itemHead}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <div style={cs.avatar}>{c.fullName?.charAt(0) || 'A'}</div>
-                    <div><div style={cs.itemName}>{c.fullName || 'Anonymous'}</div><div style={cs.itemEmail}>{c.email}</div></div>
+
+      <div className="contact-main-grid">
+        {/* List */}
+        <div className="contact-list-card">
+          <div className="contact-list-head">
+            <h3 className="contact-list-title">Submissions <span>({filtered.length})</span></h3>
+          </div>
+          <div className="contact-list-body">
+            {filtered.map(c => {
+              const sc = STATUS_TOKENS[c.status] || STATUS_TOKENS.new;
+              return (
+                <button
+                  key={c.id}
+                  type="button"
+                  className={`contact-list-item ${selected?.id === c.id ? 'contact-list-item--active' : ''}`}
+                  onClick={() => { setSelected(c); if (c.status === 'new') handleStatusUpdate(c.id, 'read'); }}
+                >
+                  <div className="contact-list-item-head">
+                    <div className="contact-list-item-author">
+                      <div className="contact-avatar">{c.fullName?.charAt(0) || 'A'}</div>
+                      <div>
+                        <div className="contact-list-name">{c.fullName || 'Anonymous'}</div>
+                        <div className="contact-list-email">{c.email}</div>
+                      </div>
+                    </div>
+                    <div className="contact-list-meta">
+                      <span
+                        className="contact-badge"
+                        style={{ background: sc.tint, color: sc.color, borderColor: sc.border }}
+                      >
+                        {c.status}
+                      </span>
+                      <button
+                        type="button"
+                        className="contact-star-btn"
+                        onClick={e => { e.stopPropagation(); handleToggleStar(c.id, !c.starred); }}
+                        aria-label={c.starred ? 'Unstar' : 'Star'}
+                      >
+                        <Star size={14} fill={c.starred ? 'currentColor' : 'none'} style={{ color: c.starred ? 'var(--color-accent-gold)' : 'var(--admin-text-muted)' }} />
+                      </button>
+                    </div>
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <span style={{ ...cs.badge, background: sc.bg, color: sc.text }}>{c.status}</span>
-                    <button style={cs.starBtn} onClick={e => { e.stopPropagation(); handleToggleStar(c.id, !c.starred); }}><Star size={14} style={{ color: c.starred ? '#f59e0b' : 'rgba(255,255,255,0.2)', fill: c.starred ? '#f59e0b' : 'none' }} /></button>
+                  <p className="contact-list-msg">
+                    {c.message ? (c.message.length > 120 ? c.message.slice(0, 120) + '...' : c.message) : '—'}
+                  </p>
+                  <div className="contact-list-foot">
+                    <span><Clock size={11} />{formatDate(c.created_at)}</span>
+                    {c.phone && <span><Phone size={11} />{c.phone}</span>}
                   </div>
-                </div>
-                <p style={cs.itemMsg}>{c.message ? (c.message.length > 120 ? c.message.slice(0, 120) + '...' : c.message) : '—'}</p>
-                <div style={cs.itemMeta}>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><Clock size={11} />{formatDate(c.created_at)}</span>
-                  {c.phone && <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><Phone size={11} />{c.phone}</span>}
-                </div>
+                </button>
+              );
+            })}
+            {filtered.length === 0 && (
+              <div className="contact-empty">
+                No submissions found matching your criteria
               </div>
-            ); })}
-            {filtered.length === 0 && <div style={cs.empty}>No submissions found matching your criteria</div>}
+            )}
           </div>
         </div>
-        <div style={cs.detailCard}>
+
+        {/* Detail panel — desktop sticky sidebar */}
+        <div className="contact-detail-card">
           {selected ? (
             <div>
-              <div style={cs.detailHead}>
-                <h3 style={cs.detailTitle}>Message Details</h3>
-                <button style={{ background: 'none', border: 'none', color: 'var(--color-on-dark-soft)', cursor: 'pointer', padding: 4 }} onClick={() => setSelected(null)}><X size={18} /></button>
+              <div className="contact-detail-head">
+                <h3 className="contact-detail-title">Message details</h3>
+                <button type="button" className="ax-icon-btn" onClick={() => setSelected(null)} aria-label="Close detail">
+                  <X size={15} />
+                </button>
               </div>
-              <div style={cs.detailContact}>
-                <div style={cs.detailAvatar}>{selected.fullName?.charAt(0) || 'A'}</div>
-                <div><div style={cs.detailContactName}>{selected.fullName}</div><div style={cs.detailContactEmail}>{selected.email}</div>{selected.phone && <div style={cs.detailContactPhone}>{selected.phone}</div>}</div>
-              </div>
-              <div style={cs.detailSection}><p style={cs.detailLabel}>Message</p><div style={cs.detailMsg}>{selected.message}</div></div>
-              <div style={cs.detailFooter}>
-                <span>Received: {formatDate(selected.created_at)}</span>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ ...cs.badge, background: STATUS_COLORS[selected.status].bg, color: STATUS_COLORS[selected.status].text }}>{selected.status}</span>
-                  <button style={cs.starBtn} onClick={() => handleToggleStar(selected.id, !selected.starred)}><Star size={14} style={{ color: selected.starred ? '#f59e0b' : 'rgba(255,255,255,0.2)', fill: selected.starred ? '#f59e0b' : 'none' }} /></button>
+
+              <div className="contact-detail-author">
+                <div className="contact-avatar contact-avatar--lg">{selected.fullName?.charAt(0) || 'A'}</div>
+                <div>
+                  <div className="contact-detail-name">{selected.fullName}</div>
+                  <a href={`mailto:${selected.email}`} className="contact-detail-email">{selected.email}</a>
+                  {selected.phone && (
+                    <a href={`tel:${selected.phone}`} className="contact-detail-phone">{selected.phone}</a>
+                  )}
                 </div>
               </div>
-              <div style={cs.actionRow}>
-                <button style={{ ...cs.actionBtn, background: '#4a90d9', color: '#fff' }} onClick={() => handleStatusUpdate(selected.id, 'read')}><Eye size={14} /> Mark as Read</button>
-                <button style={{ ...cs.actionBtn, background: '#5db8a6', color: '#fff' }} onClick={() => { setReplySubject(`Re: Your inquiry`); setReplyMessage(''); setShowReplyModal(true); }}><Reply size={14} /> Reply</button>
-                <button style={{ ...cs.actionBtn, background: 'var(--color-error)', color: '#fff' }} onClick={() => { setSelected(null); setDeleteConfirm(selected.id); }}><Trash2 size={14} /> Delete</button>
+
+              <div className="contact-detail-section">
+                <p className="contact-detail-label">Message</p>
+                <div className="contact-detail-msg">{selected.message}</div>
+              </div>
+
+              <div className="contact-detail-foot">
+                <span>Received: {formatDate(selected.created_at)}</span>
+                <div className="contact-detail-foot-meta">
+                  <span
+                    className="contact-badge"
+                    style={{
+                      background: STATUS_TOKENS[selected.status].tint,
+                      color: STATUS_TOKENS[selected.status].color,
+                      borderColor: STATUS_TOKENS[selected.status].border,
+                    }}
+                  >
+                    {selected.status}
+                  </span>
+                  <button
+                    type="button"
+                    className="contact-star-btn"
+                    onClick={() => handleToggleStar(selected.id, !selected.starred)}
+                    aria-label={selected.starred ? 'Unstar' : 'Star'}
+                  >
+                    <Star size={14} fill={selected.starred ? 'currentColor' : 'none'} style={{ color: selected.starred ? 'var(--color-accent-gold)' : 'var(--admin-text-muted)' }} />
+                  </button>
+                </div>
+              </div>
+
+              <div className="contact-action-row">
+                <button
+                  type="button"
+                  className="ax-btn ax-btn--secondary contact-action-btn"
+                  onClick={() => handleStatusUpdate(selected.id, 'read')}
+                >
+                  <Eye size={14} /> Mark Read
+                </button>
+                <button
+                  type="button"
+                  className="ax-btn ax-btn--primary contact-action-btn"
+                  onClick={() => { setReplySubject('Re: Your inquiry'); setReplyMessage(''); setShowReplyModal(true); }}
+                >
+                  <Reply size={14} /> Reply
+                </button>
+                <button
+                  type="button"
+                  className="ax-btn ax-btn--danger contact-action-btn"
+                  onClick={() => { setDeleteConfirm(selected.id); }}
+                >
+                  <Trash2 size={14} /> Delete
+                </button>
               </div>
             </div>
           ) : (
-            <div style={{ ...cs.empty, padding: 80 }}><Mail size={40} style={{ opacity: 0.3, marginBottom: 12 }} /><p>Select a submission to view details</p></div>
+            <div className="contact-detail-empty">
+              <Mail size={36} />
+              <p>Select a submission to view details</p>
+            </div>
           )}
         </div>
       </div>
-      {showReplyModal && selected && (
-        <div style={cs.modal} onClick={() => setShowReplyModal(false)}><div style={cs.modalBox} onClick={e => e.stopPropagation()}>
-          <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 20, color: 'var(--color-on-dark)', margin: '0 0 20px' }}>Reply to {selected.fullName}</h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-            <div><label style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: 'var(--color-on-dark-soft)', display: 'block', marginBottom: 6 }}>Subject</label><input style={cs.modalInput} value={replySubject} onChange={e => setReplySubject(e.target.value)} placeholder="Subject..." /></div>
-            <div><label style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: 'var(--color-on-dark-soft)', display: 'block', marginBottom: 6 }}>Message</label><textarea style={cs.modalTextarea} value={replyMessage} onChange={e => setReplyMessage(e.target.value)} placeholder="Type your reply here..." rows={8} /></div>
+
+      {/* Reply dialog */}
+      <EditDialog
+        open={showReplyModal && !!selected}
+        onClose={() => setShowReplyModal(false)}
+        title={selected ? `Reply to ${selected.fullName}` : 'Reply'}
+        subtitle={selected?.email}
+        size="md"
+        onSave={handleSendReply}
+        saving={sending}
+        saveLabel="Send reply"
+      >
+        <DialogGrid cols={1}>
+          <div>
+            <label className="ax-label">Subject</label>
+            <input
+              className="ax-input"
+              value={replySubject}
+              onChange={e => setReplySubject(e.target.value)}
+              placeholder="Subject..."
+            />
           </div>
-          <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 20 }}>
-            <button style={cs.cancelBtn} onClick={() => setShowReplyModal(false)}>Cancel</button>
-            <button style={{ ...cs.actionBtn, background: 'var(--color-primary)', color: 'var(--color-on-primary)' }} onClick={handleSendReply}><Reply size={14} /> Send Reply</button>
+          <div>
+            <label className="ax-label">Message</label>
+            <textarea
+              className="ax-textarea"
+              rows={8}
+              value={replyMessage}
+              onChange={e => setReplyMessage(e.target.value)}
+              placeholder="Type your reply here..."
+              style={{ minHeight: 180 }}
+            />
           </div>
-        </div></div>
-      )}
-      {deleteConfirm && (
-        <div style={cs.modal} onClick={() => setDeleteConfirm(null)}><div style={{ ...cs.modalBox, maxWidth: 420 }} onClick={e => e.stopPropagation()}>
-          <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 20, color: 'var(--color-on-dark)', margin: '0 0 12px' }}>Delete Submission?</h3>
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: 'var(--color-on-dark-soft)', margin: '0 0 20px' }}>This action cannot be undone.</p>
-          <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}><button style={cs.cancelBtn} onClick={() => setDeleteConfirm(null)}>Cancel</button><button style={cs.delBtn} onClick={handleDelete}><Trash2 size={14} /> Delete</button></div>
-        </div></div>
-      )}
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+        </DialogGrid>
+      </EditDialog>
+
+      {/* Delete confirm */}
+      <EditDialog
+        open={!!deleteConfirm}
+        onClose={() => setDeleteConfirm(null)}
+        title="Delete submission?"
+        subtitle="This action cannot be undone."
+        size="md"
+        onSave={handleDelete}
+        saveLabel="Delete submission"
+      >
+        <div className="contact-delete-body">
+          <Trash2 size={28} />
+          <p>The contact submission will be permanently removed.</p>
+        </div>
+      </EditDialog>
+
+      <style>{`
+        .contact-page { width: 100%; }
+
+        .contact-stats-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+          gap: 12px;
+          margin-bottom: 24px;
+        }
+        .contact-stat {
+          background: var(--admin-surface);
+          border: 1px solid var(--admin-border);
+          border-radius: var(--radius-lg);
+          padding: 16px;
+          text-align: center;
+          transition: border-color 0.15s ease;
+        }
+        .contact-stat:hover { border-color: var(--admin-border-strong); }
+        .contact-stat-val {
+          font-family: var(--font-display);
+          font-size: 26px;
+          font-weight: 600;
+          color: var(--admin-text);
+          margin: 4px 0;
+          line-height: 1.1;
+        }
+        .contact-stat-lbl {
+          font-family: var(--font-body);
+          font-size: 12px;
+          color: var(--admin-text-soft);
+          margin: 0;
+        }
+
+        .contact-main-grid {
+          display: grid;
+          grid-template-columns: 1fr 380px;
+          gap: 16px;
+          align-items: start;
+        }
+        @media (max-width: 980px) {
+          .contact-main-grid { grid-template-columns: 1fr; }
+        }
+
+        .contact-list-card {
+          background: var(--admin-surface);
+          border: 1px solid var(--admin-border);
+          border-radius: var(--radius-lg);
+          overflow: hidden;
+        }
+        .contact-list-head {
+          padding: 14px 18px;
+          border-bottom: 1px solid var(--admin-divider);
+        }
+        .contact-list-title {
+          font-family: var(--font-display);
+          font-size: 18px;
+          font-weight: 600;
+          color: var(--admin-text);
+          margin: 0;
+        }
+        .contact-list-title span {
+          color: var(--admin-text-muted);
+          font-weight: 400;
+          font-family: var(--font-body);
+          font-size: 14px;
+        }
+
+        .contact-list-body {
+          max-height: 600px;
+          overflow-y: auto;
+        }
+
+        .contact-list-item {
+          display: block;
+          width: 100%;
+          text-align: left;
+          padding: 14px 18px;
+          border: none;
+          border-bottom: 1px solid var(--admin-divider);
+          border-left: 3px solid transparent;
+          background: transparent;
+          color: inherit;
+          cursor: pointer;
+          transition: background 0.15s ease, border-color 0.15s ease;
+          outline: none;
+          font-family: inherit;
+        }
+        .contact-list-item:hover {
+          background: var(--admin-hover-bg);
+        }
+        .contact-list-item:focus-visible {
+          background: var(--admin-hover-bg);
+          box-shadow: inset 0 0 0 2px var(--color-primary);
+        }
+        .contact-list-item--active {
+          background: color-mix(in srgb, var(--color-primary) 8%, transparent);
+          border-left-color: var(--color-primary);
+        }
+        .contact-list-item--active:hover {
+          background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+        }
+
+        .contact-list-item-head {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          margin-bottom: 8px;
+          gap: 10px;
+        }
+        .contact-list-item-author {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          min-width: 0;
+        }
+        .contact-list-meta {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          flex-shrink: 0;
+        }
+
+        .contact-avatar {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          background: var(--color-primary);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-family: var(--font-display);
+          font-size: 15px;
+          font-weight: 600;
+          color: var(--color-on-primary);
+          flex-shrink: 0;
+        }
+        .contact-avatar--lg { width: 48px; height: 48px; font-size: 20px; }
+
+        .contact-list-name {
+          font-family: var(--font-body);
+          font-size: 14px;
+          font-weight: 600;
+          color: var(--admin-text);
+          line-height: 1.3;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 200px;
+        }
+        .contact-list-email {
+          font-family: var(--font-body);
+          font-size: 12px;
+          color: var(--admin-text-soft);
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 200px;
+        }
+
+        .contact-badge {
+          padding: 2px 10px;
+          border-radius: var(--radius-pill);
+          border: 1px solid;
+          font-size: 10px;
+          font-family: var(--font-body);
+          font-weight: 600;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
+        }
+
+        .contact-star-btn {
+          background: transparent;
+          border: none;
+          cursor: pointer;
+          padding: 4px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: var(--radius-sm);
+          transition: background 0.15s ease;
+          outline: none;
+        }
+        .contact-star-btn:hover { background: var(--admin-hover-bg); }
+        .contact-star-btn:focus-visible { box-shadow: var(--admin-focus-ring); }
+
+        .contact-list-msg {
+          font-family: var(--font-body);
+          font-size: 13px;
+          color: var(--admin-text-soft);
+          line-height: 1.5;
+          margin: 0 0 8px;
+        }
+        .contact-list-foot {
+          display: flex;
+          gap: 14px;
+          font-size: 12px;
+          font-family: var(--font-body);
+          color: var(--admin-text-muted);
+        }
+        .contact-list-foot span {
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
+        }
+
+        .contact-empty {
+          padding: 56px 24px;
+          text-align: center;
+          color: var(--admin-text-muted);
+          font-family: var(--font-body);
+          font-size: 13px;
+        }
+
+        /* Detail panel */
+        .contact-detail-card {
+          background: var(--admin-surface);
+          border: 1px solid var(--admin-border);
+          border-radius: var(--radius-lg);
+          padding: 20px;
+          position: sticky;
+          top: 88px;
+        }
+        @media (max-width: 980px) {
+          .contact-detail-card { position: static; }
+        }
+
+        .contact-detail-head {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 16px;
+        }
+        .contact-detail-title {
+          font-family: var(--font-display);
+          font-size: 20px;
+          font-weight: 600;
+          color: var(--admin-text);
+          margin: 0;
+        }
+
+        .contact-detail-author {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 14px;
+          background: var(--admin-chip-bg);
+          border: 1px solid var(--admin-divider);
+          border-radius: var(--radius-md);
+          margin-bottom: 16px;
+        }
+        .contact-detail-name {
+          font-family: var(--font-body);
+          font-size: 16px;
+          font-weight: 600;
+          color: var(--admin-text);
+          line-height: 1.2;
+          margin-bottom: 2px;
+        }
+        .contact-detail-email,
+        .contact-detail-phone {
+          display: block;
+          font-family: var(--font-body);
+          font-size: 12px;
+          color: var(--admin-text-soft);
+          text-decoration: none;
+          line-height: 1.4;
+          transition: color 0.15s ease;
+        }
+        .contact-detail-email:hover,
+        .contact-detail-phone:hover { color: var(--color-primary); }
+
+        .contact-detail-section { margin-bottom: 16px; }
+        .contact-detail-label {
+          font-family: var(--font-body);
+          font-size: 11px;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.06em;
+          color: var(--admin-text-muted);
+          margin: 0 0 6px;
+        }
+        .contact-detail-msg {
+          font-family: var(--font-body);
+          font-size: 14px;
+          color: var(--admin-text);
+          line-height: 1.6;
+          padding: 14px;
+          background: var(--admin-chip-bg);
+          border: 1px solid var(--admin-divider);
+          border-radius: var(--radius-md);
+          white-space: pre-wrap;
+          word-break: break-word;
+        }
+
+        .contact-detail-foot {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 8px;
+          font-size: 12px;
+          color: var(--admin-text-muted);
+          font-family: var(--font-body);
+          margin-bottom: 16px;
+          flex-wrap: wrap;
+        }
+        .contact-detail-foot-meta {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+
+        .contact-action-row {
+          display: flex;
+          gap: 6px;
+          padding-top: 16px;
+          border-top: 1px solid var(--admin-divider);
+        }
+        .contact-action-btn {
+          flex: 1;
+          padding: 9px 10px;
+          font-size: 12px;
+          gap: 5px;
+          white-space: nowrap;
+        }
+
+        .contact-detail-empty {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 12px;
+          padding: 60px 24px;
+          text-align: center;
+          color: var(--admin-text-muted);
+          font-family: var(--font-body);
+          font-size: 13px;
+        }
+        .contact-detail-empty svg {
+          opacity: 0.4;
+        }
+
+        .contact-delete-body {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 12px;
+          padding: 8px 0;
+          text-align: center;
+          color: var(--admin-text-soft);
+          font-family: var(--font-body);
+          font-size: 14px;
+        }
+        .contact-delete-body svg {
+          color: var(--color-error);
+          padding: 12px;
+          background: color-mix(in srgb, var(--color-error) 12%, transparent);
+          border-radius: 50%;
+          box-sizing: content-box;
+        }
+      `}</style>
     </div>
   );
 }
