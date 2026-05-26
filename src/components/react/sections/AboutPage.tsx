@@ -3,7 +3,7 @@ import { BookOpen, Users, Building2, Target, Award, Globe } from 'lucide-react';
 
 export default function AboutPage() {
   return (
-    <div className="about-page bg-[var(--color-bg)] text-[var(--color-text)] min-h-screen">
+    <div className="about-page text-[var(--color-text)] min-h-screen ">
       {/* Hero Section */}
       <section className="pt-32 pb-16 md:pt-40 px-6">
         <div className="max-w-7xl mx-auto text-center">
@@ -25,13 +25,13 @@ export default function AboutPage() {
       </section>
 
       {/* Project Overview Section - Coral Callout */}
-      <section className="py-16 px-6 bg-[var(--color-primary)]">
+      <section className="py-8 px-6 bg-[var(--color-primary)]">
         <div className="max-w-7xl mx-auto">
           <div className="text-center">
-            <div className="inline-flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full mb-6">
+            {/* <div className="inline-flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full mb-6">
               <Globe size={16} className="text-white" />
               <span className="text-white/90 text-sm font-medium uppercase tracking-wider">ITGA & ASTEC Funded Project</span>
-            </div>
+            </div> */}
             {/* <h2 className="font-display text-3xl md:text-5xl text-white font-medium mb-6">
               Journey Through Assam's Vaishnavite Manuscript Paintings
             </h2> */}
@@ -57,7 +57,7 @@ export default function AboutPage() {
       </section>
 
       {/* Goals & Impact Section */}
-      <section className="py-16 md:py-24 px-6 bg-[var(--color-surface-soft)]">
+      <section className="py-16 md:py-24 px-6">
         <div className="max-w-7xl mx-auto text-center">
           <div className="max-w-3xl mx-auto">
             {/* Decorative element */}
@@ -76,7 +76,7 @@ export default function AboutPage() {
             </p>
             <a
               href="/team"
-              className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-[var(--color-on-primary)] bg-[var(--color-primary)] hover:bg-[var(--color-primary-active)] transition-all duration-200 shadow-md font-sans"
+              className="flex w-fit mx-auto items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-[var(--color-on-primary)] bg-[var(--color-primary)] hover:bg-[var(--color-primary-active)] transition-all duration-200 shadow-md font-sans"
             >
               View Team Members
             </a>

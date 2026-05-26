@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function TeamPage() {
   return (
-    <div className="team-page bg-[var(--color-bg)] text-[var(--color-text)] min-h-screen">
+    <div className="team-page text-[var(--color-text)] min-h-screen">
       {/* Hero Section */}
       <section className="pt-32 pb-16 md:pt-40 px-6">
         <div className="max-w-7xl mx-auto text-center">
@@ -73,7 +73,7 @@ export default function TeamPage() {
       </section>
 
       {/* Website Developers Section */}
-      <section className="py-16 md:py-24 px-6 bg-[var(--color-bg)]">
+      <section className="py-16 md:py-24 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="font-display text-3xl md:text-4xl text-[var(--color-text)] font-medium mb-4">

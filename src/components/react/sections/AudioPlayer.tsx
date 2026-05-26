@@ -1,6 +1,7 @@
 // src/components/react/sections/AudioPlayer.tsx
 import React, { useRef, useState, useEffect } from "react";
-import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX } from "lucide-react";
+import { createPortal } from "react-dom";
+import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, ChevronDown, Check, X, ZoomIn } from "lucide-react";
 import "./AudioPlayer.css";
 import { getArtifactById } from "../../../backend/actions/artifact";
 import thumbnailImage from "../../../assets/horai.png";
@@ -15,6 +16,82 @@ const FaStepBackward = () => <SkipBack size={14} />;
 const FaStepForward = () => <SkipForward size={14} />;
 const FaVolumeUp = () => <Volume2 size={20} />;
 const FaVolumeMute = () => <VolumeX size={20} />;
+
+// ── Custom themed language dropdown ──────────────────────
+interface DropdownOption {
+    value: string;
+    label: string;
+}
+
+const LanguageDropdown: React.FC<{
+    value: string;
+    options: DropdownOption[];
+    onChange: (v: string) => void;
+    disabled?: boolean;
+    placeholder?: string;
+}> = ({ value, options, onChange, disabled, placeholder }) => {
+    const [open, setOpen] = useState(false);
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (!open) return;
+        const onDocClick = (e: MouseEvent) => {
+            if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+                setOpen(false);
+            }
+        };
+        const onKey = (e: KeyboardEvent) => {
+            if (e.key === "Escape") setOpen(false);
+        };
+        document.addEventListener("mousedown", onDocClick);
+        document.addEventListener("keydown", onKey);
+        return () => {
+            document.removeEventListener("mousedown", onDocClick);
+            document.removeEventListener("keydown", onKey);
+        };
+    }, [open]);
+
+    const selected = options.find(o => o.value === value);
+    const buttonLabel = selected?.label ?? placeholder ?? "";
+
+    return (
+        <div className={`lang-dd ${open ? "is-open" : ""}`} ref={containerRef}>
+            <button
+                type="button"
+                className="lang-dd-trigger"
+                aria-haspopup="listbox"
+                aria-expanded={open}
+                disabled={disabled}
+                onClick={() => !disabled && setOpen(o => !o)}
+            >
+                <span className="lang-dd-label">{buttonLabel}</span>
+                <ChevronDown size={14} className="lang-dd-chevron" aria-hidden="true" />
+            </button>
+            {open && options.length > 0 && (
+                <ul className="lang-dd-menu" role="listbox">
+                    {options.map(opt => {
+                        const active = opt.value === value;
+                        return (
+                            <li
+                                key={opt.value}
+                                role="option"
+                                aria-selected={active}
+                                className={`lang-dd-option ${active ? "is-active" : ""}`}
+                                onClick={() => {
+                                    onChange(opt.value);
+                                    setOpen(false);
+                                }}
+                            >
+                                <span>{opt.label}</span>
+                                {active && <Check size={14} aria-hidden="true" />}
+                            </li>
+                        );
+                    })}
+                </ul>
+            )}
+        </div>
+    );
+};
 
 interface AudioPlayerProps {
     artifactData?: any;
@@ -44,7 +121,46 @@ const AudioPlayerInner: React.FC<AudioPlayerProps> = ({ artifactData = null }) =
     const [duration, setDuration] = useState(0);
     const [volume, setVolume] = useState(1);
     const [language, setLanguage] = useState('english');
+    const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+    const [showMiniBar, setShowMiniBar] = useState(false);
+    const [isMounted, setIsMounted] = useState(false);
     const audioRef = useRef(null);
+    const playPauseRef = useRef<HTMLButtonElement>(null);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
+    // Show the sticky mini bar once the main play/pause button scrolls
+    // out of view (less than 50% visible). Only relevant for the stacked
+    // mobile/tablet layout — the desktop open-book hides the bar via CSS.
+    useEffect(() => {
+        const target = playPauseRef.current;
+        if (!target || typeof IntersectionObserver === 'undefined') return;
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                setShowMiniBar(entry.intersectionRatio < 0.5);
+            },
+            { threshold: [0, 0.25, 0.5, 0.75, 1] }
+        );
+        observer.observe(target);
+        return () => observer.disconnect();
+    }, []);
+
+    // Lock body scroll & wire Escape key while the image modal is open
+    useEffect(() => {
+        if (!isImageModalOpen) return;
+        const prevOverflow = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+        const onKey = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') setIsImageModalOpen(false);
+        };
+        document.addEventListener('keydown', onKey);
+        return () => {
+            document.body.style.overflow = prevOverflow;
+            document.removeEventListener('keydown', onKey);
+        };
+    }, [isImageModalOpen]);
 
     // Map language to audio file
     const languageAudioMap = {
@@ -67,21 +183,21 @@ const AudioPlayerInner: React.FC<AudioPlayerProps> = ({ artifactData = null }) =
 
         // Fallback to static descriptions
         return {
-            english: `The Satras of Assam are monastic institutions established by the great Vaishnavite saint Srimanta Sankardeva and his disciples in the 15th-16th centuries. These unique centers of art, culture, and spirituality have preserved traditional dance, music, and craft forms for over five centuries.
+            english: `In the heart of Assam, along the river-laced island of Majuli, the Satras have stood for nearly six centuries as living centres of devotion, art, and learning. Founded by the Vaishnavite saint Srimanta Sankardeva and shaped further by his disciples, these monastic institutions emerged in the fifteenth and sixteenth centuries as quiet sanctuaries where faith and creativity grew together.
 
-Each Satra follows a strict daily routine of prayers, rituals, and artistic practices. The institution serves as both a spiritual center and a cultural academy, where young devotees learn traditional arts like Borgeet (classical music), Sattriya dance, and mask-making.
+A Satra is, at once, a temple and a school. Each day unfolds in measured rhythm: prayers at dawn, recitation of scripture, the practice of Borgeet and Sattriya dance, the patient craft of mask-making, and hours given to manuscript painting. Through this rhythm, generations of devotees have carried forward an inheritance that belongs not only to Assam, but to the wider story of Indian classical culture.
 
-The Majuli Museum preserves artifacts and documents that showcase the rich history of these Satras, which played a crucial role in shaping Assamese culture and identity.`,
-            hindi: `असम के सत्र महान वैष्णव संत श्रीमंत शंकरदेव और उनके शिष्यों द्वारा 15वीं-16वीं शताब्दी में स्थापित मठ संस्थान हैं। कला, संस्कृति और आध्यात्मिकता के ये अनूठे केंद्र पांच शताब्दियों से अधिक समय से पारंपरिक नृत्य, संगीत और शिल्प रूपों को संरक्षित कर रहे हैं।
+The manuscripts and artefacts preserved within these Satras — and now within the Majuli Museum — are more than relics. They are witnesses to a tradition that has shaped the Assamese identity, and a record of how art, devotion, and community can endure across the turning of centuries.`,
+            hindi: `असम के हृदय में, माजुली के नदी-घिरे द्वीप पर, सत्र लगभग छह शताब्दियों से भक्ति, कला और ज्ञान के जीवंत केंद्रों के रूप में स्थापित हैं। वैष्णव संत श्रीमंत शंकरदेव द्वारा स्थापित और उनके शिष्यों द्वारा संवर्धित, ये मठ पंद्रहवीं और सोलहवीं शताब्दी में ऐसे शांत आश्रयों के रूप में उभरे जहाँ श्रद्धा और सर्जनशीलता साथ-साथ विकसित हुईं।
 
-प्रत्येक सत्र प्रार्थना, अनुष्ठान और कलात्मक प्रथाओं के सख्त दैनिक कार्यक्रम का पालन करता है। संस्था एक आध्यात्मिक केंद्र और एक सांस्कृतिक अकादमी दोनों के रूप में कार्य करती है, जहां युवा भक्त बोरगीत (शास्त्रीय संगीत), सत्रीया नृत्य और मुखौटा निर्माण जैसी पारंपरिक कलाएं सीखते हैं।
+सत्र एक ही समय में मंदिर भी है और विद्यालय भी। प्रत्येक दिन एक सधे हुए लय में बीतता है — भोर की प्रार्थना, शास्त्रों का पाठ, बोरगीत और सत्रीया नृत्य का अभ्यास, मुखौटा निर्माण की धैर्यपूर्ण कला, और पांडुलिपि चित्रकला को समर्पित घंटे। इसी लय में पीढ़ियों ने एक ऐसी विरासत को आगे बढ़ाया है जो केवल असम की ही नहीं, बल्कि भारतीय शास्त्रीय संस्कृति की व्यापक कथा की भी है।
 
-माजुली संग्रहालय कलाकृतियों और दस्तावेजों को संरक्षित करता है जो इन सत्रों के समृद्ध इतिहास को प्रदर्शित करता है, जिसने असमिया संस्कृति और पहचान को आकार देने में महत्वपूर्ण भूमिका निभाई है।`,
-            assamese: `অসমৰ সত্ৰসমূহ মহাপুৰুষ শ্ৰীমন্ত শংকৰদেৱ আৰু তেওঁৰ শিষ্যসকলে ১৫-১৬ শতিকাত স্থাপন কৰা বৈষ্ণৱ মঠ। কলা-সংস্কৃতি আৰু আধ্যাত্মিকতাৰ এই অনন্য কেন্দ্ৰবোৰে পাঁচশতাধিক বছৰ ধৰি পৰম্পৰাগত নৃত্য, সংগীত আৰু শিল্পক ৰক্ষা কৰি আহিছে।
+इन सत्रों में — और अब माजुली संग्रहालय में — संरक्षित पांडुलिपियाँ और कलाकृतियाँ केवल अवशेष नहीं हैं। ये एक ऐसी परंपरा की साक्षी हैं जिसने असमिया पहचान को आकार दिया, और इस बात का प्रमाण हैं कि कला, भक्ति और समुदाय शताब्दियों के परिवर्तन के बीच भी कैसे जीवित रह सकते हैं।`,
+            assamese: `অসমৰ মাজত, ব্ৰহ্মপুত্ৰৰ বুকুত গঢ় লোৱা মাজুলী দ্বীপত, সত্ৰসমূহ প্ৰায় ছশতিকা ধৰি ভক্তি, কলা আৰু জ্ঞানৰ জীৱন্ত কেন্দ্ৰ হিচাপে থিয় হৈ আছে। মহাপুৰুষ শ্ৰীমন্ত শংকৰদেৱে স্থাপন কৰা আৰু তেওঁৰ শিষ্যসকলে গঢ়ি তোলা এই বৈষ্ণৱ মঠবোৰ পঞ্চদশ আৰু ষোড়শ শতিকাত শ্ৰদ্ধা আৰু সৃষ্টিশীলতাই একেলগে বিকাশ লাভ কৰা শান্ত আশ্ৰয়ৰূপে গঢ় লৈ উঠিছিল।
 
-প্ৰতিটো সত্ৰত প্ৰাৰ্থনা, আচাৰ-অনুষ্ঠান আৰু কলা-চৰ্চাৰ কঠোৰ দৈনন্দিন কাৰ্যসূচী পালন কৰা হয়। এই অনুষ্ঠানবোৰে এক আধ্যাত্মিক কেন্দ্ৰ আৰু সাংস্কৃতিক বিদ্যালয়ৰ দৰে কাম কৰে, য'ত ডেকা-গাভৰুৱে বৰগীত, সত্ৰীয়া নৃত্য, মুখা তৈয়াৰী আদি পৰম্পৰাগত কলা শিকে।
+এটা সত্ৰ একেসময়তে মন্দিৰো, বিদ্যালয়ো। প্ৰতিটো দিন এক সংযত ছন্দত আগবাঢ়ে — ৰাতিপুৱাৰ প্ৰাৰ্থনা, শাস্ত্ৰ পাঠ, বৰগীত আৰু সত্ৰীয়া নৃত্যৰ সাধনা, মুখা নিৰ্মাণৰ ধৈৰ্য্যশীল শিল্প, আৰু পুথি চিত্ৰাংকনত নিয়োজিত প্ৰহৰ। এই ছন্দৰে ডেকা-গাভৰুসকলে যুগে যুগে এনে এক উত্তৰাধিকাৰ আগবঢ়াই আনিছে যি কেৱল অসমৰে নহয়, ভাৰতীয় শাস্ত্ৰীয় সংস্কৃতিৰ বহল কাহিনীৰো অংগ।
 
-মাজুলী সংগ্ৰহালয়ে সত্ৰৰ সমৃদ্ধ ইতিহাসৰ সাক্ষ্য দিয়া বিভিন্ন সামগ্ৰী আৰু দলিল সংৰক্ষণ কৰিছে, যিয়ে অসমীয়া সংস্কৃতি আৰু পৰিচয় গঢ়াত গুৰুত্বপূৰ্ণ ভূমিকা পালন কৰিছে।`
+এই সত্ৰসমূহত — আৰু এতিয়া মাজুলী সংগ্ৰহালয়ত — সংৰক্ষিত পুথি আৰু সামগ্ৰীবোৰ কেৱল অৱশেষ নহয়। এইবোৰ এনে এক পৰম্পৰাৰ সাক্ষী, যিয়ে অসমীয়া পৰিচয় গঢ় দিছে; আৰু কেনেকৈ কলা, ভক্তি আৰু সমাজে শতিকাৰ পৰিৱৰ্তনৰ মাজতো জীয়াই থাকিব পাৰে, তাৰ এক জ্বলন্ত প্ৰমাণ।`
         }[lang];
     };
 
@@ -201,119 +317,140 @@ The Majuli Museum preserves artifacts and documents that showcase the rich histo
 
     return (
         <div className="audio-player-container">
-            {/* Audio Player (now on the left) */}
-            <div className="audio-player">
-                {/* Language Selector */}
-                <div className="language-selector">
-                    <select
-                        value={language}
-                        onChange={(e) => setLanguage(e.target.value)}
-                        className="language-dropdown"
-                    >
-                        {/* When artifactData is provided, only show available languages */}
-                        {artifactData ? (
-                            <>
-                                {artifactData.english_audio_url && <option value="english">English</option>}
-                                {artifactData.hindi_audio_url && <option value="hindi">हिंदी (Hindi)</option>}
-                                {artifactData.assamese_audio_url && <option value="assamese">অসমীয়া (Assamese)</option>}
-                            </>
-                        ) : (
-                            /* When no artifactData */
-                            <>
-                                <option>No Audios Found!</option>
-                            </>
-                        )}
-                    </select>
-                </div>
-
-                {/* Exhibit Info at Top */}
-                <div className="exhibit-info">
-                    <img
-                        src={thumbnail}
-                        alt="Exhibit thumbnail"
-                        className="exhibit-thumbnail"
-                    />
-                    <div className="exhibit-text">
-                        {/* Updated to show artifact name */}
-                        <h3 className="exhibit-title">
-                            {artifactData?.name || "History of Satras"}
-                        </h3>
-                        {/* Updated to show collection category */}
-                        <p className="exhibit-subtitle">
-                            {artifactData?.category || "Majuli Museum, Govt. of Assam"}
-                        </p>
-                    </div>
-                </div>
-
-                {/* Audio Controls */}
-                <div className="audio-controls">
-                    <div className="control-buttons">
-                        <button className="skip-button" onClick={skipBackward}>
-                            <FaStepBackward /> 10s
-                        </button>
-                        <button
-                            className="play-pause-button"
-                            onClick={togglePlayPause}
-                            aria-label={isPlaying ? "Pause" : "Play"}
-                        >
-                            {isPlaying ? <FaPause size={28} /> : <FaPlay size={28} />}
-                        </button>
-                        <button className="skip-button" onClick={skipForward}>
-                            10s <FaStepForward />
-                        </button>
-                    </div>
-
-                    <div className="progress-container">
-                        <div className="time-display-container">
-                            <span className="time-display">{formatTime(currentTime)}</span>
-                            <span className="time-display">{formatTime(duration)}</span>
+            <section className="open-book">
+                <article className="book-spread">
+                    {/* Left Page — Player */}
+                    <div className="left-page">
+                        <div className="page-top-row">
+                            <h1 className="book-title">Assamese Manuscript Archive - Samaguri Satra</h1>
+                            <LanguageDropdown
+                                value={language}
+                                onChange={setLanguage}
+                                disabled={!artifactData}
+                                placeholder="No Audios Found!"
+                                options={
+                                    artifactData
+                                        ? [
+                                            ...(artifactData.english_audio_url ? [{ value: "english", label: "English" }] : []),
+                                            ...(artifactData.hindi_audio_url ? [{ value: "hindi", label: "हिंदी (Hindi)" }] : []),
+                                            ...(artifactData.assamese_audio_url ? [{ value: "assamese", label: "অসমীয়া (Assamese)" }] : []),
+                                        ]
+                                        : []
+                                }
+                            />
                         </div>
-                        <input
-                            type="range"
-                            min="0"
-                            max={duration || 100}
-                            value={currentTime}
-                            onChange={handleSeek}
-                            className="progress-slider"
-                            style={{ '--progress': `${duration ? (currentTime / duration) * 100 : 0}%` } as React.CSSProperties}
-                        />
+
+                        <div className="exhibit-info">
+                            <button
+                                type="button"
+                                className="exhibit-thumbnail-button"
+                                onClick={() => setIsImageModalOpen(true)}
+                                aria-label="View image in larger size"
+                            >
+                                <img
+                                    src={thumbnail}
+                                    alt="Exhibit thumbnail"
+                                    className="exhibit-thumbnail"
+                                />
+                                <span className="exhibit-thumbnail-zoom" aria-hidden="true">
+                                    <ZoomIn size={18} />
+                                </span>
+                            </button>
+                            <div className="exhibit-text">
+                                <h3 className="exhibit-title">
+                                    {artifactData?.name || "History of Satras"}
+                                </h3>
+                                <p className="exhibit-subtitle">
+                                    {artifactData?.category || "Majuli Museum, Govt. of Assam"}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="audio-controls">
+                            <div className="control-buttons">
+                                <button className="skip-button" onClick={skipBackward}>
+                                    <FaStepBackward /> 10s
+                                </button>
+                                <button
+                                    ref={playPauseRef}
+                                    className="play-pause-button"
+                                    onClick={togglePlayPause}
+                                    aria-label={isPlaying ? "Pause" : "Play"}
+                                >
+                                    {isPlaying ? <FaPause size={28} /> : <FaPlay size={28} />}
+                                </button>
+                                <button className="skip-button" onClick={skipForward}>
+                                    10s <FaStepForward />
+                                </button>
+                            </div>
+
+                            <div className="progress-container">
+                                <div className="time-display-container">
+                                    <span className="time-display">{formatTime(currentTime)}</span>
+                                    <span className="time-display">{formatTime(duration)}</span>
+                                </div>
+                                <input
+                                    type="range"
+                                    min="0"
+                                    max={duration || 100}
+                                    value={currentTime}
+                                    onChange={handleSeek}
+                                    className="progress-slider"
+                                    style={{ '--progress': `${duration ? (currentTime / duration) * 100 : 0}%` } as React.CSSProperties}
+                                />
+                            </div>
+
+                            <div className="volume-controls">
+                                <button
+                                    className="volume-button"
+                                    onClick={toggleMute}
+                                    aria-label={volume > 0 ? "Mute" : "Unmute"}
+                                >
+                                    {volume > 0 ? <FaVolumeUp /> : <FaVolumeMute />}
+                                </button>
+                                <input
+                                    type="range"
+                                    min="0"
+                                    max="1"
+                                    step="0.01"
+                                    value={volume}
+                                    onChange={handleVolumeChange}
+                                    className="volume-slider"
+                                    style={{ '--volume': `${volume * 100}%` } as React.CSSProperties}
+                                />
+                            </div>
+                        </div>
                     </div>
 
-                    <div className="volume-controls">
-                        <button
-                            className="volume-button"
-                            onClick={toggleMute}
-                            aria-label={volume > 0 ? "Mute" : "Unmute"}
-                        >
-                            {volume > 0 ? <FaVolumeUp /> : <FaVolumeMute />}
-                        </button>
-                        <input
-                            type="range"
-                            min="0"
-                            max="1"
-                            step="0.01"
-                            value={volume}
-                            onChange={handleVolumeChange}
-                            className="volume-slider"
-                            style={{ '--volume': `${volume * 100}%` } as React.CSSProperties}
-                        />
+                    {/* Right Page — Description */}
+                    <div className="right-page">
+                        <div className="page-top-row right-page-top">
+                            <h2 className="chapter-title">
+                                {artifactData?.name || "The Satras of Assam"}
+                            </h2>
+                        </div>
+                        <div className="chapter-divider" aria-hidden="true">
+                            <span className="chapter-divider-line" />
+                            <span className="chapter-divider-star">✦</span>
+                            <span className="chapter-divider-line" />
+                        </div>
+                        <div className="description-content">
+                            {getDescription(language).split('\n\n').map((paragraph, index) => (
+                                <p key={`${language}-${index}`} className="description-paragraph">
+                                    {paragraph}
+                                </p>
+                            ))}
+                        </div>
                     </div>
-                </div>
-            </div>
+                </article>
 
-            {/* Text Description (now on the right) */}
-            <div className="text-description">
-                <h2 className="description-title">
-                    {artifactData?.name || "The Satras of Assam"}
-                </h2>
-                <div className="description-content">
-                    {getDescription(language).split('\n\n').map((paragraph, index) => (
-                        <p key={index} className="description-paragraph">
-                            {paragraph}
-                        </p>
-                    ))}
-                </div>
-            </div>
+                <footer className="book-footer">
+                    <ol id="page-numbers">
+                        <li>1</li>
+                        <li>2</li>
+                    </ol>
+                </footer>
+            </section>
 
             <audio
                 ref={audioRef}
@@ -322,6 +459,100 @@ The Majuli Museum preserves artifacts and documents that showcase the rich histo
                 onEnded={() => setIsPlaying(false)}
                 onError={(e) => console.error("Audio error:", e)}
             />
+
+            {showMiniBar && languageAudioMap[language] && isMounted && createPortal(
+                <div
+                    className="mini-audio-bar"
+                    style={{ '--mini-progress': `${duration ? (currentTime / duration) * 100 : 0}%` } as React.CSSProperties}
+                    role="region"
+                    aria-label="Now playing"
+                >
+                    <img
+                        src={thumbnail}
+                        alt=""
+                        className="mini-audio-bar-thumb"
+                        aria-hidden="true"
+                    />
+                    <div className="mini-audio-bar-text">
+                        <span className="mini-audio-bar-title">
+                            {artifactData?.name || "History of Satras"}
+                        </span>
+                        <span className="mini-audio-bar-time">
+                            {formatTime(currentTime)} / {formatTime(duration)}
+                        </span>
+                    </div>
+                    <div className="mini-audio-bar-controls">
+                        <button
+                            type="button"
+                            className="mini-audio-bar-skip"
+                            onClick={skipBackward}
+                            aria-label="Skip back 10 seconds"
+                        >
+                            <SkipBack size={18} />
+                        </button>
+                        <button
+                            type="button"
+                            className="mini-audio-bar-playpause"
+                            onClick={togglePlayPause}
+                            aria-label={isPlaying ? "Pause" : "Play"}
+                        >
+                            {isPlaying ? <Pause size={18} /> : <Play size={18} />}
+                        </button>
+                        <button
+                            type="button"
+                            className="mini-audio-bar-skip"
+                            onClick={skipForward}
+                            aria-label="Skip forward 10 seconds"
+                        >
+                            <SkipForward size={18} />
+                        </button>
+                    </div>
+                </div>,
+                document.body
+            )}
+
+            {isImageModalOpen && (
+                <div
+                    className="image-modal-backdrop"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label="Artifact image viewer"
+                    onClick={() => setIsImageModalOpen(false)}
+                >
+                    <button
+                        type="button"
+                        className="image-modal-close"
+                        onClick={() => setIsImageModalOpen(false)}
+                        aria-label="Close image viewer"
+                    >
+                        <X size={20} />
+                    </button>
+                    <figure
+                        className="image-modal-figure"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <img
+                            src={thumbnail}
+                            alt={artifactData?.name || "Artifact"}
+                            className="image-modal-image"
+                        />
+                        {(artifactData?.name || artifactData?.category) && (
+                            <figcaption className="image-modal-caption">
+                                {artifactData?.name && (
+                                    <span className="image-modal-caption-title">
+                                        {artifactData.name}
+                                    </span>
+                                )}
+                                {artifactData?.category && (
+                                    <span className="image-modal-caption-subtitle">
+                                        {artifactData.category}
+                                    </span>
+                                )}
+                            </figcaption>
+                        )}
+                    </figure>
+                </div>
+            )}
         </div>
     );
 };

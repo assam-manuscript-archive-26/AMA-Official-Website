@@ -1,193 +1,171 @@
 /* ── AudioPlayer.css ──────────────────────────────────────────
-   Assamese Manuscript Archive Design System — Theme-aware Audio Player
-   Uses CSS custom properties from globals.css for light/dark mode.
-   All transitions synced with --theme-transition-duration (400ms).
+   Assamese Manuscript Archive — Open-Book Audio Player
+   Maps Erin Sullivan's open-book layout onto AMA design tokens.
+   - Cream pages on a coral leather binding
+   - Cormorant Garamond display + Inter body
+   - Light/dark theme via CSS vars from globals.css
 ──────────────────────────────────────────────────────────────── */
 
-/* Base Container */
+/* ── Outer Page Container ────────────────────────────────── */
 .audio-player-container {
     display: flex;
-    min-height: 100vh;
-    width: 100%;
-    padding: 20px;
-    padding-top: 130px;
-    box-sizing: border-box;
-    overflow: auto;
-    flex-wrap: wrap;
-    background-color: var(--color-primary);
-    color: var(--color-ink);
-    font-family: var(--font-body);
-    transition:
-        background-color var(--theme-transition-duration, 400ms) ease,
-        color var(--theme-transition-duration, 400ms) ease;
-}
-
-/* ── Left Side — Audio Player ────────────────────────────── */
-.audio-player {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    padding: 40px;
-    background: var(--color-surface-card);
-    border-radius: var(--radius-lg) 0 0 var(--radius-lg);
-    box-shadow:
-        0 0 0 1px var(--color-hairline),
-        0 10px 30px rgba(0, 0, 0, 0.08);
-    position: relative;
-    overflow: hidden;
-    transition:
-        background-color var(--theme-transition-duration, 400ms) ease,
-        box-shadow var(--theme-transition-duration, 400ms) ease;
-}
-
-.audio-player::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -30%;
-    width: 80%;
-    height: 200%;
-    background: radial-gradient(circle, color-mix(in srgb, var(--color-primary) 6%, transparent) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
-}
-
-/* ── Right Side — Text Description ───────────────────────── */
-.text-description {
-    flex: 1;
-    padding: 40px;
-    display: flex;
-    flex-direction: column;
     justify-content: center;
-    align-items: center;
-    background: var(--color-surface-soft);
-    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
-    margin-left: 2px;
-    box-shadow:
-        0 0 0 1px var(--color-hairline),
-        0 10px 30px rgba(0, 0, 0, 0.08);
-    backdrop-filter: blur(10px);
-    overflow-y: auto;
+    align-items: flex-start;
+    width: 100%;
+    padding: 120px 20px 20px;
+    box-sizing: border-box;
+    background-color: transparent;
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    transition: color var(--theme-transition-duration, 400ms) ease;
+}
+
+/* ── Open Book ───────────────────────────────────────────── */
+.open-book {
+    background: var(--color-surface-card);
+    color: var(--color-ink);
+    padding: 2em;
+    width: 100%;
+    max-width: none;
     position: relative;
-    z-index: 1;
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.18),
+        0 12px 40px rgba(0, 0, 0, 0.08);
+    border-radius: var(--radius-sm);
     transition:
         background-color var(--theme-transition-duration, 400ms) ease,
+        border-color var(--theme-transition-duration, 400ms) ease,
         box-shadow var(--theme-transition-duration, 400ms) ease;
 }
 
-.text-description::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background:
-        radial-gradient(circle at 20% 30%, color-mix(in srgb, var(--color-primary) 5%, transparent) 0%, transparent 40%),
-        radial-gradient(circle at 80% 70%, color-mix(in srgb, var(--color-accent-gold) 4%, transparent) 0%, transparent 40%);
-    border-radius: inherit;
-    pointer-events: none;
-    z-index: -1;
-}
-
-.description-title {
-    font-size: 2.5rem;
-    margin-bottom: 30px;
-    color: var(--color-ink);
-    font-weight: 500;
-    font-family: var(--font-display);
+.open-book * {
     position: relative;
-    padding-bottom: 15px;
-    text-align: center;
-    transition: color var(--theme-transition-duration, 400ms) ease;
 }
 
-.description-title::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 3px;
-    background: var(--color-primary);
-    border-radius: 3px;
+/* Coral selection */
+.open-book *::-moz-selection {
+    background: color-mix(in srgb, var(--color-primary) 35%, transparent);
 }
 
-.description-content {
-    line-height: 1.8;
-    font-size: 1.1rem;
-    color: var(--color-body);
-    max-width: 600px;
+.open-book *::selection {
+    background: color-mix(in srgb, var(--color-primary) 35%, transparent);
+}
+
+/* ── Page Top Row (one per page, aligned across spread) ──── */
+.page-top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
     width: 100%;
-    margin: 0 auto;
-    text-align: justify;
-    transition: color var(--theme-transition-duration, 400ms) ease;
+    min-height: 40px;
+    margin-bottom: 1.25em;
+    flex-wrap: wrap;
 }
 
-.description-paragraph {
-    margin-bottom: 25px;
+.right-page-top {
+    justify-content: center;
 }
 
-/* ── Language Selector ───────────────────────────────────── */
-.language-selector {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    z-index: 2;
-}
-
-.language-dropdown {
-    background: var(--color-primary);
-    color: var(--color-on-primary);
-    border: 1px solid color-mix(in srgb, var(--color-primary-active) 60%, transparent);
-    border-radius: var(--radius-pill);
-    padding: 8px 15px;
-    font-size: 0.9rem;
-    font-family: var(--font-body);
-    cursor: pointer;
-    backdrop-filter: blur(5px);
-    transition:
-        all 0.3s ease,
-        background-color var(--theme-transition-duration, 400ms) ease,
-        color var(--theme-transition-duration, 400ms) ease;
-}
-
-.language-dropdown:hover {
-    background: var(--color-primary-active);
-    color: var(--color-on-primary);
-    border-color: var(--color-primary-active);
-}
-
-.language-dropdown option {
-    background: var(--color-surface-card);
+.book-title {
+    font: 500 0.85rem/1.25 var(--font-display);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
     color: var(--color-ink);
+    margin: 0;
 }
 
-/* ── Exhibit Info ────────────────────────────────────────── */
+/* ── Book Spread ─────────────────────────────────────────── */
+.book-spread {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2em;
+    padding: 0;
+}
+
+/* ── Left Page — Player ──────────────────────────────────── */
+.left-page {
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+    align-items: center;
+}
+
+.left-page .page-top-row {
+    margin-bottom: 0;
+}
+
 .exhibit-info {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 50px;
+    text-align: center;
+    width: 100%;
+}
+
+.exhibit-thumbnail-button {
     position: relative;
-    z-index: 1;
-    padding-top: 40px;
+    display: inline-block;
+    padding: 0;
+    margin: 0 0 1.5em 0;
+    border: 0;
+    background: transparent;
+    cursor: zoom-in;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.exhibit-thumbnail-button:hover {
+    transform: scale(1.02);
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.22);
+}
+
+.exhibit-thumbnail-button:focus-visible {
+    outline: none;
+    box-shadow:
+        0 0 0 3px color-mix(in srgb, var(--color-primary) 35%, transparent),
+        0 10px 30px rgba(0, 0, 0, 0.15);
 }
 
 .exhibit-thumbnail {
+    display: block;
     width: 220px;
     height: 220px;
     border-radius: var(--radius-lg);
     object-fit: cover;
     border: 2px solid var(--color-hairline);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    margin-bottom: 25px;
-    transition: transform 0.3s ease, border-color var(--theme-transition-duration, 400ms) ease;
+    transition: border-color var(--theme-transition-duration, 400ms) ease;
 }
 
-.exhibit-thumbnail:hover {
-    transform: scale(1.02);
+.exhibit-thumbnail-zoom {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--color-surface-dark) 75%, transparent);
+    color: var(--color-on-dark);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 200ms ease, transform 200ms ease;
+    pointer-events: none;
+}
+
+.exhibit-thumbnail-button:hover .exhibit-thumbnail-zoom,
+.exhibit-thumbnail-button:focus-visible .exhibit-thumbnail-zoom {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .exhibit-text {
@@ -195,37 +173,37 @@
 }
 
 .exhibit-title {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     color: var(--color-ink);
-    margin: 0 0 10px 0;
+    margin: 0 0 0.4rem 0;
     font-weight: 500;
     font-family: var(--font-display);
+    letter-spacing: 0.02em;
     transition: color var(--theme-transition-duration, 400ms) ease;
 }
 
 .exhibit-subtitle {
-    font-size: 1.1rem;
+    font-size: 0.95rem;
     color: var(--color-muted);
     margin: 0;
     font-weight: 400;
+    font-family: var(--font-body);
     transition: color var(--theme-transition-duration, 400ms) ease;
 }
 
 /* ── Audio Controls ──────────────────────────────────────── */
 .audio-controls {
     width: 100%;
-    max-width: 500px;
+    max-width: 460px;
     margin: 0 auto;
-    position: relative;
-    z-index: 1;
 }
 
 .control-buttons {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 30px;
-    margin-bottom: 30px;
+    gap: 24px;
+    margin-bottom: 24px;
 }
 
 .skip-button {
@@ -233,15 +211,14 @@
     color: var(--color-ink);
     border: 1px solid var(--color-hairline);
     border-radius: var(--radius-pill);
-    padding: 12px 20px;
-    font-size: 1rem;
+    padding: 10px 18px;
+    font-size: 0.9rem;
     font-family: var(--font-body);
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     transition: all 0.3s ease;
-    backdrop-filter: blur(5px);
 }
 
 .skip-button:hover {
@@ -254,37 +231,36 @@
 .play-pause-button {
     background: var(--color-primary);
     color: var(--color-on-primary);
-    border: none;
+    border: 2px solid var(--color-hairline-soft);
     border-radius: 50%;
-    width: 80px;
-    height: 80px;
-    font-size: 1rem;
+    width: 72px;
+    height: 72px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
     box-shadow: 0 5px 20px color-mix(in srgb, var(--color-primary) 50%, transparent);
-    border: 2px solid var(--color-hairline-soft);
 }
 
 .play-pause-button:hover {
-    transform: scale(1.1);
+    transform: scale(1.08);
     background: var(--color-primary-active);
 }
 
-/* ── Progress Bar ────────────────────────────────────────── */
+/* Progress */
 .progress-container {
     width: 100%;
-    margin-bottom: 30px;
+    margin-bottom: 22px;
 }
 
 .time-display-container {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 10px;
-    font-size: 0.9rem;
+    margin-bottom: 8px;
+    font-size: 0.85rem;
     color: var(--color-muted);
+    font-family: var(--font-body);
     transition: color var(--theme-transition-duration, 400ms) ease;
 }
 
@@ -300,14 +276,11 @@
     border-radius: 3px;
     outline: none;
     cursor: pointer;
-    /* Only animate height on hover, NOT background — prevents trail desync */
     transition: height 0.2s ease;
     -webkit-transition: height 0.2s ease;
 }
 
-.progress-slider:hover {
-    height: 7px;
-}
+.progress-slider:hover { height: 7px; }
 
 .progress-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
@@ -319,7 +292,6 @@
     transition: transform 0.2s, background 0.2s;
     border: 2px solid var(--color-canvas);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    /* Ensure thumb sits on top of the gradient track */
     position: relative;
     z-index: 1;
 }
@@ -338,23 +310,24 @@
     border: 2px solid var(--color-canvas);
 }
 
-/* ── Volume Controls ─────────────────────────────────────── */
+/* Volume */
 .volume-controls {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 15px;
-    margin-bottom: 40px;
+    gap: 14px;
 }
 
 .volume-button {
     background: none;
     border: none;
     color: var(--color-muted);
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     cursor: pointer;
-    padding: 5px;
+    padding: 4px;
     transition: all 0.2s ease, color var(--theme-transition-duration, 400ms) ease;
+    display: flex;
+    align-items: center;
 }
 
 .volume-button:hover {
@@ -364,7 +337,7 @@
 
 .volume-slider {
     -webkit-appearance: none;
-    width: 120px;
+    width: 110px;
     height: 5px;
     background: linear-gradient(
         to right,
@@ -374,14 +347,11 @@
     border-radius: 3px;
     outline: none;
     cursor: pointer;
-    /* Only animate height on hover, NOT background — prevents trail desync */
     transition: height 0.2s ease;
     -webkit-transition: height 0.2s ease;
 }
 
-.volume-slider:hover {
-    height: 7px;
-}
+.volume-slider:hover { height: 7px; }
 
 .volume-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
@@ -405,41 +375,438 @@
     border: 2px solid var(--color-canvas);
 }
 
-/* ── Official Website Button ─────────────────────────────── */
-.official-website-container {
-    display: flex;
-    justify-content: center;
+/* ── Custom Language Dropdown ─────────────────────────────── */
+.lang-dd {
+    position: relative;
+    display: inline-flex;
+    flex: 0 0 auto;
 }
 
-.official-website-button {
-    background: var(--color-surface-soft);
-    color: var(--color-ink);
-    border: 1px solid var(--color-hairline);
-    border-radius: var(--radius-pill);
-    padding: 12px 25px;
-    font-size: 1rem;
-    cursor: pointer;
-    display: flex;
+.lang-dd-trigger {
+    display: inline-flex;
     align-items: center;
-    gap: 10px;
-    transition: all 0.3s;
-    backdrop-filter: blur(5px);
-}
-
-.official-website-button:hover {
+    gap: 0.55em;
     background: var(--color-primary);
     color: var(--color-on-primary);
-    transform: scale(1.05);
+    border: 1px solid color-mix(in srgb, var(--color-primary-active) 70%, transparent);
+    border-radius: var(--radius-pill);
+    padding: 7px 12px 7px 16px;
+    font-size: 0.82rem;
+    font-family: var(--font-body);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    line-height: 1;
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--color-primary) 25%, transparent);
+    transition:
+        background-color 200ms ease,
+        border-color 200ms ease,
+        box-shadow 200ms ease,
+        transform 200ms ease;
 }
 
-/* ── Responsive Design ───────────────────────────────────── */
-@media (max-width: 1024px) {
-    .text-description {
-        padding: 30px;
+.lang-dd-trigger:hover:not(:disabled) {
+    background: var(--color-primary-active);
+    border-color: var(--color-primary-active);
+    box-shadow: 0 4px 14px color-mix(in srgb, var(--color-primary) 38%, transparent);
+}
+
+.lang-dd-trigger:focus-visible {
+    outline: none;
+    box-shadow:
+        0 0 0 3px color-mix(in srgb, var(--color-primary) 30%, transparent),
+        0 2px 8px color-mix(in srgb, var(--color-primary) 25%, transparent);
+}
+
+.lang-dd-trigger:disabled {
+    background: var(--color-primary-disabled);
+    border-color: var(--color-hairline);
+    color: var(--color-muted);
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.lang-dd-label {
+    white-space: nowrap;
+}
+
+.lang-dd-chevron {
+    transition: transform 250ms ease;
+    flex: 0 0 auto;
+}
+
+.lang-dd.is-open .lang-dd-chevron {
+    transform: rotate(180deg);
+}
+
+.lang-dd-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    min-width: max(100%, 11em);
+    max-width: calc(100vw - 32px);
+    width: max-content;
+    margin: 0;
+    padding: 6px;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background: var(--color-surface-card);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-md);
+    box-shadow:
+        0 12px 32px rgba(20, 20, 19, 0.12),
+        0 4px 10px rgba(20, 20, 19, 0.06);
+    z-index: 20;
+    transform-origin: top right;
+    animation: langDdIn 160ms ease-out;
+    overflow: hidden;
+}
+
+@keyframes langDdIn {
+    from { opacity: 0; transform: translateY(-4px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.lang-dd-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 0.88rem;
+    font-family: var(--font-body);
+    color: var(--color-ink);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 150ms ease, color 150ms ease;
+}
+
+.lang-dd-option > span:first-child {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+/* On phones the longest option (Assamese) can be wider than the
+   viewport — let it wrap so the menu never overflows. */
+@media (max-width: 30em) {
+    .lang-dd-menu {
+        max-width: calc(100vw - 24px);
     }
 
-    .description-title {
-        font-size: 2rem;
+    .lang-dd-option {
+        white-space: normal;
+        word-break: break-word;
+        gap: 0.6em;
+    }
+}
+
+.lang-dd-option:hover {
+    background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+    color: var(--color-ink);
+}
+
+.lang-dd-option.is-active {
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    font-weight: 500;
+}
+
+.lang-dd-option.is-active:hover {
+    background: var(--color-primary-active);
+}
+
+/* ── Right Page — Description ────────────────────────────── */
+.right-page {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+/* Chapter Title */
+.chapter-title {
+    font: 500 1.75rem/1.2 var(--font-display);
+    letter-spacing: 0.12em;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    text-transform: uppercase;
+    color: var(--color-ink);
+    transition: color var(--theme-transition-duration, 400ms) ease;
+}
+
+/* Line + Star + Line divider */
+.chapter-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.85em;
+    margin: 0 auto 1.4em;
+    width: 100%;
+    max-width: 32em;
+    color: var(--color-primary);
+}
+
+.chapter-divider-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(
+        to var(--dir, right),
+        transparent 0%,
+        var(--color-ink) 100%
+    );
+    opacity: 0.55;
+}
+
+.chapter-divider-line:first-child {
+    --dir: right;
+}
+
+.chapter-divider-line:last-child {
+    background: linear-gradient(
+        to right,
+        var(--color-ink) 0%,
+        transparent 100%
+    );
+    opacity: 0.55;
+}
+
+.chapter-divider-star {
+    font-size: 1.1rem;
+    line-height: 1;
+    color: var(--color-primary);
+    flex: 0 0 auto;
+    transform: translateY(-1px);
+}
+
+/* Body Copy */
+.description-content {
+    line-height: 1.45;
+    font-size: 1rem;
+    color: var(--color-body);
+    width: 100%;
+    text-align: justify;
+    hyphens: auto;
+    transition: color var(--theme-transition-duration, 400ms) ease;
+}
+
+.description-content > p {
+    margin: 0 0 0.7em 0;
+    text-indent: 0;
+}
+
+.description-content > p:last-child {
+    margin-bottom: 0;
+}
+
+/* ── Book Footer (Page Numbers) ──────────────────────────── */
+.book-footer {
+    padding-top: 1em;
+}
+
+.book-footer #page-numbers {
+    display: none;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font: 500 0.85rem/1 var(--font-display);
+    letter-spacing: 0.18em;
+    color: var(--color-muted);
+}
+
+/* ── Laptop / Desktop — Open-Book Chrome (≥ 1024px) ───────── */
+@media only screen and (min-width: 64em) {
+    .audio-player-container {
+        padding: 100px 30px 40px;
+    }
+
+    .open-book {
+        margin: 0;
+        padding: 2.5em 3em;
+        box-shadow:
+            0 0 0 1px rgba(0, 0, 0, 0.18),
+            0 1em 3em rgba(0, 0, 0, 0.18);
+    }
+
+    /* Central binding spine — constrained to book height */
+    .open-book::after {
+        background: linear-gradient(
+            to right,
+            transparent 0%,
+            rgba(0, 0, 0, 0.18) 46%,
+            rgba(0, 0, 0, 0.42) 49%,
+            rgba(0, 0, 0, 0.5) 50%,
+            rgba(0, 0, 0, 0.42) 51%,
+            rgba(0, 0, 0, 0.18) 52%,
+            transparent 100%
+        );
+        top: 0;
+        bottom: 0;
+        content: '';
+        left: 50%;
+        position: absolute;
+        transform: translate(-50%, 0);
+        width: 4em;
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    /* Two-column spread */
+    .book-spread {
+        grid-template-columns: 1fr 1fr;
+        column-gap: 6em;
+        gap: 0;
+    }
+
+    /* Vertical hairline between the two pages (subtle paper crease) */
+    .book-spread::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        width: 1px;
+        background: color-mix(in srgb, var(--color-hairline) 60%, transparent);
+        pointer-events: none;
+    }
+
+    /* Peeked page corners — footer only (header was removed) */
+    .book-footer::before,
+    .book-footer::after {
+        background: var(--color-surface-card);
+        border-radius: 25%;
+        content: '';
+        height: 2em;
+        position: absolute;
+        z-index: -1;
+        width: calc(50% + 2em);
+        transition: background-color var(--theme-transition-duration, 400ms) ease;
+    }
+
+    .book-footer::before,
+    .book-footer::after { border-top-left-radius: 0; }
+
+    .book-footer::before,
+    .book-footer::after { border-top-right-radius: 0; }
+
+    .book-footer::after { border-bottom-right-radius: 0; }
+
+    .book-footer::before { border-bottom-left-radius: 0; }
+
+    .book-footer::before { right: 50%; }
+
+    .book-footer::after { left: 50%; }
+
+    .book-footer::before,
+    .book-footer::after { bottom: -2.65em; }
+
+    .book-footer::before { transform: rotate(2deg); }
+
+    .book-footer::after { transform: rotate(-2deg); }
+
+    /* Page-top-row mirrors the spread columns; both pages
+       share the same baseline so the title (right) and the
+       language dropdown (left) start at the same vertical line */
+    .left-page .page-top-row,
+    .right-page .page-top-row {
+        min-height: 44px;
+    }
+
+    .book-title {
+        font-size: 0.95rem;
+    }
+
+    /* Chapter Title — larger at desktop */
+    .chapter-title {
+        font-size: 2.25rem;
+    }
+
+    .chapter-divider {
+        margin-bottom: 1.6em;
+    }
+
+    .chapter-divider-star {
+        font-size: 1.25rem;
+    }
+
+    /* Page numbers */
+    .book-footer {
+        padding: 1em 0.5em 0;
+    }
+
+    .book-footer #page-numbers {
+        display: flex;
+        justify-content: space-between;
+        font-size: 1rem;
+    }
+}
+
+/* ── Wider screens — bump display sizing ─────────────────── */
+@media only screen and (min-width: 90em) {
+    .chapter-title { font-size: 2.6rem; }
+    .book-title { font-size: 1.05rem; }
+    .description-content { font-size: 1.05rem; }
+    .open-book { padding: 3em 4em; }
+    .book-spread { column-gap: 7em; }
+    .chapter-divider-star { font-size: 1.4rem; }
+}
+
+/* ── Tablet & Mobile — Drop book chrome, stack as cards ──── */
+@media (max-width: 63.999em) {
+    .audio-player-container {
+        padding: 120px 20px 20px;
+    }
+
+    .open-book {
+        background: transparent;
+        padding: 0;
+        box-shadow: none;
+        border-radius: 0;
+        max-width: 800px;
+    }
+
+    .book-header {
+        padding: 0 0.25em 1em;
+    }
+
+    .book-title {
+        font-size: 0.8rem;
+    }
+
+    .book-spread {
+        gap: 1.25em;
+    }
+
+    .left-page,
+    .right-page {
+        background: var(--color-surface-card);
+        border-radius: var(--radius-lg);
+        padding: 2em 1.5em;
+        box-shadow:
+            0 0 0 1px var(--color-hairline),
+            0 6px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    .exhibit-thumbnail-button {
+        margin-bottom: 1.25em;
+    }
+
+    .exhibit-thumbnail {
+        width: 200px;
+        height: 200px;
+    }
+
+    .exhibit-title { font-size: 1.5rem; }
+    .exhibit-subtitle { font-size: 0.95rem; }
+
+    .chapter-title {
+        font-size: 1.7rem;
+    }
+
+    .chapter-divider {
+        margin-bottom: 1.2em;
     }
 
     .description-content {
@@ -447,71 +814,383 @@
     }
 }
 
-@media (max-width: 768px) {
-    .audio-player-container {
-        flex-direction: column;
-        height: auto;
-        min-height: 100vh;
-        padding: 15px;
-    }
+/* ── Phone — tighter spacing ──────────────────────────────── */
+@media (max-width: 30em) {
+    .audio-player-container { padding: 110px 16px 16px; }
 
-    .text-description {
-        border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-        margin-left: 0;
-        margin-top: 2px;
-        padding: 30px 20px;
-    }
-
-    .audio-player {
-        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-        padding: 30px 20px;
+    .left-page,
+    .right-page {
+        padding: 1.5em 1.25em;
     }
 
     .exhibit-thumbnail {
-        width: 180px;
-        height: 180px;
+        width: 160px;
+        height: 160px;
     }
 
-    .control-buttons {
-        gap: 20px;
-    }
+    .exhibit-title { font-size: 1.35rem; }
+    .exhibit-subtitle { font-size: 0.9rem; }
 
-    .language-selector {
-        top: 15px;
-        right: 15px;
-    }
-
-    .language-dropdown {
-        padding: 6px 12px;
-        font-size: 0.8rem;
-    }
-
-    .description-content {
-        text-align: justify;
-        padding: 2%;
-    }
-}
-
-@media (max-width: 480px) {
-    .audio-player-container {
-        padding-top: 120px;
-    }
-
-    .description-title {
-        font-size: 1.8rem;
-    }
-
-    .exhibit-thumbnail {
-        width: 150px;
-        height: 150px;
-    }
+    .control-buttons { gap: 16px; }
 
     .play-pause-button {
-        width: 70px;
-        height: 70px;
+        width: 60px;
+        height: 60px;
     }
 
     .skip-button {
-        padding: 10px 15px;
+        padding: 8px 14px;
+        font-size: 0.85rem;
+    }
+
+    .chapter-title {
+        font-size: 1.5rem;
+    }
+
+    .chapter-divider-star {
+        font-size: 1rem;
+    }
+
+    .description-content {
+        font-size: 0.95rem;
+    }
+}
+
+/* ── Image Modal Viewer ───────────────────────────────────── */
+.image-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5vh 24px;
+    background: color-mix(in srgb, var(--color-surface-dark) 88%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    animation: imageModalFadeIn 200ms ease-out;
+    cursor: zoom-out;
+}
+
+@keyframes imageModalFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.image-modal-figure {
+    position: relative;
+    margin: 0;
+    max-width: min(1400px, calc(100vw - 48px));
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    cursor: default;
+    animation: imageModalScaleIn 240ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes imageModalScaleIn {
+    from { opacity: 0; transform: scale(0.96); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+.image-modal-image {
+    display: block;
+    max-width: 100%;
+    max-height: 80vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: var(--radius-md);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 40%, transparent);
+    box-shadow:
+        0 24px 64px rgba(0, 0, 0, 0.5),
+        0 8px 20px rgba(0, 0, 0, 0.35);
+    background: var(--color-surface-card);
+}
+
+.image-modal-caption {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    text-align: center;
+    color: var(--color-on-dark);
+    font-family: var(--font-body);
+    max-width: 100%;
+    padding: 0 8px;
+}
+
+.image-modal-caption-title {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--color-on-dark);
+}
+
+.image-modal-caption-subtitle {
+    font-size: 0.88rem;
+    color: var(--color-on-dark-soft);
+    letter-spacing: 0.04em;
+}
+
+.image-modal-close {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1001;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid color-mix(in srgb, var(--color-on-dark) 30%, transparent);
+    background: color-mix(in srgb, var(--color-surface-dark) 70%, transparent);
+    color: var(--color-on-dark);
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transition:
+        background-color 200ms ease,
+        border-color 200ms ease,
+        transform 200ms ease;
+}
+
+.image-modal-close:hover {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-on-primary);
+    transform: scale(1.05);
+}
+
+.image-modal-close:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 45%, transparent);
+}
+
+@media (max-width: 30em) {
+    .image-modal-backdrop { padding: 4vh 12px; }
+    .image-modal-image { max-height: 72vh; }
+    .image-modal-caption-title { font-size: 1rem; }
+    .image-modal-caption-subtitle { font-size: 0.82rem; }
+    .image-modal-close {
+        top: 12px;
+        right: 12px;
+        width: 40px;
+        height: 40px;
+    }
+}
+
+/* ── Mini Audio Bar (mobile/tablet, scroll-triggered) ─────── */
+.mini-audio-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 64px;                 /* clears MobileBottomNav */
+    z-index: 65;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px 18px;
+    min-height: 84px;
+    background: var(--color-surface-card);
+    border-top: 1px solid var(--color-hairline);
+    box-shadow: 0 -10px 28px rgba(0, 0, 0, 0.14);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    animation: miniBarIn 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition:
+        background-color var(--theme-transition-duration, 400ms) ease,
+        color var(--theme-transition-duration, 400ms) ease,
+        border-color var(--theme-transition-duration, 400ms) ease;
+}
+
+/* Top progress bar — thicker than MobileBottomNav's 2px top border */
+.mini-audio-bar::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: -1px;
+    height: 4px;
+    width: var(--mini-progress, 0%);
+    background: var(--color-primary);
+    border-radius: 0 2px 2px 0;
+    transition: width 100ms linear;
+    z-index: 1;
+}
+
+@keyframes miniBarIn {
+    from { transform: translateY(100%); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+}
+
+.mini-audio-bar-thumb {
+    width: 48px;
+    height: 48px;
+    flex: 0 0 auto;
+    border-radius: var(--radius-sm);
+    object-fit: cover;
+    border: 1px solid var(--color-hairline);
+}
+
+.mini-audio-bar-text {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.mini-audio-bar-title {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--color-ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mini-audio-bar-time {
+    font-size: 0.75rem;
+    color: var(--color-muted);
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
+}
+
+.mini-audio-bar-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 0 0 auto;
+}
+
+.mini-audio-bar-skip,
+.mini-audio-bar-playpause {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    cursor: pointer;
+    border-radius: 50%;
+    transition:
+        background-color 180ms ease,
+        color 180ms ease,
+        transform 180ms ease;
+}
+
+.mini-audio-bar-skip {
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    color: var(--color-ink);
+}
+
+.mini-audio-bar-skip:hover {
+    background: color-mix(in srgb, var(--color-primary) 14%, transparent);
+    color: var(--color-primary);
+}
+
+.mini-audio-bar-skip:active {
+    transform: scale(0.94);
+}
+
+.mini-audio-bar-playpause {
+    width: 48px;
+    height: 48px;
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--color-primary) 35%, transparent);
+}
+
+.mini-audio-bar-playpause:hover {
+    background: var(--color-primary-active);
+}
+
+.mini-audio-bar-playpause:active {
+    transform: scale(0.94);
+}
+
+/* Reserve scroll room at the bottom so page content (footer, last
+   description line) doesn't get hidden beneath the mini bar.
+   Total reserved = nav (64px) + bar (~84px) + breathing room. */
+body:has(.mini-audio-bar) {
+    padding-bottom: 96px;
+}
+
+/* Floating buttons (FloatingQRButton, Chatbot) live in BaseLayout.
+   They use Tailwind bottom-* utilities. Add an explicit transition
+   so they slide up/down in sync with the mini bar's slide animation
+   instead of jumping. Both selectors below match the mobile-only
+   anchor classes used by those buttons. */
+.fixed.bottom-22,
+.fixed.bottom-38 {
+    transition: bottom 240ms cubic-bezier(0.2, 0.8, 0.2, 1),
+                background-color 0.3s ease,
+                transform 0.3s ease;
+}
+
+/* Lift floating buttons above the mini bar when it's visible.
+   Mini bar is ~84px tall and sits at bottom: 64px (nav) — push
+   each button up by the bar height so they land just above it. */
+body:has(.mini-audio-bar) .fixed.bottom-22 {
+    bottom: calc(88px + 84px);   /* QR button: original 88px + bar */
+}
+
+body:has(.mini-audio-bar) .fixed.bottom-38 {
+    bottom: calc(152px + 84px);  /* Chatbot button: original 152px + bar */
+}
+
+/* Hide mini bar on the open-book layout */
+@media only screen and (min-width: 64em) {
+    .mini-audio-bar { display: none !important; }
+    body:has(.mini-audio-bar) { padding-bottom: 0; }
+    body:has(.mini-audio-bar) .fixed.bottom-22,
+    body:has(.mini-audio-bar) .fixed.bottom-38 { bottom: inherit; }
+}
+
+/* Phone — drop the time row so transport buttons keep room */
+@media (max-width: 30em) {
+    .mini-audio-bar {
+        gap: 12px;
+        padding: 12px 14px 16px;
+        min-height: 78px;
+    }
+
+    .mini-audio-bar-thumb {
+        width: 44px;
+        height: 44px;
+    }
+
+    .mini-audio-bar-time { display: none; }
+
+    .mini-audio-bar-title { font-size: 0.92rem; }
+
+    .mini-audio-bar-controls { gap: 4px; }
+
+    .mini-audio-bar-skip {
+        width: 38px;
+        height: 38px;
+    }
+
+    .mini-audio-bar-playpause {
+        width: 44px;
+        height: 44px;
+    }
+
+    body:has(.mini-audio-bar) {
+        padding-bottom: 90px;
+    }
+
+    body:has(.mini-audio-bar) .fixed.bottom-22 {
+        bottom: calc(88px + 78px);
+    }
+
+    body:has(.mini-audio-bar) .fixed.bottom-38 {
+        bottom: calc(152px + 78px);
     }
 }
