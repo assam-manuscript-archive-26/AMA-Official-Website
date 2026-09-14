@@ -9,6 +9,7 @@ interface MobileBottomNavProps {
 const primaryNavItems = [
   { href: '/', label: 'Home', icon: Home },
   { href: '/collections', label: 'Collections', icon: Layers },
+  { href: '/picture-gallery', label: 'Gallery', icon: Layers },
   { href: '/events', label: 'Events', icon: Calendar },
   { href: '/feedback', label: 'Feedback', icon: Handshake },
 ];

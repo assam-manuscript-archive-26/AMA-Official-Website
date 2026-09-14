@@ -66,6 +66,7 @@ interface CollectionsSearchBarProps {
   handleSearch: () => void;
   showPrompt?: boolean;
   collectionsData?: CollectionItem[];
+  onSuggestionSelect?: (suggestion: string) => void;
 }
 
 const CollectionsSearchBar: React.FC<CollectionsSearchBarProps> = ({
@@ -74,6 +75,7 @@ const CollectionsSearchBar: React.FC<CollectionsSearchBarProps> = ({
   handleSearch,
   showPrompt = false,
   collectionsData = [],
+  onSuggestionSelect,
 }) => {
   const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
   const searchRef = useRef<HTMLDivElement>(null);
@@ -133,6 +135,12 @@ const CollectionsSearchBar: React.FC<CollectionsSearchBarProps> = ({
   const handleSuggestionClick = (suggestion: string) => {
     setSearchQuery(suggestion);
     setFilteredSuggestions([]);
+
+    if (onSuggestionSelect) {
+      onSuggestionSelect(suggestion);
+      return;
+    }
+
     window.location.href = `/collections?search=${encodeURIComponent(suggestion)}`;
   };
 

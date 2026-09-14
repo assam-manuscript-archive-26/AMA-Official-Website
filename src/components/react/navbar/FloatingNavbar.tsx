@@ -19,6 +19,7 @@ interface Props {
 const navLinks = [
   { label: 'HOME', href: '/' },
   { label: 'COLLECTIONS', href: '/collections' },
+  { label: 'GALLERY', href: '/picture-gallery' },
   { label: 'EVENTS', href: '/events' },
   { label: 'RESOURCES', href: '/resources' },
   { label: 'VISIT', href: '/visit' },
@@ -29,6 +30,7 @@ const navLinks = [
 const mobilePrimaryLinks = [
   { label: 'Home', href: '/' },
   { label: 'Collections', href: '/collections' },
+  { label: 'Gallery', href: '/picture-gallery' },
   { label: 'Events', href: '/events' },
   { label: 'Feedback', href: '/feedback' },
 ];

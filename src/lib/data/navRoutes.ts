@@ -1,9 +1,12 @@
 export const navRoutes = [
+  { label: 'Home', href: '/', icon: 'Home' },
   { label: 'Collections', href: '/collections', icon: 'Gallery' },
-  { label: 'Visit', href: '/visit', icon: 'MapPin' },
+  { label: 'Gallery', href: '/picture-gallery', icon: 'Image' },
   { label: 'Events', href: '/events', icon: 'Calendar' },
+  { label: 'Resources', href: '/resources', icon: 'FileText' },
+  { label: 'Visit', href: '/visit', icon: 'MapPin' },
+  { label: 'Feedback', href: '/feedback', icon: 'MessageSquare' },
   { label: 'About', href: '/about', icon: 'Info' },
-  { label: 'Audio Guide', href: '/audioplayer', icon: 'Headphones' },
 ];
 
 export const adminNavRoutes = [
