@@ -162,6 +162,21 @@ export default function PictureGalleryPage() {
               </div>
             ) : (
               <>
+                {filteredItems.length > 5 && (
+                  <div className="flex justify-end items-end mb-6">
+                    <button
+                      type="button"
+                      onClick={() => setShowAll((prev) => !prev)}
+                      className="text-sm sm:text-lg font-bold underline cursor-pointer transition-colors"
+                      style={{
+                        color: 'var(--color-primary)',
+                      }}
+                    >
+                      {showAll ? 'Show Less' : 'See More'}
+                    </button>
+                  </div>
+                )}
+
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-5">
                   {visibleItems.map((item) => (
                     <button
@@ -218,22 +233,6 @@ export default function PictureGalleryPage() {
                   ))}
                 </div>
 
-                {filteredItems.length > 5 && (
-                  <div className="flex justify-center mt-8 mb-4">
-                    <button
-                      type="button"
-                      onClick={() => setShowAll((prev) => !prev)}
-                      className="font-bold uppercase tracking-[0.12em] px-6 py-3 rounded-full border transition-colors"
-                      style={{
-                        color: 'var(--color-primary)',
-                        borderColor: 'var(--color-primary)',
-                        backgroundColor: 'transparent',
-                      }}
-                    >
-                      {showAll ? 'Show Less' : 'See More'}
-                    </button>
-                  </div>
-                )}
               </>
             )}
           </div>
