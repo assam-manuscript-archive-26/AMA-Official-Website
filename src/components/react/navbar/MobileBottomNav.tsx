@@ -9,7 +9,6 @@ interface MobileBottomNavProps {
 const primaryNavItems = [
   { href: '/', label: 'Home', icon: Home },
   { href: '/collections', label: 'Collections', icon: Layers },
-  { href: '/picture-gallery', label: 'Gallery', icon: Layers },
   { href: '/events', label: 'Events', icon: Calendar },
   { href: '/feedback', label: 'Feedback', icon: Handshake },
 ];
@@ -18,6 +17,7 @@ const secondaryNavItems = [
   { href: '/resources', label: 'Resources', icon: Info },
   { href: '/visit', label: 'Visit', icon: Compass },
   { href: '/about', label: 'About Us', icon: User },
+  { href: '/picture-gallery', label: 'Gallery', icon: Layers },
 ];
 
 const themeColors = {
