@@ -1,23 +1,40 @@
-# Robots.txt for Assamese Manuscript Archive
+# Robots.txt for Assamese Manuscript Archive & Samaguri Satra
 # https://assammanuscriptarchive.com
 
 User-agent: *
 Allow: /
 
-# Disallow admin pages
+# Protected administration routes
 Disallow: /admin/
 Disallow: /admin
-
-# Disallow login page
 Disallow: /login
 
-# Sitemap location
-Sitemap: https://assammanuscriptarchive.com/sitemap.xml
+# AI Search & Retrieval Crawlers (Explicitly Allowed for GEO/AEO Citations)
+User-agent: GPTBot
+Allow: /
+Disallow: /admin/
+Disallow: /login
 
-# Crawl-delay (optional, for politeness)
-Crawl-delay: 1
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /admin/
+Disallow: /login
 
-# User-agent specific rules
+User-agent: PerplexityBot
+Allow: /
+Disallow: /admin/
+Disallow: /login
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /admin/
+Disallow: /login
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /admin/
+Disallow: /login
+
 User-agent: Googlebot
 Allow: /
 Disallow: /admin/
@@ -28,12 +45,9 @@ Allow: /
 Disallow: /admin/
 Disallow: /login
 
-# Block common scrapers
-User-agent: AhrefsBot
-Disallow: /
-
-User-agent: SemrushBot
-Disallow: /
-
+# Block malicious or resource-exhausting generic scrapers while preserving search bots
 User-agent: MJ12bot
 Disallow: /
+
+# XML Sitemap location
+Sitemap: https://assammanuscriptarchive.com/sitemap.xml

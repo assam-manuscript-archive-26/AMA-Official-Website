@@ -126,14 +126,14 @@ const VisitPage = () => {
 
             {/* Header */}
             <div className="max-w-4xl mx-auto text-center mb-8">
-                <h2
+                <h1
                     className="text-4xl mb-4"
                     style={{ fontFamily: 'var(--font-display)', fontWeight: 500, color: 'var(--color-ink)' }}
                 >
-                    Visit Assamese Manuscript Archive
-                </h2>
-                <p style={{ color: 'var(--color-body)', maxWidth: '600px', margin: '0 auto' }}>
-                    Step into history and explore ancient manuscripts. Contact us for guided tours, research access, or any inquiries.
+                    Visit Samaguri Satra &amp; Assamese Manuscript Archive
+                </h1>
+                <p style={{ color: 'var(--color-body)', maxWidth: '650px', margin: '0 auto' }}>
+                    Step into living history and explore sacred manuscripts and mask-making traditions. Plan your guided visit, research consultation, or general inquiry.
                 </p>
             </div>
 
@@ -163,7 +163,7 @@ const VisitPage = () => {
                         Address
                     </h3>
                     <p className="text-sm" style={{ color: 'var(--color-body)' }}>
-                        Assamese Manuscript Archive, Majuli, Assam, India
+                        Samaguri Satra, Kaliabor / Majuli, Assam, India
                     </p>
                 </button>
 
@@ -225,37 +225,25 @@ const VisitPage = () => {
                 </button>
             </div>
 
-            {/* Virtual Tour Button */}
-            {/*
-            <div className="max-w-4xl mx-auto mb-6">
-                <a href="/map" style={{ textDecoration: 'none' }}>
-                    <button
-                        className="w-full flex items-center justify-center gap-2 py-3 text-lg transition-all"
-                        style={{
-                            border: '1px solid var(--color-primary)',
-                            color: 'var(--color-primary)',
-                            borderRadius: 'var(--radius-lg)',
-                            backgroundColor: 'var(--color-canvas)',
-                            fontFamily: 'var(--font-body)',
-                            fontWeight: 500,
-                            cursor: 'pointer',
-                        }}
-                        onMouseEnter={(e) => {
-                            cursorRef.current?.startAnimation();
-                            e.currentTarget.style.backgroundColor = 'var(--color-primary)';
-                            e.currentTarget.style.color = 'var(--color-on-primary)';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = 'var(--color-canvas)';
-                            e.currentTarget.style.color = 'var(--color-primary)';
-                        }}
-                    >
-                        Virtual Tour
-                        <CursorClickIcon ref={cursorRef} className="w-3 h-3" />
-                    </button>
-                </a>
+            {/* Visitor Timings and Entry Fee Card */}
+            <div className="max-w-4xl mx-auto mb-8 p-6 bg-[var(--color-surface-soft)] rounded-2xl border border-[var(--color-hairline)] grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                <div className="flex items-start gap-3">
+                    <span className="p-2 rounded-lg bg-[var(--color-primary)] text-white text-base">🕒</span>
+                    <div>
+                        <h4 className="font-semibold text-[var(--color-ink)] text-base mb-1">Visiting Hours</h4>
+                        <p className="text-[var(--color-body)]"><strong>07:00 AM – 05:00 PM</strong></p>
+                        <p className="text-[var(--color-muted)] text-xs">Open Monday through Sunday (All 7 Days)</p>
+                    </div>
+                </div>
+                <div className="flex items-start gap-3">
+                    <span className="p-2 rounded-lg bg-[var(--color-primary)] text-white text-base">🎟️</span>
+                    <div>
+                        <h4 className="font-semibold text-[var(--color-ink)] text-base mb-1">Entry Fee</h4>
+                        <p className="text-[var(--color-body)]"><strong>Free Admission</strong></p>
+                        <p className="text-[var(--color-muted)] text-xs">Voluntary donations or purchases of local crafts optional</p>
+                    </div>
+                </div>
             </div>
-            */}
 
             {/* Map and Contact Form */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
@@ -270,11 +258,11 @@ const VisitPage = () => {
                 >
                     <div className="relative w-full h-full min-h-[400px]">
                         <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3556.175674385524!2d94.2642826!3d26.961335599999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3746d051e36cc7e1%3A0x54f05820a3b56d9e!2sSri%20Sri%20Samaguri%20Satra(Majuli)!5e0!3m2!1sen!2sin!4v1779794988725!5m2!1sen!2sin"
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3568.7346806662213!2d92.93105078688811!3d26.560790115471676!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3744e5ac8cf4007b%3A0x5aeba22814c9798a!2sSamaguri%20Satra%20Kaliabor!5e0!3m2!1sen!2sin!4v1790780700752!5m2!1sen!2sin"
                             className="absolute inset-0 w-full h-full border-0"
                             allowFullScreen
                             loading="lazy"
-                            referrerPolicy="no-referrer-when-downgrade"
+                            referrerPolicy="strict-origin-when-cross-origin"
                         />
                     </div>
                 </div>

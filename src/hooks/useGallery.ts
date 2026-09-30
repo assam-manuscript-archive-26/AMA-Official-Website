@@ -3,7 +3,7 @@ import { getAllGalleryItems } from '../backend/actions/gallery';
 
 export interface GalleryItem {
   id: string;
-  title: string;
+  title?: string;
   category: string;
   imageUrl: string;
   accent?: string;

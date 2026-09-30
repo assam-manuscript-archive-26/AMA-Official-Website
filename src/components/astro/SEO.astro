@@ -8,50 +8,120 @@ interface Props {
   type?: string;
   noIndex?: boolean;
   noFollow?: boolean;
+  schema?: Record<string, any> | Array<Record<string, any>>;
 }
 
 const {
   title = 'Assamese Manuscript Archive',
-  description = 'Digital archive of Assamese manuscript paintings - preserving the cultural heritage of Assam through digital preservation of ancient manuscripts and paintings from Majuli and Sattras.',
-  keywords = 'Assamese manuscripts, manuscript painting, Sattra, Majuli, Assam culture, Vaishnavite manuscripts, ancient manuscripts, digital archive, cultural heritage',
+  description = 'Digital archive of Assamese manuscript paintings and Vaishnavite art - preserving sacred Sanchipat manuscripts, cultural heritage, and mask traditions from Samaguri Satra, Majuli.',
+  keywords = 'Assamese manuscripts, manuscript painting, Samaguri Satra, Chamaguri Satra, Majuli, Assam culture, Vaishnavite manuscripts, Sanchipat, Mukha Shilpa, digital archive, cultural heritage',
   image = '/assets/logo/og-image.png',
   url = '',
   type = 'website',
   noIndex = false,
-  noFollow = false
+  noFollow = false,
+  schema
 } = Astro.props;
 
-const canonicalURL = new URL(url, Astro.site || 'https://assammanuscriptarchive.com');
-const socialImageURL = new URL(image, Astro.site || 'https://assammanuscriptarchive.com');
+// Determine canonical URL, maintaining search parameters for content items (e.g. ?id=...)
+const rawUrl = url || (Astro.url.pathname + (Astro.url.search || ''));
+const siteBase = Astro.site || 'https://assammanuscriptarchive.com';
+const canonicalURL = new URL(rawUrl, siteBase);
+const socialImageURL = new URL(image, siteBase);
 
 const robots = [
   noIndex ? 'noindex' : 'index',
   noFollow ? 'nofollow' : 'follow'
 ].join(', ');
 
+// Base schema graph for all pages
+const baseSchemaGraph: Record<string, any>[] = [
+  {
+    "@type": "EducationalOrganization",
+    "@id": "https://assammanuscriptarchive.com/#organization",
+    "name": "Assamese Manuscript Archive",
+    "alternateName": "Samaguri Satra Digital Heritage Archive",
+    "url": "https://assammanuscriptarchive.com",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://assammanuscriptarchive.com/assets/logo/logo.png",
+      "caption": "Assamese Manuscript Archive Logo"
+    },
+    "description": "Collaborative project by Girijananda Chowdhury University (GCU) and Samaguri Satra, funded by ASTEC under the ITGA scheme.",
+    "telephone": "+91 98765 43210",
+    "email": "info@assammanuscriptarchive.com",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Majuli",
+      "addressRegion": "Assam",
+      "postalCode": "785110",
+      "addressCountry": "IN"
+    },
+    "sameAs": [
+      "https://www.instagram.com/gcu_assam/",
+      "https://www.facebook.com/gcuniversityassam/"
+    ],
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+91 98765 43210",
+      "contactType": "cultural inquiries and guided visits",
+      "availableLanguage": ["English", "Assamese", "Hindi"]
+    }
+  },
+  {
+    "@type": "WebSite",
+    "@id": "https://assammanuscriptarchive.com/#website",
+    "url": "https://assammanuscriptarchive.com",
+    "name": "Assamese Manuscript Archive",
+    "publisher": {
+      "@id": "https://assammanuscriptarchive.com/#organization"
+    },
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://assammanuscriptarchive.com/search?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  },
+  {
+    "@type": "TouristAttraction",
+    "@id": "https://assammanuscriptarchive.com/#samaguri-satra",
+    "name": "Samaguri Satra (Chamaguri Satra)",
+    "description": "Historical 17th-century Neo-Vaishnavite monastery in Majuli, Assam, world-renowned for traditional mask-making (Mukha Shilpa) and ancient manuscript heritage.",
+    "url": "https://assammanuscriptarchive.com/visit",
+    "isAccessibleForFree": true,
+    "telephone": "+91 98765 43210",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Samaguri Satra",
+      "addressLocality": "Majuli",
+      "addressRegion": "Assam",
+      "postalCode": "785110",
+      "addressCountry": "IN"
+    },
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+        ],
+        "opens": "07:00",
+        "closes": "17:00"
+      }
+    ]
+  }
+];
+
+if (schema) {
+  if (Array.isArray(schema)) {
+    baseSchemaGraph.push(...schema);
+  } else {
+    baseSchemaGraph.push(schema);
+  }
+}
+
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "Assamese Manuscript Archive",
-  "url": "https://assammanuscriptarchive.com",
-  "logo": "https://assammanuscriptarchive.com/assets/logo/logo.svg",
-  "description": description,
-  "address": {
-    "@type": "PostalAddress",
-    "addressLocality": "Majuli",
-    "addressRegion": "Assam",
-    "addressCountry": "IN"
-  },
-  "sameAs": [
-    "https://facebook.com/assamesemanuscriptarchive",
-    "https://instagram.com/assamesemanuscriptarchive",
-    "https://twitter.com/assamesemanuscriptarchive"
-  ],
-  "contactPoint": {
-    "@type": "ContactPoint",
-    "contactType": "customer service",
-    "availableLanguage": ["English", "Hindi", "Assamese"]
-  }
+  "@graph": baseSchemaGraph
 };
 ---
 
@@ -60,7 +130,7 @@ const jsonLd = {
 <meta name="description" content={description} />
 <meta name="keywords" content={keywords} />
 <meta name="robots" content={robots} />
-<meta name="author" content="Assamese Manuscript Archive" />
+<meta name="author" content="Assamese Manuscript Archive & Samaguri Satra" />
 <meta name="generator" content="Astro" />
 
 <!-- Canonical URL -->
@@ -75,7 +145,7 @@ const jsonLd = {
 <meta property="og:site_name" content="Assamese Manuscript Archive" />
 <meta property="og:locale" content="en_IN" />
 
-<!-- Twitter -->
+<!-- Twitter Card -->
 <meta property="twitter:card" content="summary_large_image" />
 <meta property="twitter:url" content={canonicalURL.href} />
 <meta property="twitter:title" content={title} />

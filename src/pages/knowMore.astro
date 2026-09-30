@@ -7,16 +7,36 @@ import { getArticleById } from '../data/knowMoreData';
 const id = Astro.url.searchParams.get('id');
 const article = id ? getArticleById(id) : undefined;
 
-const pageTitle = article ? article.title : "Learn More";
-const pageDescription = article ? article.excerpt : "Discover the history of Majuli, Sattras, and Assamese manuscript painting traditions. Learn about the rich cultural heritage of Assam's monastic institutions.";
+const pageTitle = article ? article.title : "Assamese Heritage & Manuscript Traditions | Learn More";
+const pageDescription = article ? article.excerpt : "Discover the history of Majuli, Sattras, Sanchipat folios, and Assamese manuscript painting traditions. Learn about the rich cultural heritage of Assam's monastic institutions.";
+
+const articleSchema = article ? {
+  "@type": "Article",
+  "headline": article.title,
+  "description": article.excerpt,
+  "author": {
+    "@type": "EducationalOrganization",
+    "name": "Assamese Manuscript Archive Project",
+    "url": "https://assammanuscriptarchive.com"
+  },
+  "publisher": {
+    "@type": "EducationalOrganization",
+    "name": "Girijananda Chowdhury University & Samaguri Satra",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://assammanuscriptarchive.com/assets/logo/logo.png"
+    }
+  },
+  "inLanguage": "en",
+  "url": `https://assammanuscriptarchive.com/knowMore?id=${article.id}`
+} : undefined;
 ---
 
 <BaseLayout
   title={pageTitle}
   description={pageDescription}
-  keywords="learn more, Majuli history, Sattra traditions, manuscript painting history, Vaishnavite culture, Assamese cultural heritage, Sankardeva, Madhavdeva"
+  keywords="Majuli history, Samaguri Sattra traditions, Sanchipat manuscript painting, Vaishnavite culture, Assamese cultural heritage, Srimanta Sankardeva, Madhavdeva, Mukha Shilpa"
+  schema={articleSchema ? [articleSchema] : undefined}
 >
   {id ? <KnowMorePage client:load /> : <KnowMoreCollections client:load />}
 </BaseLayout>
-
-

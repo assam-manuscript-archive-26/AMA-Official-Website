@@ -196,10 +196,10 @@ const CollectionsPage: React.FC = () => {
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-5">
                   {displayedItems.map((item) => (
-                    <div
+                    <a
                       key={item.name}
-                      onClick={() => handleArtifactClick(item.id)}
-                      className="block cursor-pointer"
+                      href={`/audioplayer?id=${item.id}`}
+                      className="block cursor-pointer no-underline"
                     >
                       <div
                         className="relative group rounded-xl overflow-hidden w-full h-[280px] sm:h-[300px]
@@ -280,7 +280,7 @@ const CollectionsPage: React.FC = () => {
                           </p>
                         </div>
                       </div>
-                    </div>
+                    </a>
                   ))}
                 </div>
               </section>

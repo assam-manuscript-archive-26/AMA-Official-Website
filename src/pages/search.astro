@@ -5,26 +5,26 @@ import CollectionGrid from '../components/react/sections/CollectionGrid';
 ---
 
 <BaseLayout
-  title="Search"
-  description="Search our collection of Assamese manuscripts and paintings. Find by keywords, artists, time periods, or Sattras."
-  keywords="search, find manuscripts, search collection, keyword search, artist search, manuscript database, painting search, Sattra search"
+  title="Search Manuscripts & Collections | Assamese Manuscript Archive"
+  description="Search across ancient Assamese manuscripts, Sanchipat paintings, Sattra cultural records, and audio guides by title, category, or historical period."
+  keywords="search manuscripts, find Assamese paintings, Sanchipat search, Sattra database, ancient scripture search, Samaguri Satra collection search"
 >
   <section className="py-24 px-6">
     <div className="max-w-7xl mx-auto">
-      <h1 className="font-display text-5xl text-ink text-center mb-8">Search</h1>
+      <h1 className="font-display text-5xl text-ink text-center mb-8">Search Catalog &amp; Archives</h1>
 
       <div className="mb-12">
         <SearchBar client:load />
       </div>
 
       <p className="text-body text-center text-muted mb-8">
-        Try searching for: manuscripts, artists, periods, or Satras
+        Try searching for: manuscripts, artists, periods, or Sattras
       </p>
 
       <div className="card-cream">
         <h2 className="font-display text-2xl text-ink mb-6">Popular Searches</h2>
         <div className="flex flex-wrap gap-3">
-          {['Manuscript Paintings', 'Religious Art', 'Traditional Crafts', '18th Century', 'Auniati Satra'].map((term) => (
+          {['Manuscript Paintings', 'Religious Art', 'Traditional Crafts', '18th Century', 'Samaguri Satra', 'Sanchipat'].map((term) => (
             <a href={`/search?q=${encodeURIComponent(term)}`} className="px-4 py-2 bg-surface-soft text-body rounded-full text-sm hover:bg-hairline transition-colors">
               {term}
             </a>

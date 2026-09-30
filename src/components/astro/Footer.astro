@@ -8,34 +8,47 @@ import { footerLinks } from '../../lib/data/navRoutes';
       <div>
         <h3 class="font-display text-xl text-on-dark mb-4">Assamese Manuscript Archive</h3>
         <p class="text-on-dark-soft text-sm leading-relaxed">
-          Preserving the rich heritage of Assamese manuscript paintings for future generations.
+          Preserving the rich heritage of Assamese manuscript paintings and Samaguri Satra traditions for future generations.
         </p>
       </div>
 
-      {Object.entries(footerLinks).map(([title, links]) => (
-        <div>
-          <h4 class="font-body font-medium text-on-dark mb-4">{title}</h4>
-          <ul class="space-y-2">
-            {links.map((link) => (
-              <li>
-                <a href="#" class="text-on-dark-soft text-sm hover:text-on-dark transition-colors">
-                  {link}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
+      <div>
+        <h4 class="font-body font-medium text-on-dark mb-4">Collections</h4>
+        <ul class="space-y-2">
+          <li><a href="/collections" class="text-on-dark-soft text-sm hover:text-on-dark transition-colors">Manuscripts</a></li>
+          <li><a href="/picture-gallery" class="text-on-dark-soft text-sm hover:text-on-dark transition-colors">Picture Gallery</a></li>
+          <li><a href="/audioplayer" class="text-on-dark-soft text-sm hover:text-on-dark transition-colors">Audio Guides</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-body font-medium text-on-dark mb-4">Visit &amp; Learn</h4>
+        <ul class="space-y-2">
+          <li><a href="/visit" class="text-on-dark-soft text-sm hover:text-on-dark transition-colors">Plan Your Visit</a></li>
+          <li><a href="/knowMore" class="text-on-dark-soft text-sm hover:text-on-dark transition-colors">Heritage History</a></li>
+          <li><a href="/resources" class="text-on-dark-soft text-sm hover:text-on-dark transition-colors">Scholarly Resources</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-body font-medium text-on-dark mb-4">Trust &amp; Legal</h4>
+        <ul class="space-y-2">
+          <li><a href="/privacy" class="text-on-dark-soft text-sm hover:text-on-dark transition-colors">Privacy Policy</a></li>
+          <li><a href="/terms" class="text-on-dark-soft text-sm hover:text-on-dark transition-colors">Terms of Use</a></li>
+          <li><a href="/disclaimer" class="text-on-dark-soft text-sm hover:text-on-dark transition-colors">Institutional Disclaimer</a></li>
+          <li><a href="/copyright" class="text-on-dark-soft text-sm hover:text-on-dark transition-colors">Copyright Policy</a></li>
+        </ul>
+      </div>
     </div>
 
     <div class="border-t border-surface-dark-soft pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
       <p class="text-on-dark-soft text-sm">
-        &copy; {new Date().getFullYear()} Assamese Manuscript Archive. All rights reserved.
+        &copy; {new Date().getFullYear()} Assamese Manuscript Archive &amp; Samaguri Satra. Supported by ASTEC under the ITGA scheme.
       </p>
       <div class="flex gap-6">
-        <a href="#" class="text-on-dark-soft text-sm hover:text-on-dark">Privacy</a>
-        <a href="#" class="text-on-dark-soft text-sm hover:text-on-dark">Terms</a>
-        <a href="#" class="text-on-dark-soft text-sm hover:text-on-dark">Contact</a>
+        <a href="/privacy" class="text-on-dark-soft text-sm hover:text-on-dark">Privacy</a>
+        <a href="/terms" class="text-on-dark-soft text-sm hover:text-on-dark">Terms</a>
+        <a href="/visit" class="text-on-dark-soft text-sm hover:text-on-dark">Contact</a>
       </div>
     </div>
   </div>

@@ -172,7 +172,7 @@ export default function ResourcesPage() {
         }}
       >
         <div>
-          <h2
+          <h1
             className="text-3xl mb-2"
             style={{
               fontFamily: 'var(--font-display)',
@@ -181,7 +181,7 @@ export default function ResourcesPage() {
             }}
           >
             Resources
-          </h2>
+          </h1>
           <p style={{ color: 'rgba(255,255,255,0.85)', fontFamily: 'var(--font-body)' }}>
             Scholarly resources on Assamese manuscripts, painting traditions, Sattra culture, and Vaishnavite heritage.
           </p>

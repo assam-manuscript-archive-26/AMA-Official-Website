@@ -3,12 +3,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import LandingHero from '../components/react/hero/LandingHero';
 import MajuliIntro from '../components/react/sections/MajuliIntro';
 import CollectionsCarousel from '../components/react/sections/CollectionsCarousel';
+import HomeFAQ from '../components/astro/HomeFAQ.astro';
+import { faqSchema } from '../data/faqs';
 ---
 
 <BaseLayout
-  title="Home"
-  description="Discover the digital archive of Assamese manuscript paintings. Explore ancient manuscripts, Sattras, and cultural heritage from Majuli, Assam."
-  keywords="Assamese manuscripts, manuscript paintings, Majuli, Sattra, Vaishnavite art, ancient manuscripts, digital archive, Assam culture, traditional painting"
+  title="Assamese Manuscript Archive | Samaguri Satra Heritage & Ancient Art"
+  description="Explore the digital archive of Assamese manuscript paintings, sacred Sanchipat texts, and traditional mask making from Samaguri Satra in Majuli, Assam."
+  keywords="Assamese manuscripts, manuscript paintings, Samaguri Satra, Chamaguri Satra, Majuli, Sanchipat, Vaishnavite art, ancient manuscripts, digital archive, Assam culture, Bhaona masks"
+  schema={[faqSchema]}
 >
 
   <!-- Hero Section (with integrated search bar) -->
@@ -19,6 +22,9 @@ import CollectionsCarousel from '../components/react/sections/CollectionsCarouse
 
   <!-- EXPLORE OUR COLLECTIONS -->
   <CollectionsCarousel client:visible />
+
+  <!-- Answer Engine Optimization (AEO) FAQs with FAQPage Schema -->
+  <!-- <HomeFAQ /> -->
 
 </BaseLayout>
 

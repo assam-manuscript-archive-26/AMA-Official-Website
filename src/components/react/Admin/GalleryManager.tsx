@@ -16,7 +16,7 @@ import AdminSpinner from './AdminSpinner';
 
 export interface GalleryItem {
   id: string;
-  title: string;
+  title?: string;
   category: string;
   imageUrl: string;
   accent?: string;
@@ -42,7 +42,7 @@ export default function GalleryManager() {
   const [showFilters, setShowFilters] = useState(false);
   const [showUploadPanel, setShowUploadPanel] = useState(false);
 
-  // New item form state
+  // New item form state (Only cloud image and category are compulsory)
   const [newTitle, setNewTitle] = useState('');
   const [newCategory, setNewCategory] = useState('');
   const [newAccent, setNewAccent] = useState('');
@@ -123,29 +123,25 @@ export default function GalleryManager() {
     });
   }, [items, searchTerm, selectedCategory]);
 
-  // Handle Add Item Submit
+  // Handle Add Item Submit (Only image and category are required)
   const handleCreateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const categoryToSave = newCategory.trim();
 
-    if (!newTitle.trim()) {
-      triggerToast('Please provide an image title', 'error');
+    if (!newImageUrl.trim()) {
+      triggerToast('Please upload an image to cloud first', 'error');
       return;
     }
     if (!categoryToSave) {
       triggerToast('Please select or create a category', 'error');
       return;
     }
-    if (!newImageUrl.trim()) {
-      triggerToast('Please upload an image to cloud first', 'error');
-      return;
-    }
 
     setIsSubmitting(true);
     try {
       const payload = {
-        title: newTitle.trim(),
+        title: newTitle.trim() || undefined,
         category: categoryToSave,
         imageUrl: newImageUrl.trim(),
         accent: newAccent.trim() || undefined,
@@ -178,7 +174,7 @@ export default function GalleryManager() {
   const handleEditClick = (item: GalleryItem) => {
     setEditingItem(item);
     setEditForm({
-      title: item.title,
+      title: item.title || '',
       category: item.category,
       accent: item.accent || '',
       description: item.description || '',
@@ -187,29 +183,25 @@ export default function GalleryManager() {
     setEditIsChangingImage(false);
   };
 
-  // Save Edit Dialog
+  // Save Edit Dialog (Only image and category are required)
   const handleSaveEdit = async () => {
     if (!editingItem) return;
 
     const categoryToSave = editForm.category?.trim();
 
-    if (!editForm.title?.trim()) {
-      triggerToast('Title cannot be empty', 'error');
+    if (!editForm.imageUrl?.trim()) {
+      triggerToast('Image URL cannot be empty', 'error');
       return;
     }
     if (!categoryToSave) {
       triggerToast('Category cannot be empty', 'error');
       return;
     }
-    if (!editForm.imageUrl?.trim()) {
-      triggerToast('Image URL cannot be empty', 'error');
-      return;
-    }
 
     setIsSavingEdit(true);
     try {
       const payload = {
-        title: editForm.title.trim(),
+        title: editForm.title?.trim() || null,
         category: categoryToSave,
         accent: editForm.accent?.trim() || null,
         description: editForm.description?.trim() || null,
@@ -311,13 +303,13 @@ export default function GalleryManager() {
           <div className="gm-upload-header">
             <h3 className="gm-upload-title">Add New Gallery Exhibit</h3>
             <p className="gm-upload-subtitle">
-              Upload an image to cloud storage, select or create a category, and publish it to the gallery.
+              Upload an image to cloud storage and choose or create a category. Title, subtitle, and description are optional.
             </p>
           </div>
 
           <form onSubmit={handleCreateSubmit}>
             <div className="gm-upload-grid">
-              {/* Left Column: Image Uploader */}
+              {/* Left Column: Image Uploader (COMPULSORY) */}
               <div className="gm-upload-col">
                 <label className="ax-label">Exhibit Image *</label>
                 <UploadGalleryImage
@@ -340,36 +332,36 @@ export default function GalleryManager() {
 
               {/* Right Column: Metadata */}
               <div className="gm-upload-col">
+                {/* Category Selection (COMPULSORY) */}
                 <div>
-                  <label className="ax-label">Exhibit Title *</label>
-                  <input
-                    type="text"
-                    className="ax-input"
-                    value={newTitle}
-                    onChange={(e) => setNewTitle(e.target.value)}
-                    placeholder="e.g. Ancient Palm Leaf Manuscript"
-                    required
-                  />
-                </div>
-
-                {/* Custom Creatable Category Selection */}
-                <div style={{ marginTop: 14 }}>
                   <label className="ax-label">Category *</label>
                   <CreatableCategorySelect
                     value={newCategory}
                     onChange={(cat) => setNewCategory(cat)}
                     categories={allCategories}
-                    placeholder="Select or type to create a new category..."
+                    placeholder="Select or type to create a category..."
                   />
                   <span className="gm-hint">
                     Choose an existing category or type any new name and click <strong>Create</strong> or press <strong>Enter</strong>.
                   </span>
                 </div>
 
-                {/* Accent Tag */}
+                {/* Exhibit Title (OPTIONAL) */}
+                <div style={{ marginTop: 14 }}>
+                  <label className="ax-label">Exhibit Title (Optional)</label>
+                  <input
+                    type="text"
+                    className="ax-input"
+                    value={newTitle}
+                    onChange={(e) => setNewTitle(e.target.value)}
+                    placeholder="e.g. Ancient Palm Leaf Manuscript (optional)"
+                  />
+                </div>
+
+                {/* Accent Tag (OPTIONAL) */}
                 <div style={{ marginTop: 14 }}>
                   <label className="ax-label">
-                    Accent Tag / Subtitle
+                    Accent Tag / Subtitle (Optional)
                     <span className="gm-hint"> (e.g. 'Heritage archive', 'Fine detail study')</span>
                   </label>
                   <input
@@ -377,11 +369,11 @@ export default function GalleryManager() {
                     className="ax-input"
                     value={newAccent}
                     onChange={(e) => setNewAccent(e.target.value)}
-                    placeholder="e.g. Manuscript detail"
+                    placeholder="e.g. Manuscript detail (optional)"
                   />
                 </div>
 
-                {/* Description */}
+                {/* Description (OPTIONAL) */}
                 <div style={{ marginTop: 14 }}>
                   <label className="ax-label">Description (Optional)</label>
                   <textarea
@@ -389,7 +381,7 @@ export default function GalleryManager() {
                     rows={3}
                     value={newDescription}
                     onChange={(e) => setNewDescription(e.target.value)}
-                    placeholder="Add brief background or historical context..."
+                    placeholder="Add brief background or historical context (optional)..."
                   />
                 </div>
 
@@ -484,7 +476,7 @@ export default function GalleryManager() {
           <div key={item.id} className="gm-card">
             <div className="gm-card-img-wrap">
               {item.imageUrl ? (
-                <img src={item.imageUrl} alt={item.title} className="gm-card-img" loading="lazy" />
+                <img src={item.imageUrl} alt={item.title || item.category} className="gm-card-img" loading="lazy" />
               ) : (
                 <div className="gm-card-placeholder">
                   <ImageIcon size={32} />
@@ -495,9 +487,12 @@ export default function GalleryManager() {
             </div>
 
             <div className="gm-card-body">
-              <h3 className="gm-card-title" title={item.title}>
-                {item.title}
-              </h3>
+              {item.title && item.title.trim() && (
+                <h3 className="gm-card-title" title={item.title}>
+                  {item.title}
+                </h3>
+              )}
+
               {item.accent && (
                 <span className="gm-card-accent" title={item.accent}>
                   {item.accent}
@@ -564,16 +559,16 @@ export default function GalleryManager() {
         open={!!editingItem}
         onClose={() => setEditingItem(null)}
         title="Edit Gallery Exhibit"
-        subtitle={editingItem ? `Editing "${editingItem.title}"` : 'Update exhibit details'}
+        subtitle={editingItem ? (editingItem.title ? `Editing "${editingItem.title}"` : `Editing exhibit in "${editingItem.category}"`) : 'Update exhibit details'}
         size="lg"
         onSave={handleSaveEdit}
         saving={isSavingEdit}
         saveLabel="Save Changes"
       >
         <div className="gm-edit-layout">
-          {/* Left: Image Preview & Replace */}
+          {/* Left: Image Preview & Replace (COMPULSORY) */}
           <div className="gm-edit-col-img">
-            <label className="ax-label">Exhibit Image</label>
+            <label className="ax-label">Exhibit Image *</label>
             <div className="gm-edit-img-frame">
               {editForm.imageUrl ? (
                 <img src={editForm.imageUrl} alt="Preview" />
@@ -614,18 +609,7 @@ export default function GalleryManager() {
           {/* Right: Form fields */}
           <div className="gm-edit-col-fields">
             <DialogGrid cols={1}>
-              <div>
-                <label className="ax-label">Exhibit Title *</label>
-                <input
-                  type="text"
-                  className="ax-input"
-                  value={editForm.title || ''}
-                  onChange={(e) => setEditForm((prev) => ({ ...prev, title: e.target.value }))}
-                  placeholder="e.g. Sanchipat Manuscript"
-                  required
-                />
-              </div>
-
+              {/* Category (COMPULSORY) */}
               <div>
                 <label className="ax-label">Category *</label>
                 <CreatableCategorySelect
@@ -636,17 +620,31 @@ export default function GalleryManager() {
                 />
               </div>
 
+              {/* Title (OPTIONAL) */}
               <div>
-                <label className="ax-label">Accent Tag / Subtitle</label>
+                <label className="ax-label">Exhibit Title (Optional)</label>
+                <input
+                  type="text"
+                  className="ax-input"
+                  value={editForm.title || ''}
+                  onChange={(e) => setEditForm((prev) => ({ ...prev, title: e.target.value }))}
+                  placeholder="e.g. Sanchipat Manuscript (optional)"
+                />
+              </div>
+
+              {/* Accent Tag (OPTIONAL) */}
+              <div>
+                <label className="ax-label">Accent Tag / Subtitle (Optional)</label>
                 <input
                   type="text"
                   className="ax-input"
                   value={editForm.accent || ''}
                   onChange={(e) => setEditForm((prev) => ({ ...prev, accent: e.target.value }))}
-                  placeholder="e.g. Heritage archive"
+                  placeholder="e.g. Heritage archive (optional)"
                 />
               </div>
 
+              {/* Description (OPTIONAL) */}
               <div>
                 <label className="ax-label">Description (Optional)</label>
                 <textarea
@@ -654,7 +652,7 @@ export default function GalleryManager() {
                   rows={3}
                   value={editForm.description || ''}
                   onChange={(e) => setEditForm((prev) => ({ ...prev, description: e.target.value }))}
-                  placeholder="Additional background notes..."
+                  placeholder="Additional background notes (optional)..."
                 />
               </div>
             </DialogGrid>
@@ -677,7 +675,7 @@ export default function GalleryManager() {
           <Trash2 size={32} />
           <p>
             Are you sure you want to permanently delete{' '}
-            <strong>"{deleteConfirm.item?.title}"</strong> from the gallery database?
+            <strong>"{deleteConfirm.item?.title || deleteConfirm.item?.category || 'Exhibit'}"</strong> from the gallery database?
           </p>
         </div>
       </EditDialog>

@@ -141,9 +141,13 @@ export default function PictureGalleryPage() {
   const searchBarCollectionsData = useMemo(() => {
     return items.map((item) => ({
       id: item.id,
-      name: item.title,
+      name: item.title || item.category,
       category: item.category,
-      keywords: [item.title, item.category, ...(item.accent ? [item.accent] : [])],
+      keywords: [
+        ...(item.title ? [item.title] : []),
+        item.category,
+        ...(item.accent ? [item.accent] : []),
+      ],
       imageUrl: item.imageUrl,
     }));
   }, [items]);
@@ -164,7 +168,7 @@ export default function PictureGalleryPage() {
           }}
         >
           <div className="text-center sm:text-left w-full sm:w-auto">
-            <h2
+            <h1
               className="text-4xl sm:text-5xl mb-2 font-display text-white"
               style={{
                 textTransform: 'uppercase',
@@ -174,7 +178,7 @@ export default function PictureGalleryPage() {
               }}
             >
               Gallery
-            </h2>
+            </h1>
             <p
               className="text-lg sm:text-xl font-body font-medium text-white/90"
               style={{ textRendering: 'optimizeLegibility' }}
@@ -406,7 +410,7 @@ export default function PictureGalleryPage() {
                         <button
                           key={item.id}
                           type="button"
-                          aria-label={`Open image preview for ${item.title}`}
+                          aria-label={`Open image preview for ${item.title || item.category}`}
                           onClick={() => setSelectedItem(item)}
                           className="block cursor-pointer text-left p-0 border-0 bg-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] rounded-xl group"
                         >
@@ -418,7 +422,7 @@ export default function PictureGalleryPage() {
                             {item.imageUrl ? (
                               <img
                                 src={item.imageUrl}
-                                alt={item.title}
+                                alt={item.title || `${item.category} exhibit`}
                                 loading="lazy"
                                 className="rounded-xl object-cover w-full h-full transition-all duration-500 ease-in-out transform group-hover:scale-105"
                               />
@@ -444,38 +448,40 @@ export default function PictureGalleryPage() {
                               </span>
                             </div>
 
-                            {/* Caption Card Bar */}
-                            <div
-                              className="absolute z-10 bottom-3 left-0 mx-2 p-2.5 backdrop-blur-lg w-[calc(100%-16px)] border rounded-lg shadow-sm transition-all duration-500"
-                              style={{
-                                backgroundColor: 'rgba(20,20,19,0.82)',
-                                borderColor: 'rgba(255,255,255,0.18)',
-                              }}
-                            >
-                              <div className="flex flex-col items-center justify-center text-center">
-                                <h6
-                                  className="font-semibold text-xs sm:text-sm leading-5 text-center line-clamp-2"
-                                  style={{
-                                    color: '#faf9f5',
-                                    fontFamily: 'var(--font-body)',
-                                    fontWeight: 700,
-                                  }}
-                                >
-                                  {item.title}
-                                </h6>
-                                {item.accent && (
-                                  <span
-                                    className="text-[10px] sm:text-xs font-medium tracking-wide mt-1 uppercase line-clamp-1"
+                            {/* Title Box on the image (only rendered if title exists and is not empty) */}
+                            {Boolean(item.title && item.title.trim()) && (
+                              <div
+                                className="absolute z-10 bottom-3 left-0 mx-2 p-2.5 backdrop-blur-lg w-[calc(100%-16px)] border rounded-lg shadow-sm transition-all duration-500"
+                                style={{
+                                  backgroundColor: 'rgba(20,20,19,0.82)',
+                                  borderColor: 'rgba(255,255,255,0.18)',
+                                }}
+                              >
+                                <div className="flex flex-col items-center justify-center text-center">
+                                  <h6
+                                    className="font-semibold text-xs sm:text-sm leading-5 text-center line-clamp-2"
                                     style={{
-                                      color: 'var(--color-primary)',
-                                      letterSpacing: '0.04em',
+                                      color: '#faf9f5',
+                                      fontFamily: 'var(--font-body)',
+                                      fontWeight: 700,
                                     }}
                                   >
-                                    {item.accent}
-                                  </span>
-                                )}
+                                    {item.title.trim()}
+                                  </h6>
+                                  {item.accent && item.accent.trim() && (
+                                    <span
+                                      className="text-[10px] sm:text-xs font-medium tracking-wide mt-1 uppercase line-clamp-1"
+                                      style={{
+                                        color: 'var(--color-primary)',
+                                        letterSpacing: '0.04em',
+                                      }}
+                                    >
+                                      {item.accent.trim()}
+                                    </span>
+                                  )}
+                                </div>
                               </div>
-                            </div>
+                            )}
                           </div>
                         </button>
                       ))}
@@ -520,7 +526,7 @@ export default function PictureGalleryPage() {
           <div
             role="dialog"
             aria-modal="true"
-            aria-label={selectedItem.title}
+            aria-label={selectedItem.title || selectedItem.category}
             className="relative z-[65] flex flex-col items-center justify-center max-w-[92vw] max-h-[90vh]"
             style={{
               animation: 'galleryModalIn 220ms ease-out',
@@ -531,7 +537,7 @@ export default function PictureGalleryPage() {
           >
             <img
               src={selectedItem.imageUrl}
-              alt={selectedItem.title}
+              alt={selectedItem.title || selectedItem.category}
               className="block rounded-xl shadow-2xl"
               style={{
                 maxWidth: 'min(85vw, 1050px)',
@@ -552,7 +558,9 @@ export default function PictureGalleryPage() {
                 color: '#faf9f5',
               }}
             >
-              <h4 className="font-semibold text-base sm:text-lg mb-0.5">{selectedItem.title}</h4>
+              {selectedItem.title && (
+                <h4 className="font-semibold text-base sm:text-lg mb-0.5">{selectedItem.title}</h4>
+              )}
               <div className="flex items-center justify-center gap-3 text-xs sm:text-sm">
                 <span style={{ color: 'var(--color-primary)', fontWeight: 600 }}>
                   {selectedItem.category}

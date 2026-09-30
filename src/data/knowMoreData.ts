@@ -69,7 +69,6 @@ export const articles: Article[] = [
           "Within this living tradition, Padmashree Hem Chandra Goswami stands as one of its most important contemporary custodians. A master artisan from Samaguri Sattra, he has played a pivotal role in preserving and revitalizing the art of mukha shilpa at a time when many such indigenous practices faced decline. Drawing from generational knowledge inherited within the sattra, he has continued to sustain the core aesthetic and ritual principles of mask-making while also ensuring its relevance in changing cultural contexts.",
           "His contribution extends beyond preservation to thoughtful innovation. Goswami is known for refining the structural design of masks by making them lighter, more durable, and performance-friendly, without compromising their symbolic depth. He has also helped expand the expressive possibilities of the masks, enabling more dynamic use in Bhaona performances. Through workshops, demonstrations, and cultural exchanges across India and abroad, he has brought wider visibility to this tradition, positioning Samaguri Sattra as a key site of living heritage.",
           "In recognition of his contribution to Indian arts and crafts, he was awarded the Padma Shri in 2023. His work continues to ensure that the mask-making tradition of Samaguri Sattra remains not only preserved but actively practiced, evolving as a vibrant form of cultural expression rooted in devotion and performance.",
-          "Together, Assamese manuscripts and manuscript paintings constitute a vital part of the region's cultural memory. They reflect the interwoven nature of text, image, and devotion in Assamese society, where literature and visual art functioned as mediums of spiritual expression and collective identity. Today, these traditions continue to hold significance not only as historical artifacts but also as living cultural practices that connect contemporary communities to their intellectual and religious heritage.",
         ],
       },
     ],
@@ -77,24 +76,38 @@ export const articles: Article[] = [
     ctaHref: "/collections",
   },
   {
-    id: "demo-article-3",
-    title: "Lorem Ipsum",
+    id: "sanchipat-manuscript-tradition",
+    title: "The Tradition of Sanchipat and Tulapat Manuscripts in Assam",
     excerpt:
-      "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...",
-    category: "demo-article",
+      "Understand the indigenous techniques behind Sanchipat bark processing, mineral inks, and centuries-old manuscript preservation in Assam.",
+    category: "History & Conservation",
     content: [
       {
+        heading: "The Botanical Origin of Sanchipat",
         paragraphs: [
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris mauris eros, tristique interdum massa quis, tempus venenatis arcu. Mauris a nunc nisl. Vestibulum neque sem, aliquam sit amet vulputate quis, pretium a tellus. In quis leo eget leo tristique molestie non at lectus. Sed id placerat erat. Duis vehicula tortor sit amet tellus varius, id tristique orci commodo. Maecenas sodales orci quis est condimentum, et mattis tortor convallis. In imperdiet mi ut nulla iaculis, in tristique tellus dictum.",
-          "In tincidunt, leo at dictum hendrerit, lorem enim auctor nunc, ut sodales leo ipsum vel sapien. Suspendisse volutpat tellus nec lacus posuere, hendrerit varius felis pretium. Sed viverra odio vitae luctus sollicitudin. Donec elementum ultricies felis, at efficitur mauris venenatis et. Integer at nulla sed velit rhoncus suscipit. Nunc iaculis ante nec augue molestie, vitae hendrerit mauris egestas. Integer dictum dignissim posuere. Fusce rutrum turpis in vestibulum posuere. Proin nec sagittis nisi. Nunc malesuada feugiat mauris ac pretium. Donec vel porttitor magna, eget eleifend felis. Nullam ut convallis nisl, vel sollicitudin ligula. Aliquam id placerat arcu. Vivamus in imperdiet purus, in ultricies ligula.",
-          "Praesent non ornare nulla. Donec sed rutrum diam, et elementum felis. Suspendisse eros mauris, fringilla ut leo sed, pharetra accumsan massa. Aenean in metus ultricies, ornare risus eu, varius nulla. Suspendisse accumsan, mi ut vulputate commodo, nibh purus porta dolor, in malesuada sem magna nec augue. Nullam vel diam nibh. Donec eget porta dui, ac congue elit.",
-          "Aliquam viverra consequat est, sit amet faucibus augue rutrum at. Sed condimentum consectetur tortor. Nullam sem ipsum, porta at sapien consectetur, placerat dapibus enim. Praesent consectetur placerat risus, non vestibulum arcu dignissim ut. Cras et augue augue. Praesent urna ligula, volutpat malesuada feugiat id, cursus sed dui. Quisque id nisl risus. Pellentesque lobortis neque vitae augue lobortis placerat. Nullam non luctus augue. Nam ut nibh at ante elementum dignissim ac sed urna. Vestibulum viverra malesuada porta. Praesent eget porta tortor. Fusce laoreet eleifend ipsum. Maecenas in finibus neque, ac pretium lorem. Sed malesuada dui in vulputate lacinia. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+          "In ancient Assam, the primary medium for recording scriptures, royal chronicles (Buranji), philosophical treatises, and illuminated paintings was Sanchipat. Sanchipat is prepared from the bark of the Sanchi tree, scientifically known as Aquilaria agallocha (the agarwood tree). Indigenous to the tropical riverine forests of the Brahmaputra valley, the bark of mature trees possesses unique fibrous toughness and natural resin content that makes it remarkably resilient against decay.",
+          "Unlike palm-leaf (talapatra) traditions dominant in southern and eastern India, Sanchipat sheets offer an exceptionally smooth, pliable, and non-brittle writing surface. When properly prepared and cured, Sanchipat folios remain preserved for over six to eight centuries even in Assam's humid monsoon climate.",
+        ],
+      },
+      {
+        heading: "Traditional Preparation and Curing Techniques",
+        paragraphs: [
+          "The indigenous preparation process required meticulous craftsmanship across several weeks. Long strips of bark were carefully extracted from trees aged between fifteen and thirty years, ensuring the inner wood was unharmed. The outer rough epidermis was peeled away, followed by an extended period of curing where the bark strips were soaked in dew or running river water and dried under controlled shade.",
+          "To achieve a smooth writing surface, artisans rubbed the cured sheets with burnt brick powder, followed by the seeds of Phaseolus mungo (Mati-mah). Finally, a fine application of arsenic trisulphide (haitaal) was applied, imparting a lustrous yellow hue that acted as a potent natural biocide against woodborers, termites, and fungal degradation.",
+        ],
+      },
+      {
+        heading: "Traditional Inks and Natural Pigments",
+        paragraphs: [
+          "Texts inscribed upon Sanchipat were executed using a specialized, indelible Assamese ink known as Mahi. Prepared from an ancient recipe incorporating silikha (Terminalia chebula), cow urine, rust scrapings from iron vessels, and carbon soot collected from mustard-oil lamps, Mahi formed a chemical bond with the bark fibers that remains pitch-black and waterproof through centuries.",
+          "Illuminated manuscripts combined this durable ink with mineral and vegetable dyes such as hengul (cinnabar red), haitaal (orpiment yellow), indigo blue (neel), and chalk white (dhala mati), creating the vivid narrative tableaus preserved within Samaguri Satra and monasteries across Assam today.",
         ],
       },
     ],
-    ctaText: "Explore Our Collections",
-    ctaHref: "/collections",
+    ctaText: "View Manuscript Gallery",
+    ctaHref: "/picture-gallery",
   },
+
 ];
 
 export function getArticleById(id: string): Article | undefined {

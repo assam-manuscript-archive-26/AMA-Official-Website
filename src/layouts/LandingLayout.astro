@@ -9,6 +9,7 @@ interface Props {
   image?: string;
   noIndex?: boolean;
   noFollow?: boolean;
+  schema?: Record<string, any> | Array<Record<string, any>>;
 }
 
 const {
@@ -17,8 +18,15 @@ const {
   keywords = 'Assamese manuscripts, manuscript painting, Sattra, Majuli, Assam culture, Vaishnavite manuscripts, ancient manuscripts, digital archive, cultural heritage',
   image,
   noIndex = false,
-  noFollow = false
+  noFollow = false,
+  schema
 } = Astro.props;
+
+const fullTitle = title.includes('Assamese Manuscript Archive')
+  ? title
+  : (title ? `${title} | Assamese Manuscript Archive` : 'Assamese Manuscript Archive');
+
+const currentUrl = Astro.url.pathname + (Astro.url.search || '');
 ---
 
 <!DOCTYPE html>
@@ -27,15 +35,25 @@ const {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>{title ? `${title} | ` : ''}Assamese Manuscript Archive</title>
+    
+    <!-- Preconnect for Google Fonts to eliminate render-blocking CSS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
+
+    <title>{fullTitle}</title>
     <SEO
-      title={title}
+      title={fullTitle}
       description={description}
       keywords={keywords}
       image={image}
-      url={Astro.url.pathname}
+      url={currentUrl}
       noIndex={noIndex}
       noFollow={noFollow}
+      schema={schema}
     />
   </head>
   <body class="bg-canvas text-ink min-h-screen">

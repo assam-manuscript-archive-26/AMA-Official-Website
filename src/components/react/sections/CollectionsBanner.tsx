@@ -12,7 +12,7 @@ const CollectionsBanner: React.FC = () => {
       }}
     >
       <div className="text-center sm:text-left w-full sm:w-auto">
-        <h2
+        <h1
           className="text-4xl sm:text-5xl mb-2 font-body text-white"
           style={{
             textTransform: 'uppercase',
@@ -20,7 +20,7 @@ const CollectionsBanner: React.FC = () => {
           }}
         >
           Our Collections
-        </h2>
+        </h1>
         <p
           className="text-lg sm:text-xl font-body font-medium text-white"
           style={{

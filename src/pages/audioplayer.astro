@@ -1,12 +1,19 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import AudioPlayer from '../components/react/sections/AudioPlayer';
+
+const id = Astro.url.searchParams.get('id');
+const pageTitle = id
+  ? `Audio Guide & Narration | Assamese Manuscript Archive`
+  : 'Multilingual Audio Guides | Assamese Manuscript Archive';
+
+const pageDescription = 'Listen to trilingual audio guide narrations of Assamese manuscripts in English, Assamese (অসমীয়া), and Hindi, curated for Samaguri Satra museum visitors.';
 ---
 
 <BaseLayout
-  title="Audio Guide"
-  description="Listen to multilingual audio descriptions of Assamese manuscripts in English, Hindi, and Assamese. Experience our collection with audio guides."
-  keywords="audio guide, multilingual audio, English audio, Hindi audio, Assamese audio, manuscript description, audio narration, cultural audio guide"
+  title={pageTitle}
+  description={pageDescription}
+  keywords="audio guide, multilingual audio, Assamese audio, English audio, Hindi audio, manuscript narration, Samaguri Satra, Majuli cultural audio guide"
 >
   <AudioPlayer client:load />
 </BaseLayout>

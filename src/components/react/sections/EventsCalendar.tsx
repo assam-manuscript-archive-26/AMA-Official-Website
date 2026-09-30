@@ -195,7 +195,7 @@ const EventsCalendar: React.FC = () => {
                 }}
             >
                 <div>
-                    <h2
+                    <h1
                         className="text-3xl mb-2"
                         style={{
                             fontFamily: 'var(--font-display)',
@@ -204,7 +204,7 @@ const EventsCalendar: React.FC = () => {
                         }}
                     >
                         Satra Events & Calendar
-                    </h2>
+                    </h1>
                     <p style={{ color: 'rgba(255,255,255,0.85)', fontFamily: 'var(--font-body)' }}>
                         Discover upcoming exhibitions, workshops, and cultural events
                     </p>

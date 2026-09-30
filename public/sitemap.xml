@@ -1,75 +1,132 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://assammanuscriptarchive.com/</loc>
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-09-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://assammanuscriptarchive.com/assets/logo/og-image.png</image:loc>
+      <image:title>Assamese Manuscript Archive - Ancient Paintings &amp; Samaguri Satra Heritage</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://assammanuscriptarchive.com/collections</loc>
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-09-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://assammanuscriptarchive.com/picture-gallery</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://assammanuscriptarchive.com/assets/bg/samaguriBg.jpeg</image:loc>
+      <image:title>Samaguri Satra Manuscript and Heritage Gallery</image:title>
+    </image:image>
+  </url>
+  <url>
     <loc>https://assammanuscriptarchive.com/about</loc>
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-09-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://assammanuscriptarchive.com/visit</loc>
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-09-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://assammanuscriptarchive.com/events</loc>
-    <lastmod>2026-05-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://assammanuscriptarchive.com/news</loc>
-    <lastmod>2026-05-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://assammanuscriptarchive.com/feedback</loc>
-    <lastmod>2026-05-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://assammanuscriptarchive.com/audioplayer</loc>
-    <lastmod>2026-05-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://assammanuscriptarchive.com/resources</loc>
-    <lastmod>2026-05-15</lastmod>
+    <loc>https://assammanuscriptarchive.com/team</loc>
+    <lastmod>2026-09-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://assammanuscriptarchive.com/knowMore</loc>
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://assammanuscriptarchive.com/knowMore?id=majuli-assamese-manuscripts</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://assammanuscriptarchive.com/knowMore?id=mask-making-samaguri-sattra</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://assammanuscriptarchive.com/knowMore?id=sanchipat-manuscript-tradition</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://assammanuscriptarchive.com/events</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://assammanuscriptarchive.com/news</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://assammanuscriptarchive.com/resources</loc>
+    <lastmod>2026-09-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://assammanuscriptarchive.com/audioplayer</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://assammanuscriptarchive.com/feedback</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://assammanuscriptarchive.com/search</loc>
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-09-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://assammanuscriptarchive.com/404</loc>
-    <lastmod>2026-05-15</lastmod>
+    <loc>https://assammanuscriptarchive.com/privacy</loc>
+    <lastmod>2026-09-30</lastmod>
     <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://assammanuscriptarchive.com/terms</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://assammanuscriptarchive.com/disclaimer</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://assammanuscriptarchive.com/copyright</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
   </url>
 </urlset>
