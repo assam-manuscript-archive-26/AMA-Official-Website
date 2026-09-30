@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  LayoutDashboard, Upload, Image, MessageSquare, CalendarCheck,
+  LayoutDashboard, Upload, Image, Images, MessageSquare, CalendarCheck,
   BookOpen, Mail, Cloud, Menu, X, MoreHorizontal, ChevronUp,
   Sun, Moon, Monitor,
 } from 'lucide-react';
@@ -11,6 +11,7 @@ const tabs: NavTab[] = [
   { name: 'Dashboard', icon: <LayoutDashboard size={20} />, path: '/admin', primary: true },
   { name: 'Upload', icon: <Upload size={20} />, path: '/admin/upload', primary: true },
   { name: 'Artifacts', icon: <Image size={20} />, path: '/admin/artifacts', primary: true },
+  { name: 'Gallery', icon: <Images size={20} />, path: '/admin/gallery', primary: true },
   { name: 'Feedback', icon: <MessageSquare size={20} />, path: '/admin/feedback', primary: true },
   { name: 'Events', icon: <CalendarCheck size={20} />, path: '/admin/events' },
   { name: 'Resources', icon: <BookOpen size={20} />, path: '/admin/resources' },

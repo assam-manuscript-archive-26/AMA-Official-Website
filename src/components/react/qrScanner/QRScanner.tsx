@@ -7,9 +7,9 @@ interface QRScannerProps {
   onClose: () => void;
 }
 
-const ALLOWED_HOST = "www.assammanuscriptarchive.com";
+const ALLOWED_HOSTS = ["assammanuscriptarchive.com", "www.assammanuscriptarchive.com"];
 const INVALID_QR_MESSAGE =
-  "Invalid QR code. Please scan only QR codes for pages under www.assammanuscriptarchive.com";
+  "Invalid QR code. Please scan only QR codes for pages under assammanuscriptarchive.com";
 
 const QRScanner: React.FC<QRScannerProps> = ({ onClose }) => {
   const [qrCode, setQrCode] = useState<string | null>(null);
@@ -74,7 +74,7 @@ const QRScanner: React.FC<QRScannerProps> = ({ onClose }) => {
     try {
       const url = new URL(text);
       const isHttp = url.protocol === "http:" || url.protocol === "https:";
-      return isHttp && url.hostname === ALLOWED_HOST;
+      return isHttp && ALLOWED_HOSTS.includes(url.hostname);
     } catch {
       return false;
     }

@@ -1,5 +1,5 @@
 # Robots.txt for Assamese Manuscript Archive
-# https://assamesemanuscriptarchive.com
+# https://assammanuscriptarchive.com
 
 User-agent: *
 Allow: /
@@ -12,7 +12,7 @@ Disallow: /admin
 Disallow: /login
 
 # Sitemap location
-Sitemap: https://assamesemanuscriptarchive.com/sitemap.xml
+Sitemap: https://assammanuscriptarchive.com/sitemap.xml
 
 # Crawl-delay (optional, for politeness)
 Crawl-delay: 1

@@ -4,6 +4,7 @@ import cloudflare from '@astrojs/cloudflare';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
+  site: 'https://assammanuscriptarchive.com',
   output: 'server',
   server: {
     port: 3000,

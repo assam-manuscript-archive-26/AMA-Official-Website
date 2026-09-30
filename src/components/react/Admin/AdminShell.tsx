@@ -12,11 +12,13 @@ import EventsAdmin from './EventsAdmin';
 import ResourcesAdmin from './ResourcesAdmin';
 import ContactAdmin from './ContactAdmin';
 import CloudUploadAdmin from './CloudUploadAdmin';
+import GalleryManager from './GalleryManager';
 
 const ROUTES: Record<string, React.ComponentType> = {
   '/admin': Dashboard,
   '/admin/upload': UploadManager,
   '/admin/artifacts': ArtifactManager,
+  '/admin/gallery': GalleryManager,
   '/admin/feedback': FeedbackManager,
   '/admin/events': EventsAdmin,
   '/admin/resources': ResourcesAdmin,

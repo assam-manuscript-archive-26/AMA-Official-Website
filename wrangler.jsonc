@@ -8,13 +8,17 @@
     "directory": "./dist",
     "binding": "ASSETS"
   },
+  "routes": [
+    { "pattern": "assammanuscriptarchive.com", "custom_domain": true },
+    { "pattern": "www.assammanuscriptarchive.com", "custom_domain": true }
+  ],
   "observability": {
     "enabled": true,
     "head_sampling_rate": 1
   },
   "vars": {
     "NODE_ENV": "production",
-    "PUBLIC_DATABASE": "s5_intern_database",
+    "PUBLIC_DATABASE": "s3_ama_database",
     "PUBLIC_BASE_URL": "https://v7.frontql.dev",
     "PUBLIC_FILE_UPLOAD_URL": "https://uploads.backendservices.in/api",
     "PUBLIC_IMAGE_URL": "https://uploads.backendservices.in/storage/"
