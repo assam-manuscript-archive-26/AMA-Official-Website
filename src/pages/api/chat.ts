@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 
-const GEMINI_MODEL = 'gemini-2.5-flash-lite';
+const GEMINI_MODEL = 'gemini-2.5-flash';
 const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:streamGenerateContent?alt=sse`;
 
 const GROQ_MODEL = 'llama-3.3-70b-versatile';
@@ -233,7 +233,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
             console.warn('Gemini rate limited (429), falling back to Groq.');
             // Drain the body so the connection can close cleanly
-            await geminiResponse.text().catch(() => {});
+            await geminiResponse.text().catch(() => { });
         }
 
         // Groq fallback (or primary if Gemini key missing)
