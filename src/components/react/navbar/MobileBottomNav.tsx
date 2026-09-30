@@ -17,6 +17,7 @@ const secondaryNavItems = [
   { href: '/resources', label: 'Resources', icon: Info },
   { href: '/visit', label: 'Visit', icon: Compass },
   { href: '/about', label: 'About Us', icon: User },
+  { href: '/picture-gallery', label: 'Gallery', icon: Layers },
 ];
 
 const themeColors = {
